@@ -1,0 +1,344 @@
+from datetime import datetime
+
+from beanie import PydanticObjectId
+from app.models.revoked_token_model import RevokedToken
+from app.models.user_model import User
+from app.schemas.user_schema import (
+    LogoutRequest,
+    RefreshTokenRequest,
+    UserRegister,
+    UserResponse,
+    UserTokenData,
+    UserTokenResponse,
+    UserUpdatePassword,
+    UserUpdateRole,
+    UserUpdateProfile,
+)
+from fastapi import HTTPException, status
+from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
+from pydantic import EmailStr, ValidationError
+from app.core.user_role import UserRole
+from app.core.security import (
+    create_access_token,
+    create_refresh_token,
+    decode_token,
+    get_token_expiration,
+    get_password_hash,
+    verify_password,
+)
+
+
+class UserServices:
+    @staticmethod
+    def _can_admin_manage_role(role: UserRole) -> bool:
+        return role in {UserRole.SELLER, UserRole.CUSTOMER, UserRole.SUPPORT}
+
+    @staticmethod
+    async def _revoke_token(token_data: UserTokenData, expires_at: datetime) -> None:
+        existing_token = await RevokedToken.find_one(RevokedToken.jti == token_data.jti)
+        if existing_token:
+            return
+
+        revoked_token = RevokedToken(
+            jti=token_data.jti,
+            token_type=token_data.token_type,
+            user_id=token_data.user_id,
+            expires_at=expires_at,
+        )
+        await revoked_token.insert()
+
+    @staticmethod
+    async def _decode_token_data(
+        token: str,
+        expected_type: str,
+        invalid_detail: str,
+        expired_detail: str,
+    ) -> tuple[UserTokenData, datetime]:
+        try:
+            payload = decode_token(token)
+            token_data = UserTokenData.model_validate(payload)
+            if not token_data.email or token_data.token_type != expected_type or not token_data.jti:
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail=invalid_detail,
+                )
+            expires_at = get_token_expiration(payload)
+        except ExpiredSignatureError:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail=expired_detail,
+            )
+        except ValidationError:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail=invalid_detail,
+            )
+        except InvalidTokenError:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail=invalid_detail,
+            )
+
+        return token_data, expires_at
+
+    @staticmethod
+    async def user_registration(user: UserRegister) -> UserResponse:
+        user_email = await User.find_one(User.email == user.email)
+        if user_email:
+            raise HTTPException(status_code=400, detail="Email already registered")
+        
+        username_exists = await User.find_one(User.user_name == user.user_name)
+        if username_exists:
+            raise HTTPException(status_code=400, detail="Username already taken")
+        
+        new_user = User(
+            user_name=user.user_name,
+            email=user.email,
+            hashed_password=get_password_hash(user.password),
+            mobile=user.mobile,
+        )
+        await new_user.insert()
+        return UserResponse.model_validate(new_user)
+
+    @staticmethod
+    async def get_all_users() -> list[UserResponse]:
+        users = await User.find_all().to_list()
+        return [UserResponse.model_validate(user) for user in users]
+
+    @staticmethod
+    async def get_my_profile(current_user: User) -> UserResponse:
+        return UserResponse.model_validate(current_user)
+
+    @staticmethod
+    async def _authenticate_user(email: EmailStr, password: str) -> User:
+        user = await User.find_one(User.email == email)
+        if not user or not verify_password(password, user.hashed_password):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid email or password",
+            )
+        return user
+
+    @staticmethod
+    def _build_token_response(user: User) -> UserTokenResponse:
+        token_payload = {
+            "sub": str(user.email),
+            "user_id": str(user.id),
+            "user_name": user.user_name,
+            "role": user.role.value 
+        }
+        access_token = create_access_token(token_payload)
+        refresh_token = create_refresh_token(token_payload)
+        return UserTokenResponse(access_token=access_token, refresh_token=refresh_token)
+
+    @staticmethod
+    async def login_and_issue_tokens(email: EmailStr, password: str) -> UserTokenResponse:
+        authenticated_user = await UserServices._authenticate_user(email, password)
+        return UserServices._build_token_response(authenticated_user)
+
+    @staticmethod
+    async def refresh_user_token(data: RefreshTokenRequest) -> UserTokenResponse:
+        token_data, expires_at = await UserServices._decode_token_data(
+            data.refresh_token,
+            expected_type="refresh",
+            invalid_detail="Invalid refresh token",
+            expired_detail="Refresh token has expired",
+        )
+
+        revoked_token = await RevokedToken.find_one(RevokedToken.jti == token_data.jti)
+        if revoked_token:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Refresh token has been revoked",
+            )
+
+        user = await User.find_one(User.email == token_data.email)
+        if not user:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid refresh token",
+            )
+
+        await UserServices._revoke_token(token_data, expires_at)
+        return UserServices._build_token_response(user)
+
+    @staticmethod
+    async def logout_user(current_user: User, access_token: str, data: LogoutRequest) -> None:
+        access_token_data, access_expires_at = await UserServices._decode_token_data(
+            access_token,
+            expected_type="access",
+            invalid_detail="Invalid access token",
+            expired_detail="Access token has expired",
+        )
+        refresh_token_data, refresh_expires_at = await UserServices._decode_token_data(
+            data.refresh_token,
+            expected_type="refresh",
+            invalid_detail="Invalid refresh token",
+            expired_detail="Refresh token has expired",
+        )
+
+        if refresh_token_data.email != current_user.email:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Refresh token does not belong to the current user",
+            )
+
+        await UserServices._revoke_token(access_token_data, access_expires_at)
+        await UserServices._revoke_token(refresh_token_data, refresh_expires_at)
+        
+    @staticmethod
+    async def update_user_password(current_user: User, access_token: str, data: UserUpdatePassword) -> None:
+        if not verify_password(data.old_password, current_user.hashed_password):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Current password is incorrect",
+            )
+        if data.old_password == data.new_password:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="New password must be different from the current password",
+            )
+        
+        current_user.hashed_password = get_password_hash(data.new_password)
+        await current_user.save()
+        await UserServices.logout_user(
+            current_user,
+            access_token,
+            LogoutRequest(refresh_token=data.refresh_token),
+        )
+
+    @staticmethod
+    async def update_my_profile(current_user: User, data: UserUpdateProfile) -> UserResponse:
+        update_data = data.model_dump(exclude_unset=True)
+        if not update_data:
+            return UserResponse.model_validate(current_user)
+
+        if "user_name" in update_data:
+            existing_user = await User.find_one(
+                (User.user_name == update_data["user_name"]) & (User.id != current_user.id)
+            )
+            if existing_user:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Username already taken",
+                )
+
+        await current_user.set(update_data)
+        updated_user = await User.get(current_user.id)
+        return UserResponse.model_validate(updated_user)
+
+    @staticmethod
+    async def update_user_profile(
+        current_user: User,
+        target_user_id: PydanticObjectId,
+        data: UserUpdateProfile,
+    ) -> UserResponse:
+        target_user = await User.get(target_user_id)
+        if not target_user:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="User not found",
+            )
+
+        update_data = data.model_dump(exclude_unset=True)
+        if not update_data:
+            return UserResponse.model_validate(target_user)
+
+        if current_user.id == target_user.id:
+            return await UserServices.update_my_profile(current_user, data)
+
+        if current_user.role == UserRole.SUPER_ADMIN:
+            pass
+        elif current_user.role == UserRole.ADMIN:
+            if not UserServices._can_admin_manage_role(target_user.role):
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN,
+                    detail="Admins can update only seller, customer, or support users",
+                )
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="You can update only your own profile",
+            )
+
+        if "user_name" in update_data:
+            existing_user = await User.find_one(
+                (User.user_name == update_data["user_name"]) & (User.id != target_user.id)
+            )
+            if existing_user:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Username already taken",
+                )
+
+        await target_user.set(update_data)
+        updated_user = await User.get(target_user.id)
+        return UserResponse.model_validate(updated_user)
+
+    @staticmethod
+    async def update_user_role(
+        current_user: User,
+        target_user_id: PydanticObjectId,
+        data: UserUpdateRole,
+    ) -> UserResponse:
+        target_user = await User.get(target_user_id)
+        if not target_user:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="User not found",
+            )
+
+        if current_user.id == target_user.id:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="You cannot change your own role",
+            )
+
+        if current_user.role not in {UserRole.ADMIN, UserRole.SUPER_ADMIN}:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="You are not allowed to update user roles",
+            )
+
+        if target_user.role == data.new_role:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="User already has this role",
+            )
+
+        if current_user.role == UserRole.ADMIN:
+            if target_user.role in {UserRole.ADMIN, UserRole.SUPER_ADMIN}:
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN,
+                    detail="Admins cannot change the role of admin or super admin users",
+                )
+
+            if not UserServices._can_admin_manage_role(data.new_role):
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN,
+                    detail="Admins can assign only seller, customer, or support roles",
+                )
+
+        if data.new_role == UserRole.SUPER_ADMIN:
+            if current_user.role != UserRole.SUPER_ADMIN:
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN,
+                    detail="Only the super admin can assign the super admin role",
+                )
+
+            existing_super_admin = await User.find_one(User.role == UserRole.SUPER_ADMIN)
+            if existing_super_admin and existing_super_admin.id != target_user.id:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Only one super admin is allowed",
+                )
+
+        if target_user.role == UserRole.SUPER_ADMIN and current_user.role != UserRole.SUPER_ADMIN:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Only the super admin can manage the super admin account",
+            )
+
+        target_user.role = data.new_role
+        await target_user.save()
+        return UserResponse.model_validate(target_user)
