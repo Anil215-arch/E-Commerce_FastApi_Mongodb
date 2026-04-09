@@ -2,7 +2,7 @@ from typing import Optional, List, Dict
 from beanie import Document, Insert, PydanticObjectId, Replace, Save, SaveChanges, before_event
 from pydantic import Field
 from pymongo import IndexModel, ASCENDING
-from app.models.productVariant_model import ProductVariant
+from app.models.product_variant_model import ProductVariant
 
 
 class Product(Document):
@@ -13,7 +13,7 @@ class Product(Document):
     category_id: PydanticObjectId
 
     variants: List[ProductVariant] = Field(default_factory=list)
-    starting_price: float = Field(default=0.0, ge=0)
+    price: int = Field(default=0, ge=0)
 
     images: List[str] = Field(default_factory=list)
 
@@ -26,12 +26,14 @@ class Product(Document):
     is_featured: bool = False
 
     @before_event([Insert, Replace, Save, SaveChanges])
-    def sync_starting_price(self) -> None:
-        self.starting_price = min((variant.price for variant in self.variants), default=0.0)
+    def sync_price(self) -> None:
+        self.price = min((variant.price for variant in self.variants), default=0)
 
     class Settings:
         name = "products"
         indexes = [
             IndexModel([("category_id", ASCENDING)]),
             IndexModel([("variants.sku", ASCENDING)], unique=True),
+            IndexModel([("price", ASCENDING), ("_id", ASCENDING)]),
+            IndexModel([("rating", ASCENDING), ("_id", ASCENDING)]),
         ]

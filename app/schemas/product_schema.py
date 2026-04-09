@@ -2,7 +2,7 @@ from pydantic import BaseModel, Field, ConfigDict, field_serializer, model_valid
 from typing import Optional, List, Dict
 from beanie import PydanticObjectId
 from app.schemas.category_schema import CategorySummaryResponse
-from app.schemas.productVariant_schema import ProductVariantCreate, ProductVariantUpdate, ProductVariantResponse
+from app.schemas.product_variant_schema import ProductVariantCreate, ProductVariantUpdate, ProductVariantResponse
 
 class ProductCreate(BaseModel):
     name: str = Field(..., min_length=3, max_length=200)
@@ -102,7 +102,7 @@ class ProductResponse(BaseModel):
     category: CategorySummaryResponse
 
     variants: List[ProductVariantResponse]
-    starting_price: float
+    price: int
 
     images: List[str]
 

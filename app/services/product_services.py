@@ -5,13 +5,13 @@ from typing import List
 
 from beanie import PydanticObjectId
 from fastapi import HTTPException, UploadFile
-
+from app.utils.product_mapper import ProductMapper
 from app.models.category_model import Category
 from app.models.product_model import Product
-from app.models.productVariant_model import ProductVariant
+from app.models.product_variant_model import ProductVariant
 from app.schemas.category_schema import CategorySummaryResponse
 from app.schemas.product_schema import ProductCreate, ProductResponse, ProductUpdate
-from app.schemas.productVariant_schema import (
+from app.schemas.product_variant_schema import (
     ProductVariantCreate,
     ProductVariantResponse,
     ProductVariantUpdate,
@@ -42,23 +42,6 @@ class ProductService:
     def _serialize_variant(variant: ProductVariant) -> ProductVariantResponse:
         return ProductVariantResponse(**variant.model_dump())
 
-    @staticmethod
-    def _serialize_product(product: Product, category: Category) -> ProductResponse:
-        return ProductResponse(
-            _id=product.id,
-            name=product.name,
-            description=product.description,
-            brand=product.brand,
-            category=CategorySummaryResponse(_id=category.id, name=category.name),
-            variants=[ProductService._serialize_variant(variant) for variant in product.variants],
-            starting_price=product.starting_price,
-            images=product.images,
-            rating=product.rating,
-            num_reviews=product.num_reviews,
-            specifications=product.specifications,
-            is_available=product.is_available,
-            is_featured=product.is_featured,
-        )
 
     @staticmethod
     def _ensure_variant_sku_unique(variants: List[ProductVariant]) -> None:
@@ -105,7 +88,7 @@ class ProductService:
             is_featured=data.is_featured,
         )
         created_product = await new_product.insert()
-        return ProductService._serialize_product(created_product, category)
+        return ProductMapper.serialize_product(created_product, category)
 
     @staticmethod
     async def add_variant(product_id: PydanticObjectId, data: ProductVariantCreate) -> ProductResponse:
@@ -118,7 +101,7 @@ class ProductService:
         product.variants.append(ProductService._build_variant(data))
         ProductService._ensure_variant_sku_unique(product.variants)
         await product.save()
-        return ProductService._serialize_product(product, category)
+        return ProductMapper.serialize_product(product, category)
 
     @staticmethod
     async def update_variant(
@@ -135,7 +118,7 @@ class ProductService:
         variant_index = ProductService._find_variant_index_or_raise(product, sku)
         product.variants[variant_index] = ProductService._merge_variant_update(product.variants[variant_index], data)
         await product.save()
-        return ProductService._serialize_product(product, category)
+        return ProductMapper.serialize_product(product, category)
 
     @staticmethod
     async def delete_variant(product_id: PydanticObjectId, sku: str) -> ProductResponse:
@@ -149,7 +132,7 @@ class ProductService:
             raise HTTPException(status_code=400, detail="A product must have at least one variant")
 
         await product.save()
-        return ProductService._serialize_product(product, category)
+        return ProductMapper.serialize_product(product, category)
 
     @staticmethod
     async def upload_product_images(product_id: PydanticObjectId, images: List[UploadFile]):
@@ -186,26 +169,7 @@ class ProductService:
         product.images = image_paths
         await product.save()
         category = await ProductService._get_category_or_raise(product.category_id)
-        return ProductService._serialize_product(product, category)
-
-    @staticmethod
-    async def get_all_products():
-        products = await Product.find_all().to_list()
-        categories = await Category.find_all().to_list()
-        category_map = {str(category.id): category for category in categories}
-        return [
-            ProductService._serialize_product(product, category_map[str(product.category_id)])
-            for product in products
-        ]
-
-    @staticmethod
-    async def get_product(product_id: PydanticObjectId):
-        product = await Product.get(product_id)
-        if not product:
-            return None
-
-        category = await ProductService._get_category_or_raise(product.category_id)
-        return ProductService._serialize_product(product, category)
+        return ProductMapper.serialize_product(product, category)
 
     @staticmethod
     async def update_product(product_id: PydanticObjectId, data: ProductUpdate):
@@ -217,7 +181,7 @@ class ProductService:
         category = await ProductService._get_category_or_raise(product.category_id)
 
         if not update_data:
-            return ProductService._serialize_product(product, category)
+            return ProductMapper.serialize_product(product, category)
 
         if "category_id" in update_data:
             if update_data["category_id"] is None:
@@ -232,7 +196,7 @@ class ProductService:
 
         await product.set(update_data)
         updated_product = await Product.get(product_id)
-        return ProductService._serialize_product(updated_product, category)
+        return ProductMapper.serialize_product(updated_product, category)
 
     @staticmethod
     async def delete_product(product_id: PydanticObjectId):

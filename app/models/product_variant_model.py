@@ -5,8 +5,8 @@ from pydantic import BaseModel, Field, model_validator
 
 class ProductVariant(BaseModel):
     sku: str = Field(..., min_length=3, max_length=50)
-    price: float = Field(..., gt=0)
-    discount_price: Optional[float] = Field(None, gt=0)
+    price: int = Field(..., gt=0)
+    discount_price: Optional[int] = Field(None, gt=0)
     stock: int = Field(..., ge=0)
     attributes: Dict[str, str] = Field(default_factory=dict)
 

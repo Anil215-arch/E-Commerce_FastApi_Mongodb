@@ -2,10 +2,13 @@ from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File
 from beanie import PydanticObjectId
 from typing import List
 
+from app.services.product_query_services import ProductQueryService
+from app.schemas.product_query_schema import ProductQueryParams
+from app.schemas.common_schema import PaginatedResponse
 from app.core.dependencies import get_current_user
 from app.models.user_model import User
 from app.schemas.product_schema import ProductCreate, ProductUpdate, ProductResponse
-from app.schemas.productVariant_schema import ProductVariantCreate, ProductVariantUpdate
+from app.schemas.product_variant_schema import ProductVariantCreate, ProductVariantUpdate
 from app.schemas.common_schema import ApiResponse
 from app.utils.responses import success_response
 from app.services.product_services import ProductService
@@ -31,15 +34,19 @@ async def upload_product_images(
         )
     return success_response("Product images uploaded successfully", updated_product)
 
-@router.get("/", response_model=ApiResponse[List[ProductResponse]], response_model_by_alias=False, status_code=status.HTTP_200_OK)
-async def read_all():
-    products = await ProductService.get_all_products()
-    return success_response("Products fetched successfully", products)
-
+@router.get("/", response_model=ApiResponse[PaginatedResponse[ProductResponse]], response_model_by_alias=False, status_code=status.HTTP_200_OK)
+async def list_products(query_params: ProductQueryParams = Depends()):
+    products, next_cursor = await ProductQueryService.list_products(query_params)
+    
+    paginated_data = PaginatedResponse(
+        data=products,
+        meta={"has_next_page": next_cursor is not None, "next_cursor": next_cursor}
+    )
+    return success_response("Products fetched successfully", paginated_data)
 
 @router.get("/{id}", response_model=ApiResponse[ProductResponse], response_model_by_alias=False, status_code=status.HTTP_200_OK)
 async def read_one(id: PydanticObjectId):
-    product = await ProductService.get_product(id)
+    product = await ProductQueryService.get_product(id)
     if not product:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
