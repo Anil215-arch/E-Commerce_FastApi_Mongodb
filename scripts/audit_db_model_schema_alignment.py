@@ -26,6 +26,7 @@ from app.models.email_otp_model import EmailOTPVerification
 from app.models.order_model import Order
 from app.models.product_model import Product
 from app.models.revoked_token_model import RevokedToken
+from app.models.transaction_model import Transaction
 from app.models.user_model import User
 from app.schemas.category_schema import CategoryResponse
 from app.schemas.order_schema import OrderResponse
@@ -55,6 +56,7 @@ MODEL_SPECS: list[ModelSpec] = [
     ModelSpec("Product", "products", Product),
     ModelSpec("Cart", "carts", Cart),
     ModelSpec("Order", "orders", Order),
+    ModelSpec("Transaction", "transactions", Transaction),
     ModelSpec("EmailOTPVerification", "email_otp_verifications", EmailOTPVerification),
     ModelSpec("RevokedToken", "revoked_tokens", RevokedToken),
 ]

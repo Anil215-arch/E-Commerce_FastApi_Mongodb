@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333; margin: 40px; }
+        .header { display: flex; justify-content: space-between; border-bottom: 2px solid #333; padding-bottom: 20px; margin-bottom: 30px; }
+        .invoice-title { font-size: 28px; font-weight: bold; }
+        .details-container { display: flex; justify-content: space-between; margin-bottom: 40px; }
+        .address-box { width: 45%; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #f8f9fa; font-weight: bold; }
+        .totals { text-align: right; margin-top: 20px; }
+        .totals-row { margin-bottom: 10px; font-size: 16px; }
+        .grand-total { font-size: 20px; font-weight: bold; border-top: 2px solid #333; padding-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="invoice-title">TAX INVOICE</div>
+        <div>
+            <div><strong>Invoice No:</strong> {{ invoice.invoice_number }}</div>
+            <div><strong>Date:</strong> {{ invoice.issued_at.strftime('%Y-%m-%d') }}</div>
+            <div><strong>Transaction ID:</strong> {{ invoice.gateway_transaction_id or 'N/A' }}</div>
+        </div>
+    </div>
+
+    <div class="details-container">
+        <div class="address-box">
+            <h3>Billed To:</h3>
+            <div>{{ invoice.billing_address.full_name }}</div>
+            <div>{{ invoice.billing_address.street_address }}</div>
+            <div>{{ invoice.billing_address.city }}, {{ invoice.billing_address.state }} {{ invoice.billing_address.postal_code }}</div>
+        </div>
+        <div class="address-box">
+            <h3>Shipped To:</h3>
+            <div>{{ invoice.shipping_address.full_name }}</div>
+            <div>{{ invoice.shipping_address.street_address }}</div>
+            <div>{{ invoice.shipping_address.city }}, {{ invoice.shipping_address.state }} {{ invoice.shipping_address.postal_code }}</div>
+        </div>
+    </div>
+
+    
+
+    <table>
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>SKU</th>
+                <th>Qty</th>
+                <th>Unit Price</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in invoice.items %}
+            <tr>
+                <td>{{ item.product_name }}</td>
+                <td>{{ item.sku }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ invoice.currency }} {{ item.purchase_price }}</td>
+                <td>{{ invoice.currency }} {{ item.purchase_price * item.quantity }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="totals">
+        <div class="totals-row">Subtotal: {{ invoice.currency }} {{ invoice.subtotal }}</div>
+        <div class="totals-row">Tax: {{ invoice.currency }} {{ invoice.tax_amount }}</div>
+        <div class="totals-row">Shipping: {{ invoice.currency }} {{ invoice.shipping_fee }}</div>
+        <div class="grand-total">Grand Total: {{ invoice.currency }} {{ invoice.grand_total }}</div>
+    </div>
+</body>
+</html>

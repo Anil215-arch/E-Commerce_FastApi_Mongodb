@@ -1,5 +1,5 @@
 import asyncio
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional, List
 from beanie import PydanticObjectId
 
@@ -29,7 +29,7 @@ class CartService:
                 "user_id": user_id,
                 "items": [],
                 "version": 1,
-                "updated_at": datetime.utcnow()
+                "updated_at": datetime.now(timezone.utc)
             }},
             upsert=True
         )
@@ -71,12 +71,11 @@ class CartService:
                     raise StockExceeded(f"Insufficient stock. Available: {variant.stock}")
                 new_items.append(CartItem(**data.model_dump()))
 
-            # FIX: Using raw Motor for flawless atomic locking and bypassing Pylance UpdateQuery errors
             collection = Cart.get_pymongo_collection() # type: ignore
             update_result = await collection.update_one(
                 {"_id": cart.id, "version": cart.version},
                 {
-                    "$set": {"items": [i.model_dump() for i in new_items], "updated_at": datetime.utcnow()},
+                    "$set": {"items": [i.model_dump() for i in new_items], "updated_at": datetime.now(timezone.utc)},
                     "$inc": {"version": 1}
                 }
             )
@@ -123,7 +122,7 @@ class CartService:
             update_result = await collection.update_one(
                 {"_id": cart.id, "version": cart.version},
                 {
-                    "$set": {"items": [i.model_dump() for i in new_items], "updated_at": datetime.utcnow()},
+                    "$set": {"items": [i.model_dump() for i in new_items], "updated_at": datetime.now(timezone.utc)},
                     "$inc": {"version": 1}
                 }
             )
@@ -153,7 +152,7 @@ class CartService:
             update_result = await collection.update_one(
                 {"_id": cart.id, "version": cart.version},
                 {
-                    "$set": {"items": [i.model_dump() for i in new_items], "updated_at": datetime.utcnow()},
+                    "$set": {"items": [i.model_dump() for i in new_items], "updated_at": datetime.now(timezone.utc)},
                     "$inc": {"version": 1}
                 }
             )
@@ -219,3 +218,22 @@ class CartService:
             ))
 
         return CartResponse(items=detailed_items, total_quantity=t_qty, total_price=t_price)
+    
+    
+    @staticmethod
+    async def clear_cart(user_id: PydanticObjectId) -> bool:
+        """
+        Atomically wipes all items from the user's cart upon successful checkout.
+        """
+        collection = Cart.get_pymongo_collection() # type: ignore
+        result = await collection.update_one(
+            {"user_id": user_id},
+            {
+                "$set": {
+                    "items": [], 
+                    "updated_at": datetime.now(timezone.utc)
+                },
+                "$inc": {"version": 1}
+            }
+        )
+        return result.modified_count > 0
