@@ -13,7 +13,10 @@ class ProductMapper:
     
     @staticmethod
     def serialize_product(product: Product, category: Optional[Category]) -> ProductResponse:
-        if category:
+        if product.id is None:
+            raise ValueError("Product ID is missing. Persist product before serialization.")
+        
+        if category and category.id is not None:
             category_summary = CategorySummaryResponse(_id=category.id, name=category.name)
         else:
             category_summary = CategorySummaryResponse(_id=product.category_id, name="Unknown Category")

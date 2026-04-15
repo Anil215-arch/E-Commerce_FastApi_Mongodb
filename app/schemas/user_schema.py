@@ -1,6 +1,6 @@
 from datetime import datetime
-
-from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_serializer
+from app.schemas.address_schema import Address
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_serializer, field_validator
 from beanie import PydanticObjectId
 from app.core.user_role import UserRole
 
@@ -11,6 +11,12 @@ class UserRegister(BaseModel):
     password: str = Field(..., min_length=8, description="Password is required")
     mobile: str = Field(..., min_length=10, max_length=15, description="Enter your mobile no.")
 
+    @field_validator("email", mode="before")
+    @classmethod
+    def normalize_email(cls, value: str) -> str:
+        if isinstance(value, str):
+            return value.strip().lower()
+        return value
     model_config = ConfigDict(
         json_schema_extra={
             "example": {
@@ -26,6 +32,13 @@ class UserRegister(BaseModel):
 class UserLogin(BaseModel):
     email: EmailStr = Field(..., description="Email is required")
     password: str = Field(..., min_length=8, description="Password is required")
+
+    @field_validator("email", mode="before")
+    @classmethod
+    def normalize_email(cls, value: str) -> str:
+        if isinstance(value, str):
+            return value.strip().lower()
+        return value
 
     model_config = ConfigDict(
         json_schema_extra={
@@ -51,6 +64,8 @@ class UserResponse(BaseModel):
     email: EmailStr
     mobile: str
     role: UserRole
+    is_verified: bool
+    addresses: list[Address] = []
     created_at: datetime
     
     @field_serializer("id")
@@ -74,6 +89,12 @@ class UserTokenData(BaseModel):
     token_type: str | None = None
     jti: str | None = None
 
+    @field_validator("email", mode="before")
+    @classmethod
+    def normalize_email(cls, value: str) -> str:
+        if isinstance(value, str):
+            return value.strip().lower()
+        return value
     model_config = ConfigDict(populate_by_name=True)
     
 
@@ -116,3 +137,7 @@ class UserUpdateProfile(BaseModel):
             }
         }
     )
+    
+    
+class UserAddAddress(BaseModel):
+    address: Address = Field(..., description="The new address to add to the address book")

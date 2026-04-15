@@ -1,11 +1,11 @@
 from typing import Optional, List, Dict
 from beanie import Document, Insert, PydanticObjectId, Replace, Save, SaveChanges, before_event
 from pydantic import Field
-from pymongo import IndexModel, ASCENDING
+from pymongo import TEXT, IndexModel, ASCENDING
 from app.models.product_variant_model import ProductVariant
+from app.models.base_model import AuditDocument
 
-
-class Product(Document):
+class Product(AuditDocument):
     name: str = Field(..., min_length=3, max_length=200)
     description: str = Field(..., min_length=10)
 
@@ -24,10 +24,10 @@ class Product(Document):
 
     is_available: bool = True
     is_featured: bool = False
-
+    
     @before_event([Insert, Replace, Save, SaveChanges])
     def sync_price(self) -> None:
-        self.price = min((variant.price for variant in self.variants), default=0)
+        self.price = min((variant.effective_price for variant in self.variants), default=0)
 
     class Settings:
         name = "products"
@@ -36,4 +36,9 @@ class Product(Document):
             IndexModel([("variants.sku", ASCENDING)], unique=True),
             IndexModel([("price", ASCENDING), ("_id", ASCENDING)]),
             IndexModel([("rating", ASCENDING), ("_id", ASCENDING)]),
+            IndexModel(
+                [("name", TEXT), ("brand", TEXT), ("description", TEXT)],
+                weights={"name": 10, "brand": 5, "description": 1},
+                name="product_text_search"
+            )
         ]

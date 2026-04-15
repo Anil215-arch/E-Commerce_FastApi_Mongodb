@@ -15,3 +15,12 @@ class ProductVariant(BaseModel):
         if self.discount_price is not None and self.discount_price >= self.price:
             raise ValueError("discount_price must be less than price")
         return self
+
+    @property
+    def effective_price(self) -> int:
+        """
+        Returns the discount_price if it exists; otherwise returns the base price.
+        """
+        if self.discount_price and self.discount_price > 0:
+            return self.discount_price
+        return self.price

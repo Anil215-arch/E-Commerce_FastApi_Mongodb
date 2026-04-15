@@ -17,5 +17,5 @@ class PaginationMeta(BaseModel):
     next_cursor: Optional[str] = None
 
 class PaginatedResponse(BaseModel, Generic[T]):
-    data: List[T]
+    items: List[T]
     meta: PaginationMeta

@@ -7,8 +7,8 @@ from app.schemas.category_schema import CategoryCreate, CategoryUpdate
 class CategoryService:
     @staticmethod
     async def get_all_categories() -> List[Category]:
-        return await Category.find_all().to_list()
-
+        return await Category.find(Category.is_deleted == False).to_list()
+    
     @staticmethod
     async def get_category_by_id(category_id: PydanticObjectId) -> Category | None:
         return await Category.get(category_id)
@@ -19,8 +19,8 @@ class CategoryService:
             return None, None
 
         parent = await Category.get(parent_id)
-        if not parent:
-            return None, "Parent category not found."
+        if not parent or parent.is_deleted:
+            return None, "Parent category not found or has been deleted."
 
         return parent.id, None
 
@@ -28,7 +28,7 @@ class CategoryService:
     async def _creates_cycle(category_id: PydanticObjectId, new_parent_id: PydanticObjectId) -> bool:
         current_parent = await Category.get(new_parent_id)
 
-        while current_parent is not None:
+        while current_parent is not None and not current_parent.is_deleted:
             if current_parent.id == category_id:
                 return True
 
@@ -40,21 +40,23 @@ class CategoryService:
         return False
 
     @staticmethod
-    async def create_category(data: CategoryCreate) -> Tuple[Category | None, str | None]:
+    async def create_category(data: CategoryCreate, current_user_id: PydanticObjectId) -> Tuple[Category | None, str | None]:
         parent_id, error = await CategoryService._validate_parent(data.parent_id)
         if error:
             return None, error
 
         new_category = Category(
             name=data.name,
-            parent_id=parent_id
+            parent_id=parent_id,
+            created_by=current_user_id,
+            updated_by=current_user_id
         )
         created = await new_category.insert()
         return created, None
 
     @staticmethod
     async def get_category_tree() -> List[dict]:
-        categories = await Category.find_all().to_list()
+        categories = await Category.find(Category.is_deleted == False).to_list()
 
         category_map = {}
         tree = []
@@ -82,11 +84,14 @@ class CategoryService:
         return tree
 
     @staticmethod
-    async def update_category(category_id: PydanticObjectId, data: CategoryUpdate) -> Tuple[Category | None, str | None]:
+    async def update_category(category_id: PydanticObjectId, data: CategoryUpdate, current_user_id: PydanticObjectId) -> Tuple[Category | None, str | None]:
         category = await Category.get(category_id)
-        if not category:
+        if not category or category.is_deleted:
             return None, "Category not found."
-
+        
+        if category.id is None:
+            return None, "Category ID is missing."
+        
         update_data = data.model_dump(exclude_unset=True)
         if not update_data:
             return category, None
@@ -101,29 +106,30 @@ class CategoryService:
 
             if new_parent_id is not None:
                 new_parent = await Category.get(new_parent_id)
-                if not new_parent:
+                if not new_parent or new_parent.is_deleted:
                     return None, "New parent category not found."
                 if await CategoryService._creates_cycle(category.id, new_parent_id):
                     return None, "Invalid parent category: circular hierarchy detected."
             
             category.parent_id = new_parent_id
-
+            
+        category.updated_by = current_user_id
         await category.save()
         return category, None
 
     @staticmethod
-    async def delete_category(category_id: PydanticObjectId) -> str | None:
+    async def delete_category(category_id: PydanticObjectId, current_user_id: PydanticObjectId) -> str | None:
         category = await Category.get(category_id)
-        if not category:
+        if not category or category.is_deleted:
             return "Category not found."
 
-        child_exists = await Category.find_one({"parent_id": category.id})
+        child_exists = await Category.find_one({"parent_id": category.id, "is_deleted": False})
         if child_exists:
             return "Cannot delete category because it has child categories. Reassign or delete them first."
 
-        product_exists = await Product.find_one({"category_id": category.id})
+        product_exists = await Product.find_one({"category_id": category.id, "is_deleted": False})
         if product_exists:
             return "Cannot delete category because products are assigned to it. Reassign or delete those products first."
 
-        await category.delete()
+        await category.soft_delete(current_user_id)
         return None

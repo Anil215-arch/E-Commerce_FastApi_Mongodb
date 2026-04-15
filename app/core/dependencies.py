@@ -4,6 +4,7 @@ from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
 from pydantic import ValidationError
 
 from app.core.security import decode_token
+from app.core.user_role import UserRole
 from app.models.revoked_token_model import RevokedToken
 from app.models.user_model import User
 from app.schemas.user_schema import UserTokenData
@@ -60,3 +61,13 @@ async def get_current_user(token_data: UserTokenData = Depends(get_current_acces
         )
 
     return user
+
+def RoleChecker(allowed_roles: list[UserRole]):
+    def _role_checker(user: User = Depends(get_current_user)):
+        if user.role not in allowed_roles:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="You do not have permission to perform this action"
+            )
+        return user
+    return _role_checker

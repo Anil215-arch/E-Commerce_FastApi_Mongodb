@@ -69,7 +69,7 @@ class ProductService:
         return ProductVariant(**merged_payload)
 
     @staticmethod
-    async def create_product(data: ProductCreate) -> ProductResponse:
+    async def create_product(data: ProductCreate, current_user_id: PydanticObjectId) -> ProductResponse:
         category = await ProductService._get_category_or_raise(data.category_id)
 
         variants = [ProductService._build_variant(variant) for variant in data.variants]
@@ -86,12 +86,14 @@ class ProductService:
             specifications=data.specifications,
             is_available=data.is_available,
             is_featured=data.is_featured,
+            created_by=current_user_id,
+            updated_by=current_user_id
         )
         created_product = await new_product.insert()
         return ProductMapper.serialize_product(created_product, category)
 
     @staticmethod
-    async def add_variant(product_id: PydanticObjectId, data: ProductVariantCreate) -> ProductResponse:
+    async def add_variant(product_id: PydanticObjectId, data: ProductVariantCreate, current_user_id: PydanticObjectId) -> ProductResponse:
         product = await ProductService._get_product_or_raise(product_id)
         category = await ProductService._get_category_or_raise(product.category_id)
 
@@ -100,6 +102,7 @@ class ProductService:
 
         product.variants.append(ProductService._build_variant(data))
         ProductService._ensure_variant_sku_unique(product.variants)
+        product.updated_by = current_user_id
         await product.save()
         return ProductMapper.serialize_product(product, category)
 
@@ -108,6 +111,7 @@ class ProductService:
         product_id: PydanticObjectId,
         sku: str,
         data: ProductVariantUpdate,
+        current_user_id: PydanticObjectId
     ) -> ProductResponse:
         product = await ProductService._get_product_or_raise(product_id)
         category = await ProductService._get_category_or_raise(product.category_id)
@@ -117,16 +121,18 @@ class ProductService:
 
         variant_index = ProductService._find_variant_index_or_raise(product, sku)
         product.variants[variant_index] = ProductService._merge_variant_update(product.variants[variant_index], data)
+        product.updated_by = current_user_id
         await product.save()
         return ProductMapper.serialize_product(product, category)
 
     @staticmethod
-    async def delete_variant(product_id: PydanticObjectId, sku: str) -> ProductResponse:
+    async def delete_variant(product_id: PydanticObjectId, sku: str, current_user_id: PydanticObjectId) -> ProductResponse:
         product = await ProductService._get_product_or_raise(product_id)
         category = await ProductService._get_category_or_raise(product.category_id)
 
         variant_index = ProductService._find_variant_index_or_raise(product, sku)
         product.variants.pop(variant_index)
+        product.updated_by = current_user_id
 
         if not product.variants:
             raise HTTPException(status_code=400, detail="A product must have at least one variant")
@@ -135,7 +141,7 @@ class ProductService:
         return ProductMapper.serialize_product(product, category)
 
     @staticmethod
-    async def upload_product_images(product_id: PydanticObjectId, images: List[UploadFile]):
+    async def upload_product_images(product_id: PydanticObjectId, images: List[UploadFile], current_user_id: PydanticObjectId):
         product = await Product.get(product_id)
         if not product:
             return None
@@ -157,7 +163,15 @@ class ProductService:
                     detail=f"Rejected {image.filename}. The client sent MIME type: '{image.content_type}'. Allowed types: {ALLOWED_MIME_TYPES}",
                 )
 
-            file_ext = os.path.splitext(image.filename)[1]
+            signature = image.file.read(16)
+            image.file.seek(0)
+            if image.content_type in {"image/jpeg", "image/jfif"} and not signature.startswith(b"\xff\xd8\xff"):
+                raise HTTPException(status_code=400, detail="Invalid JPEG/JFIF file signature.")
+            if image.content_type == "image/png" and not signature.startswith(b"\x89PNG\r\n\x1a\n"):
+                raise HTTPException(status_code=400, detail="Invalid PNG file signature.")
+
+            safe_filename = image.filename or "unknown_image"
+            file_ext = os.path.splitext(safe_filename)[1]
             unique_filename = f"{uuid.uuid4().hex}{file_ext}"
             file_path = os.path.join(UPLOAD_DIR, unique_filename)
 
@@ -167,12 +181,13 @@ class ProductService:
             image_paths.append(f"/media/products/{unique_filename}")
 
         product.images = image_paths
+        product.updated_by = current_user_id
         await product.save()
         category = await ProductService._get_category_or_raise(product.category_id)
         return ProductMapper.serialize_product(product, category)
 
     @staticmethod
-    async def update_product(product_id: PydanticObjectId, data: ProductUpdate):
+    async def update_product(product_id: PydanticObjectId, data: ProductUpdate, current_user_id: PydanticObjectId):
         product = await Product.get(product_id)
         if not product:
             return None
@@ -193,15 +208,19 @@ class ProductService:
                 status_code=400,
                 detail="Use the dedicated variant endpoints to add, update, or delete variants",
             )
-
+            
+        update_data["updated_by"] = current_user_id
         await product.set(update_data)
         updated_product = await Product.get(product_id)
+        if not updated_product:
+            raise HTTPException(status_code=404, detail="Product not found after update")
+            
         return ProductMapper.serialize_product(updated_product, category)
 
     @staticmethod
-    async def delete_product(product_id: PydanticObjectId):
+    async def delete_product(product_id: PydanticObjectId, current_user_id: PydanticObjectId):
         product = await Product.get(product_id)
-        if not product:
+        if not product or product.is_deleted:
             return False
 
         for image_path in product.images:
@@ -209,5 +228,5 @@ class ProductService:
             if os.path.exists(local_path):
                 os.remove(local_path)
 
-        await product.delete()
+        await product.soft_delete(current_user_id)
         return True

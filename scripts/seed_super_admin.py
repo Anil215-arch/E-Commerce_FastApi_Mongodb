@@ -7,7 +7,6 @@ from pathlib import Path
 
 from beanie import init_beanie
 from dotenv import load_dotenv
-from motor.motor_asyncio import AsyncIOMotorClient
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
@@ -53,38 +52,35 @@ def resolve_inputs(args: argparse.Namespace) -> tuple[str, str, str, str]:
 
 
 async def seed_super_admin(user_name: str, email: str, mobile: str, password: str) -> None:
-    client = AsyncIOMotorClient(settings.MONGODB_URL)
-    database = client[settings.DATABASE_NAME]
+    await init_beanie(
+        connection_string=f"{settings.MONGODB_URL}/{settings.DATABASE_NAME}",
+        document_models=[User],
+    )
 
-    try:
-        await init_beanie(database=database, document_models=[User])
+    existing_super_admin = await User.find_one(User.role == UserRole.SUPER_ADMIN)
+    if existing_super_admin:
+        print(f"Skipped: super admin already exists with email '{existing_super_admin.email}'.")
+        return
 
-        existing_super_admin = await User.find_one(User.role == UserRole.SUPER_ADMIN)
-        if existing_super_admin:
-            print(f"Skipped: super admin already exists with email '{existing_super_admin.email}'.")
-            return
+    existing_user_by_email = await User.find_one(User.email == email)
+    if existing_user_by_email:
+        print(f"Skipped: user with email '{email}' already exists.")
+        return
 
-        existing_user_by_email = await User.find_one(User.email == email)
-        if existing_user_by_email:
-            print(f"Skipped: user with email '{email}' already exists.")
-            return
+    existing_user_by_name = await User.find_one(User.user_name == user_name)
+    if existing_user_by_name:
+        print(f"Skipped: username '{user_name}' is already taken.")
+        return
 
-        existing_user_by_name = await User.find_one(User.user_name == user_name)
-        if existing_user_by_name:
-            print(f"Skipped: username '{user_name}' is already taken.")
-            return
-
-        super_admin = User(
-            user_name=user_name,
-            email=email,
-            hashed_password=get_password_hash(password),
-            mobile=mobile,
-            role=UserRole.SUPER_ADMIN,
-        )
-        await super_admin.insert()
-        print(f"Created super admin '{super_admin.user_name}' with email '{super_admin.email}'.")
-    finally:
-        client.close()
+    super_admin = User(
+        user_name=user_name,
+        email=email,
+        hashed_password=get_password_hash(password),
+        mobile=mobile,
+        role=UserRole.SUPER_ADMIN,
+    )
+    await super_admin.insert()
+    print(f"Created super admin '{super_admin.user_name}' with email '{super_admin.email}'.")
 
 
 if __name__ == "__main__":

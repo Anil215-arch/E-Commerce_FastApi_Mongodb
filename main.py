@@ -1,7 +1,9 @@
 import os
 from fastapi import FastAPI, HTTPException, Request, status
+from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
+from pydantic import ValidationError
 from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
 from app.core.database import init_db
@@ -37,18 +39,31 @@ async def http_exception_handler(request: Request, exc: HTTPException):
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
     return JSONResponse(
-        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+        status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
         content=error_response("Validation failed", exc.errors()),
+    )
+
+
+@app.exception_handler(ValidationError)
+async def pydantic_validation_exception_handler(request: Request, exc: ValidationError):
+    try:
+        errors = exc.errors(include_context=False)
+    except TypeError:
+        errors = exc.errors()
+
+    return JSONResponse(
+        status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+        content=error_response("Validation failed", jsonable_encoder(errors)),
     )
 
 
 @app.exception_handler(Exception)
 async def unhandled_exception_handler(request: Request, exc: Exception):
+    print(f"CRITICAL ERROR: {exc}")
     return JSONResponse(
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
         content=error_response("Internal server error"),
     )
-
 
 @app.get("/", response_model=ApiResponse[None])
 async def root():

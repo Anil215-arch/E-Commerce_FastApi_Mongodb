@@ -17,13 +17,16 @@ class CartItemDetailed(BaseModel):
     brand: str
     sku: str
     image: Optional[str] = None
-    variant: ProductVariantResponse
-    quantity: int
+    variant: Optional[ProductVariantResponse] = None
+    requested_quantity: int
+    effective_quantity: int
     subtotal: int
+    is_available: bool
+    available_stock: int
 
-    @field_serializer("product_id")
+    @field_serializer("product_id", "sku")
     def serialize_id(self, value):
-        return str(value)
+        return str(value) if value else None
 
 class CartResponse(BaseModel):
     items: List[CartItemDetailed]

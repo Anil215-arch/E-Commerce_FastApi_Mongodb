@@ -1,7 +1,8 @@
 from fastapi import APIRouter, Depends, status
 from beanie import PydanticObjectId
 from app.models.user_model import User
-from app.core.dependencies import get_bearer_token, get_current_user
+from app.core.dependencies import RoleChecker, get_bearer_token, get_current_user
+from app.core.user_role import UserRole
 from app.schemas.user_schema import (
     LogoutRequest,
     RefreshTokenRequest,
@@ -12,6 +13,7 @@ from app.schemas.user_schema import (
     UserUpdatePassword,
     UserUpdateProfile,
     UserUpdateRole,
+    UserAddAddress,
 )
 from app.schemas.common_schema import ApiResponse
 from app.utils.responses import success_response
@@ -19,10 +21,14 @@ from app.services.user_services import UserServices
 
 
 router = APIRouter()
+view_user_access = Depends(RoleChecker([UserRole.SUPER_ADMIN, UserRole.ADMIN]))
 
 
 @router.get("/", response_model=ApiResponse[list[UserResponse]], response_model_by_alias=False)
-async def get_all_users(_current_user: User = Depends(get_current_user)):
+async def get_all_users(
+    _current_user: User = Depends(get_current_user),
+    _authorized_user: User = view_user_access,
+):
     users = await UserServices.get_all_users()
     return success_response("Users fetched successfully", users)
 
@@ -97,3 +103,39 @@ async def update_user_profile(
 ):
     updated_user = await UserServices.update_user_profile(current_user, id, profile_in)
     return success_response("User profile updated successfully", updated_user)
+
+@router.post("/me/addresses", response_model=ApiResponse[UserResponse])
+async def add_address(
+    data: UserAddAddress,
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Appends a new shipping/billing address to the user's profile.
+    """
+    updated_user = await UserServices.add_user_address(current_user, data)
+    return success_response("Address added successfully", updated_user)
+
+
+@router.delete("/me/addresses/{address_index}", response_model=ApiResponse[UserResponse])
+async def remove_address(
+    address_index: int,
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Deletes an address from the user's profile based on its array index (0-based).
+    """
+    updated_user = await UserServices.remove_user_address(current_user, address_index)
+    return success_response("Address removed successfully", updated_user)
+
+
+@router.delete("/{id}", response_model=ApiResponse[bool], status_code=status.HTTP_200_OK)
+async def delete_user(
+    id: PydanticObjectId,
+    current_user: User = Depends(get_current_user),
+    _authorized_user: User = view_user_access, # Reusing Admin check
+):
+    """
+    Admin only: Soft-deletes a user account.
+    """
+    success = await UserServices.delete_user(id, current_user)
+    return success_response("User deleted successfully", success)
