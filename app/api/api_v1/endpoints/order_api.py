@@ -6,7 +6,7 @@ from app.core.user_role import UserRole
 from app.core.dependencies import get_current_user, RoleChecker
 from app.models.user_model import User
 from app.schemas.invoice_schema import InvoiceResponse
-from app.schemas.order_schema import CheckoutBatchResponse, CheckoutRequest, OrderResponse, OrderUpdateStatusRequest
+from app.schemas.order_schema import CheckoutBatchResponse, CheckoutRequest, OrderResponse, OrderUpdateStatusRequest, OrderCancelRequest
 from app.schemas.common_schema import ApiResponse
 from app.services.invoice_services import InvoiceService
 from app.utils.responses import success_response
@@ -14,7 +14,6 @@ from app.services.order_services import OrderService
 from fastapi import Response
 from fastapi.concurrency import run_in_threadpool
 from app.services.pdf_services import PDFService
-
 
 router = APIRouter()
 
@@ -84,13 +83,15 @@ async def update_order_status(
 @router.patch("/{order_id}/cancel", response_model=ApiResponse[OrderResponse], response_model_by_alias=False, status_code=status.HTTP_200_OK)
 async def cancel_order(
     order_id: PydanticObjectId,
+    data: OrderCancelRequest,
     current_user: User = Depends(get_current_user)
 ):
     """
-    Cancels an order, releases reserved inventory back to stock, and processes refunds if applicable.
-    Customers can cancel their own orders. Admins can cancel any order.
+    Cancels an order, releases reserved inventory back to stock, processes refunds if applicable, 
+    and dispatches cancellation notifications.
     """
-    cancelled_order = await OrderService.cancel_order(order_id, current_user)
+    # Pass the reason down to the service layer
+    cancelled_order = await OrderService.cancel_order(order_id, current_user, data.reason)
     return success_response("Order cancelled and inventory released successfully", cancelled_order)
 
 

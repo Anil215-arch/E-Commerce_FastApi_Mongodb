@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List
+from typing import List, Optional
 
 from beanie import PydanticObjectId
 from pydantic import BaseModel, ConfigDict, Field
@@ -31,6 +31,7 @@ class OrderResponse(BaseModel):
     status: OrderStatus
     payment_status: OrderPaymentStatus
     refunded_amount: int
+    cancellation_reason: Optional[str] = None
     created_at: datetime
 
     model_config = ConfigDict(
@@ -55,3 +56,6 @@ class CheckoutBatchResponse(BaseModel):
 
 class OrderUpdateStatusRequest(BaseModel):
     status: OrderStatus = Field(..., description="The new status to apply to the order")
+    
+class OrderCancelRequest(BaseModel):
+    reason: str = Field(..., min_length=10, max_length=500, description="The exact reason for cancelling the order.")
