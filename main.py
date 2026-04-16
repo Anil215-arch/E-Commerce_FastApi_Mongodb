@@ -9,12 +9,14 @@ from contextlib import asynccontextmanager
 from app.core.database import init_db
 from app.api.api_v1.router import api_router
 from app.core.config import settings
+from app.events import register_event_handlers
 from app.utils.responses import error_response, success_response
 from app.schemas.common_schema import ApiResponse
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await init_db()
+    register_event_handlers()
     yield
 
 app = FastAPI(

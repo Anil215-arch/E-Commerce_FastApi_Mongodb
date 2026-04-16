@@ -1,7 +1,9 @@
 from beanie import init_beanie
 from app.core.config import settings
 from app.models.cart_model import Cart
+from app.models.device_token_model import DeviceToken
 from app.models.email_otp_model import EmailOTPVerification
+from app.models.notification_model import Notification
 from app.models.order_model import Order
 from app.models.product_model import Product
 from app.models.category_model import Category
@@ -27,7 +29,9 @@ async def init_db():
             Transaction,
             Invoice,
             Counter,
-            ReviewAndRating
+            ReviewAndRating,
+            DeviceToken,
+            Notification
         ],
     )
     
