@@ -81,8 +81,6 @@ class ProductService:
             brand=data.brand,
             category_id=data.category_id,
             variants=variants,
-            rating=data.rating,
-            num_reviews=data.num_reviews,
             specifications=data.specifications,
             is_available=data.is_available,
             is_featured=data.is_featured,

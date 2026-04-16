@@ -5,6 +5,7 @@ from app.models.email_otp_model import EmailOTPVerification
 from app.models.order_model import Order
 from app.models.product_model import Product
 from app.models.category_model import Category
+from app.models.review_rating_model import ReviewAndRating
 from app.models.revoked_token_model import RevokedToken
 from app.models.transaction_model import Transaction
 from app.models.user_model import User
@@ -25,7 +26,8 @@ async def init_db():
             Order,
             Transaction,
             Invoice,
-            Counter
+            Counter,
+            ReviewAndRating
         ],
     )
     

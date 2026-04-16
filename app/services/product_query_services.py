@@ -36,7 +36,7 @@ class ProductQueryService:
             if params.sort_by == SortField.RELEVANCE:
                 pipeline.append({"$sort": {"score": {"$meta": "textScore"}, "_id": 1}})
             else:
-                sort_field_map = {SortField.PRICE: "price", SortField.RATING: "rating"}
+                sort_field_map = {SortField.PRICE: "price", SortField.RATING: "average_rating"}
                 db_sort_field = sort_field_map.get(params.sort_by, "price")
                 sort_dir = -1 if params.sort_order == SortOrder.DESC else 1
                 pipeline.append({"$sort": {db_sort_field: sort_dir, "_id": sort_dir}})
@@ -58,7 +58,7 @@ class ProductQueryService:
         else:
             sort_field_map = {
                 SortField.PRICE: "price",
-                SortField.RATING: "rating",
+                SortField.RATING: "average_rating",
                 SortField.CREATED_AT: "_id" 
             }
             db_sort_field = sort_field_map[params.sort_by]

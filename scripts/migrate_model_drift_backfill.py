@@ -6,6 +6,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 from motor.motor_asyncio import AsyncIOMotorClient
+from pymongo import UpdateOne
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
@@ -54,6 +55,11 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Unset legacy orders.total_amount after mapping it to new fields.",
     )
+    parser.add_argument(
+        "--drop-legacy-product-rating",
+        action="store_true",
+        help="Unset legacy products.rating after mapping to aggregate rating fields.",
+    )
     return parser.parse_args()
 
 
@@ -85,6 +91,7 @@ async def migrate(
     database_name: str,
     dry_run: bool,
     drop_legacy_order_total_amount: bool,
+    drop_legacy_product_rating: bool,
 ) -> None:
     client = AsyncIOMotorClient(mongodb_url)
     db = client[database_name]
@@ -174,8 +181,214 @@ async def migrate(
             )
             print(f"  matched={result.matched_count} modified={result.modified_count}")
 
-        # 4) Optional legacy field cleanup
-        print("\n[4/4] Optional cleanup")
+        # 4) Product rating model drift migration
+        print("\n[4/5] Product rating aggregate backfill")
+        products = db["products"]
+        reviews = db["reviews"]
+
+        products_missing_rating_shape_filter = {
+            "$or": [
+                {"average_rating": {"$exists": False}},
+                {"average_rating": None},
+                {"rating_sum": {"$exists": False}},
+                {"rating_sum": None},
+                {"rating_breakdown": {"$exists": False}},
+                {"rating_breakdown": None},
+            ]
+        }
+        products_missing_rating_shape = await count_filter(products, products_missing_rating_shape_filter)
+        products_with_legacy_rating = await count_filter(products, {"rating": {"$exists": True}})
+        active_reviews = await count_filter(reviews, {"is_deleted": {"$ne": True}})
+
+        print(f"- products missing aggregate rating fields = {products_missing_rating_shape}")
+        print(f"- products with legacy rating field = {products_with_legacy_rating}")
+        print(f"- active reviews available for exact backfill = {active_reviews}")
+
+        if not dry_run and active_reviews > 0:
+            stats_cursor = reviews.aggregate(
+                [
+                    {"$match": {"is_deleted": {"$ne": True}}},
+                    {
+                        "$group": {
+                            "_id": "$product_id",
+                            "num_reviews": {"$sum": 1},
+                            "rating_sum": {"$sum": "$rating"},
+                            "one": {
+                                "$sum": {
+                                    "$cond": [{"$eq": ["$rating", 1]}, 1, 0]
+                                }
+                            },
+                            "two": {
+                                "$sum": {
+                                    "$cond": [{"$eq": ["$rating", 2]}, 1, 0]
+                                }
+                            },
+                            "three": {
+                                "$sum": {
+                                    "$cond": [{"$eq": ["$rating", 3]}, 1, 0]
+                                }
+                            },
+                            "four": {
+                                "$sum": {
+                                    "$cond": [{"$eq": ["$rating", 4]}, 1, 0]
+                                }
+                            },
+                            "five": {
+                                "$sum": {
+                                    "$cond": [{"$eq": ["$rating", 5]}, 1, 0]
+                                }
+                            },
+                        }
+                    },
+                ]
+            )
+
+            ops: list[UpdateOne] = []
+            async for stat in stats_cursor:
+                count = int(stat.get("num_reviews", 0))
+                score_sum = int(stat.get("rating_sum", 0))
+                avg = round(score_sum / count, 2) if count > 0 else 0.0
+
+                ops.append(
+                    UpdateOne(
+                        {"_id": stat["_id"]},
+                        {
+                            "$set": {
+                                "num_reviews": count,
+                                "rating_sum": score_sum,
+                                "average_rating": avg,
+                                "rating_breakdown": {
+                                    "1": int(stat.get("one", 0)),
+                                    "2": int(stat.get("two", 0)),
+                                    "3": int(stat.get("three", 0)),
+                                    "4": int(stat.get("four", 0)),
+                                    "5": int(stat.get("five", 0)),
+                                },
+                            }
+                        },
+                    )
+                )
+
+            if ops:
+                bulk_result = await products.bulk_write(ops, ordered=False)
+                print(
+                    "  applied exact review-based aggregates: "
+                    f"matched={bulk_result.matched_count} modified={bulk_result.modified_count}"
+                )
+
+        if not dry_run and products_missing_rating_shape > 0:
+            result = await products.update_many(
+                products_missing_rating_shape_filter,
+                [
+                    {
+                        "$set": {
+                            "num_reviews": {"$ifNull": ["$num_reviews", 0]},
+                            "_legacy_rating": {"$ifNull": ["$rating", 0]},
+                            "_legacy_num_reviews": {"$ifNull": ["$num_reviews", 0]},
+                        }
+                    },
+                    {
+                        "$set": {
+                            "_legacy_bucket": {
+                                "$min": [
+                                    5,
+                                    {
+                                        "$max": [
+                                            1,
+                                            {
+                                                "$toInt": {
+                                                    "$round": ["$_legacy_rating", 0]
+                                                }
+                                            },
+                                        ]
+                                    },
+                                ]
+                            },
+                            "rating_sum": {
+                                "$ifNull": [
+                                    "$rating_sum",
+                                    {
+                                        "$toInt": {
+                                            "$round": [
+                                                {
+                                                    "$multiply": [
+                                                        "$_legacy_rating",
+                                                        "$_legacy_num_reviews",
+                                                    ]
+                                                },
+                                                0,
+                                            ]
+                                        }
+                                    },
+                                ]
+                            },
+                        }
+                    },
+                    {
+                        "$set": {
+                            "average_rating": {
+                                "$ifNull": [
+                                    "$average_rating",
+                                    {
+                                        "$cond": [
+                                            {"$gt": ["$num_reviews", 0]},
+                                            "$_legacy_rating",
+                                            0.0,
+                                        ]
+                                    },
+                                ]
+                            },
+                            "rating_breakdown": {
+                                "$ifNull": [
+                                    "$rating_breakdown",
+                                    {
+                                        "1": {
+                                            "$cond": [
+                                                {"$eq": ["$_legacy_bucket", 1]},
+                                                "$_legacy_num_reviews",
+                                                0,
+                                            ]
+                                        },
+                                        "2": {
+                                            "$cond": [
+                                                {"$eq": ["$_legacy_bucket", 2]},
+                                                "$_legacy_num_reviews",
+                                                0,
+                                            ]
+                                        },
+                                        "3": {
+                                            "$cond": [
+                                                {"$eq": ["$_legacy_bucket", 3]},
+                                                "$_legacy_num_reviews",
+                                                0,
+                                            ]
+                                        },
+                                        "4": {
+                                            "$cond": [
+                                                {"$eq": ["$_legacy_bucket", 4]},
+                                                "$_legacy_num_reviews",
+                                                0,
+                                            ]
+                                        },
+                                        "5": {
+                                            "$cond": [
+                                                {"$eq": ["$_legacy_bucket", 5]},
+                                                "$_legacy_num_reviews",
+                                                0,
+                                            ]
+                                        },
+                                    },
+                                ]
+                            },
+                        }
+                    },
+                    {"$unset": ["_legacy_rating", "_legacy_num_reviews", "_legacy_bucket"]},
+                ],
+            )
+            print(f"  fallback aggregate backfill matched={result.matched_count} modified={result.modified_count}")
+
+        # 5) Optional legacy field cleanup
+        print("\n[5/5] Optional cleanup")
         if drop_legacy_order_total_amount:
             remaining_legacy_total = await count_filter(orders, {"total_amount": {"$exists": True}})
             print(f"- legacy orders.total_amount remaining before cleanup = {remaining_legacy_total}")
@@ -188,6 +401,19 @@ async def migrate(
                 print(f"  matched={result.matched_count} modified={result.modified_count}")
         else:
             print("- cleanup skipped (use --drop-legacy-order-total-amount to enable)")
+
+        if drop_legacy_product_rating:
+            remaining_legacy_rating = await count_filter(products, {"rating": {"$exists": True}})
+            print(f"- legacy products.rating remaining before cleanup = {remaining_legacy_rating}")
+
+            if not dry_run and remaining_legacy_rating > 0:
+                result = await products.update_many(
+                    {"rating": {"$exists": True}},
+                    {"$unset": {"rating": ""}},
+                )
+                print(f"  matched={result.matched_count} modified={result.modified_count}")
+        else:
+            print("- cleanup skipped (use --drop-legacy-product-rating to enable)")
 
         print("\nDone.")
         if dry_run:
@@ -205,5 +431,6 @@ if __name__ == "__main__":
             database_name=args.database_name,
             dry_run=args.dry_run,
             drop_legacy_order_total_amount=args.drop_legacy_order_total_amount,
+            drop_legacy_product_rating=args.drop_legacy_product_rating,
         )
     )

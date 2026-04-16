@@ -13,9 +13,6 @@ class ProductCreate(BaseModel):
 
     variants: List[ProductVariantCreate] = Field(default_factory=list)
 
-    rating: float = Field(default=0.0, ge=0, le=5)
-    num_reviews: int = Field(default=0, ge=0)
-
     specifications: Dict[str, str] = Field(default_factory=dict)
 
     is_available: bool = True
@@ -74,9 +71,6 @@ class ProductUpdate(BaseModel):
 
     images: Optional[List[str]] = None
 
-    rating: Optional[float] = Field(None, ge=0, le=5)
-    num_reviews: Optional[int] = Field(None, ge=0)
-
     specifications: Optional[Dict[str, str]] = None
 
     is_available: Optional[bool] = None
@@ -106,8 +100,11 @@ class ProductResponse(BaseModel):
 
     images: List[str]
 
-    rating: float
+    average_rating: float
     num_reviews: int
+    rating_sum: int
+    rating_breakdown: Dict[str, int]
+
 
     specifications: Dict[str, str]
 

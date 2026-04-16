@@ -17,9 +17,13 @@ class Product(AuditDocument):
 
     images: List[str] = Field(default_factory=list)
 
-    rating: float = Field(default=0.0, ge=0, le=5)
     num_reviews: int = Field(default=0, ge=0)
-
+    rating_sum: int = Field(default=0, ge=0)
+    average_rating: float = Field(default=0.0, ge=0, le=5)
+    
+    rating_breakdown: Dict[str, int] = Field(
+        default_factory=lambda: {"1": 0, "2": 0, "3": 0, "4": 0, "5": 0}
+    )
     specifications: Dict[str, str] = Field(default_factory=dict)
 
     is_available: bool = True
@@ -35,7 +39,7 @@ class Product(AuditDocument):
             IndexModel([("category_id", ASCENDING)]),
             IndexModel([("variants.sku", ASCENDING)], unique=True),
             IndexModel([("price", ASCENDING), ("_id", ASCENDING)]),
-            IndexModel([("rating", ASCENDING), ("_id", ASCENDING)]),
+            IndexModel([("average_rating", ASCENDING), ("_id", ASCENDING)]),
             IndexModel(
                 [("name", TEXT), ("brand", TEXT), ("description", TEXT)],
                 weights={"name": 10, "brand": 5, "description": 1},
