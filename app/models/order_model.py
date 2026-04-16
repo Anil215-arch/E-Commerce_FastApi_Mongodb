@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import List
+from typing import List, Optional
 
 from beanie import PydanticObjectId
 from pydantic import BaseModel, Field
@@ -55,6 +55,8 @@ class Order(AuditDocument):
     status: OrderStatus = Field(default=OrderStatus.PENDING)
     payment_status: OrderPaymentStatus = Field(default=OrderPaymentStatus.PENDING)
     refunded_amount: int = Field(default=0, ge=0)
+    
+    cancellation_reason: Optional[str] = Field(default=None, max_length=500, description="Reason provided when the order was cancelled")    
 
     class Settings:
         name = "orders"

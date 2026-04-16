@@ -8,6 +8,7 @@ from typing import TypedDict
 
 from beanie import PydanticObjectId
 from fastapi import HTTPException, status
+
 from app.services.invoice_services import InvoiceService
 from app.core.user_role import UserRole
 from app.models.cart_model import Cart
@@ -20,7 +21,9 @@ from app.models.transaction_model import (
     TransactionStatus,
 )
 from app.models.user_model import User
-from app.schemas.order_schema import CheckoutBatchResponse, CheckoutRequest, OrderResponse, OrderUpdateStatusRequest
+from app.schemas.order_schema import CheckoutBatchResponse, CheckoutRequest, OrderResponse, OrderUpdateStatusRequest, OrderCancelRequest
+from app.events.bus import EventBus
+from app.events.order_events import OrderDeliveredEvent, OrderCancelledEvent
 from app.services.cart_services import CartService
 
 logger = logging.getLogger(__name__)
@@ -299,7 +302,7 @@ class OrderService:
             created_transaction.gateway_transaction_id = payment_result["txn_id"]
             created_transaction.updated_by = user_id
             await created_transaction.save()
-  
+ 
             for order in created_orders:
                 order.status = OrderStatus.CONFIRMED
                 order.payment_status = OrderPaymentStatus.PAID
@@ -404,10 +407,19 @@ class OrderService:
         order.updated_by = current_user.id
         await order.save()
 
+        # FIRE THE DELIVERED EVENT
+        if order.status == OrderStatus.DELIVERED:
+            await EventBus.publish(
+                OrderDeliveredEvent(
+                    order_id=order_id,
+                    user_id=order.user_id
+                )
+            )
+
         return OrderResponse.model_validate(order)
 
     @staticmethod
-    async def cancel_order(order_id: PydanticObjectId, current_user: User) -> OrderResponse:
+    async def cancel_order(order_id: PydanticObjectId, current_user: User, reason: str) -> OrderResponse:
         order = await Order.find_one({"_id": order_id, "is_deleted": {"$ne": True}})
         if not order:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Order not found")
@@ -470,9 +482,19 @@ class OrderService:
         await OrderService._rollback_inventory(order.items)
 
         order.status = OrderStatus.CANCELLED
+        order.cancellation_reason = reason # Persist the audit trail
         if order.payment_status == OrderPaymentStatus.PENDING:
             order.payment_status = OrderPaymentStatus.FAILED
         order.updated_by = current_user.id
         await order.save()
+
+        # FIRE THE CANCELLED EVENT
+        await EventBus.publish(
+            OrderCancelledEvent(
+                order_id=order_id,
+                user_id=order.user_id,
+                reason=reason
+            )
+        )
 
         return OrderResponse.model_validate(order)
