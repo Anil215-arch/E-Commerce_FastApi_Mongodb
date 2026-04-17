@@ -55,9 +55,10 @@ async def test_list_products_ignores_invalid_cursor_and_returns_first_page():
         with patch("app.services.product_query_services.Category.find") as mock_category_find:
             mock_category_find.return_value.to_list = AsyncMock(return_value=[SimpleNamespace(id=category_id, name="Cat")])
             with patch("app.services.product_query_services.ProductMapper.serialize_product", return_value={"ok": True}) as mock_map:
-                data, next_cursor = await ProductQueryService.list_products(params)
+                data, next_cursor, has_next_page = await ProductQueryService.list_products(params)
 
     assert next_cursor is None
+    assert has_next_page is False
     assert data == [{"ok": True}]
     mock_map.assert_called_once()
 
@@ -74,10 +75,11 @@ async def test_list_products_generates_next_cursor_when_extra_record_exists():
         with patch("app.services.product_query_services.Category.find") as mock_category_find:
             mock_category_find.return_value.to_list = AsyncMock(return_value=[SimpleNamespace(id=category_id, name="Cat")])
             with patch("app.services.product_query_services.ProductMapper.serialize_product", side_effect=[{"id": 1}, {"id": 2}]):
-                data, next_cursor = await ProductQueryService.list_products(params)
+                data, next_cursor, has_next_page = await ProductQueryService.list_products(params)
 
     assert len(data) == 2
     assert next_cursor is not None
+    assert has_next_page is True
     decoded = CursorUtils.decode_cursor(next_cursor)
     assert decoded is not None
     assert "id" in decoded

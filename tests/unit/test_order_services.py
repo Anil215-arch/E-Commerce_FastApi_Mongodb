@@ -182,6 +182,7 @@ async def test_cancel_order_applies_partial_refund_to_shared_transaction():
                         result = await OrderService.cancel_order(
                             order_id,
                             SimpleNamespace(id=admin_id, role=UserRole.ADMIN),
+                                "Customer requested cancellation before dispatch",
                         )
 
     assert result.payment_status == OrderPaymentStatus.REFUNDED

@@ -1,3 +1,4 @@
+from beanie import PydanticObjectId
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
@@ -71,3 +72,11 @@ def RoleChecker(allowed_roles: list[UserRole]):
             )
         return user
     return _role_checker
+
+def _require_user_id(current_user: User) -> PydanticObjectId:
+    if current_user.id is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Authenticated user id is missing"
+        )
+    return current_user.id

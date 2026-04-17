@@ -19,9 +19,9 @@ def test_register_user_route_returns_success_envelope(client):
         "created_at": datetime.now(timezone.utc).isoformat(),
     }
 
-    with patch("app.api.api_v1.endpoints.user_api.UserServices.user_registration", new=AsyncMock(return_value=created_user)):
+    with patch("app.api.api_v1.endpoints.public.auth.UserServices.user_registration", new=AsyncMock(return_value=created_user)):
         response = client.post(
-            "/api/v1/users/register",
+            "/api/v1/auth/register",
             json={
                 "user_name": "john",
                 "email": "john@example.com",
@@ -43,9 +43,9 @@ def test_login_user_route_returns_tokens(client):
         "token_type": "bearer",
     }
 
-    with patch("app.api.api_v1.endpoints.user_api.UserServices.login_and_issue_tokens", new=AsyncMock(return_value=token_payload)):
+    with patch("app.api.api_v1.endpoints.public.auth.UserServices.login_and_issue_tokens", new=AsyncMock(return_value=token_payload)):
         response = client.post(
-            "/api/v1/users/login",
+            "/api/v1/auth/login",
             json={"email": "john@example.com", "password": "StrongPass123!"},
         )
 
@@ -59,10 +59,10 @@ def test_refresh_route_maps_service_http_error_to_standard_error_envelope(client
     from fastapi import HTTPException
 
     with patch(
-        "app.api.api_v1.endpoints.user_api.UserServices.refresh_user_token",
+        "app.api.api_v1.endpoints.public.auth.UserServices.refresh_user_token",
         new=AsyncMock(side_effect=HTTPException(status_code=401, detail="Refresh token has been revoked")),
     ):
-        response = client.post("/api/v1/users/refresh", json={"refresh_token": "revoked"})
+        response = client.post("/api/v1/auth/refresh", json={"refresh_token": "revoked"})
 
     assert response.status_code == 401
     body = response.json()
@@ -80,8 +80,8 @@ def test_logout_route_success_with_dependency_overrides(client):
     main.app.dependency_overrides[get_current_user] = _current_user
     main.app.dependency_overrides[get_bearer_token] = _bearer_token
 
-    with patch("app.api.api_v1.endpoints.user_api.UserServices.logout_user", new=AsyncMock()) as mock_logout:
-        response = client.post("/api/v1/users/logout", json={"refresh_token": "refresh.token"})
+    with patch("app.api.api_v1.endpoints.public.auth.UserServices.logout_user", new=AsyncMock()) as mock_logout:
+        response = client.post("/api/v1/auth/logout", json={"refresh_token": "refresh.token"})
 
     assert response.status_code == 200
     body = response.json()
@@ -90,7 +90,7 @@ def test_logout_route_success_with_dependency_overrides(client):
 
 
 def test_forgot_password_route_returns_generic_message(client):
-    with patch("app.api.api_v1.endpoints.email_otp_api.UserServices.forgot_password_request", new=AsyncMock()) as mock_forgot:
+    with patch("app.api.api_v1.endpoints.public.auth.UserServices.forgot_password_request", new=AsyncMock()) as mock_forgot:
         response = client.post("/api/v1/auth/forgot-password", json={"email": "john@example.com"})
 
     assert response.status_code == 200
@@ -102,7 +102,7 @@ def test_forgot_password_route_returns_generic_message(client):
 
 def test_verify_registration_route_uses_service_message(client):
     with patch(
-        "app.api.api_v1.endpoints.email_otp_api.UserServices.verify_email_registration",
+        "app.api.api_v1.endpoints.public.auth.UserServices.verify_email_registration",
         new=AsyncMock(return_value="Email verified successfully. You can now login."),
     ):
         response = client.post(

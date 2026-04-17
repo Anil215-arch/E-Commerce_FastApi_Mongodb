@@ -24,6 +24,7 @@ async def test_product_update_variant_rejects_path_body_sku_mismatch():
                     PydanticObjectId(),
                     "SKU-PATH",
                     ProductVariantUpdate(sku="SKU-BODY", price=100, stock=3),
+                    PydanticObjectId(),
                 )
 
     assert exc.value.status_code == 400
@@ -41,7 +42,7 @@ async def test_delete_variant_rejects_when_product_would_have_no_variants_left()
     with patch("app.services.product_services.ProductService._get_product_or_raise", new=AsyncMock(return_value=product)):
         with patch("app.services.product_services.ProductService._get_category_or_raise", new=AsyncMock(return_value=object())):
             with pytest.raises(HTTPException) as exc:
-                await ProductService.delete_variant(PydanticObjectId(), "ONLY")
+                await ProductService.delete_variant(PydanticObjectId(), "ONLY", PydanticObjectId())
 
     assert exc.value.status_code == 400
     assert "at least one variant" in str(exc.value.detail).lower()
@@ -66,7 +67,7 @@ async def test_upload_product_images_rejects_file_above_size_limit():
 
     with patch("app.services.product_services.Product.get", new=AsyncMock(return_value=product)):
         with pytest.raises(HTTPException) as exc:
-            await ProductService.upload_product_images(PydanticObjectId(), [image])
+            await ProductService.upload_product_images(PydanticObjectId(), [image], PydanticObjectId())
 
     assert exc.value.status_code == 400
     assert "file too large" in str(exc.value.detail).lower()
@@ -86,6 +87,7 @@ async def test_update_product_rejects_variants_payload_in_general_update():
                             ProductVariantUpdate(sku="SKU-1", price=100, stock=1),
                         ]
                     ),
+                    PydanticObjectId(),
                 )
 
     assert exc.value.status_code == 400
@@ -95,12 +97,13 @@ async def test_update_product_rejects_variants_payload_in_general_update():
 @pytest.mark.asyncio
 async def test_category_update_rejects_self_parent_assignment():
     category_id = PydanticObjectId()
-    category = SimpleNamespace(id=category_id, parent_id=None, save=AsyncMock())
+    category = SimpleNamespace(id=category_id, parent_id=None, is_deleted=False, save=AsyncMock())
 
     with patch("app.services.category_services.Category.get", new=AsyncMock(return_value=category)):
         updated, error = await CategoryService.update_category(
             category_id,
             CategoryUpdate(parent_id=category_id),
+            PydanticObjectId(),
         )
 
     assert updated is None
@@ -111,13 +114,13 @@ async def test_category_update_rejects_self_parent_assignment():
 async def test_category_update_rejects_cycle_in_hierarchy():
     category_id = PydanticObjectId()
     new_parent_id = PydanticObjectId()
-    category = SimpleNamespace(id=category_id, parent_id=None, save=AsyncMock())
+    category = SimpleNamespace(id=category_id, parent_id=None, is_deleted=False, save=AsyncMock())
 
     async def _category_get_side_effect(requested_id):
         if requested_id == category_id:
             return category
         if requested_id == new_parent_id:
-            return SimpleNamespace(id=new_parent_id, parent_id=None)
+            return SimpleNamespace(id=new_parent_id, parent_id=None, is_deleted=False)
         return None
 
     with patch("app.services.category_services.Category.get", new=AsyncMock(side_effect=_category_get_side_effect)):
@@ -125,6 +128,7 @@ async def test_category_update_rejects_cycle_in_hierarchy():
             updated, error = await CategoryService.update_category(
                 category_id,
                 CategoryUpdate(parent_id=new_parent_id),
+                PydanticObjectId(),
             )
 
     assert updated is None
@@ -133,12 +137,12 @@ async def test_category_update_rejects_cycle_in_hierarchy():
 
 @pytest.mark.asyncio
 async def test_delete_category_rejects_when_products_are_assigned():
-    category = SimpleNamespace(id=PydanticObjectId(), delete=AsyncMock())
+    category = SimpleNamespace(id=PydanticObjectId(), is_deleted=False, delete=AsyncMock())
 
     with patch("app.services.category_services.Category.get", new=AsyncMock(return_value=category)):
         with patch("app.services.category_services.Category.find_one", new=AsyncMock(return_value=None)):
             with patch("app.services.category_services.Product.find_one", new=AsyncMock(return_value=object())):
-                error = await CategoryService.delete_category(category.id)
+                error = await CategoryService.delete_category(category.id, PydanticObjectId())
 
     assert "products are assigned" in error.lower()
 
@@ -152,9 +156,14 @@ async def test_get_category_tree_builds_nested_children():
         SimpleNamespace(id=child_id, name="Child", parent_id=root_id),
     ]
 
-    with patch("app.services.category_services.Category.find_all") as mock_find_all:
-        mock_find_all.return_value.to_list = AsyncMock(return_value=categories)
-        tree = await CategoryService.get_category_tree()
+    class _Expr:
+        def __eq__(self, _other):
+            return True
+
+    find_cursor = SimpleNamespace(to_list=AsyncMock(return_value=categories))
+    with patch("app.services.category_services.Category.is_deleted", new=_Expr(), create=True):
+        with patch("app.services.category_services.Category.find", return_value=find_cursor):
+            tree = await CategoryService.get_category_tree()
 
     assert len(tree) == 1
     assert tree[0]["name"] == "Root"

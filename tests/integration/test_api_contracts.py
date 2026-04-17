@@ -25,16 +25,18 @@ def test_products_list_returns_paginated_items_without_double_data(client):
         ],
         "price": 45000,
         "images": [],
-        "rating": 4.2,
+        "average_rating": 4.2,
         "num_reviews": 10,
+        "rating_sum": 42,
+        "rating_breakdown": {"1": 0, "2": 0, "3": 1, "4": 5, "5": 4},
         "specifications": {},
         "is_available": True,
         "is_featured": False,
     }
 
     with patch(
-        "app.api.api_v1.endpoints.product_api.ProductQueryService.list_products",
-        new=AsyncMock(return_value=([product_payload], "cursor-1")),
+        "app.api.api_v1.endpoints.public.products.ProductQueryService.list_products",
+        new=AsyncMock(return_value=([product_payload], "cursor-1", False)),
     ):
         response = client.get("/api/v1/products/?limit=10&sort_by=created_at&sort_order=desc")
 
@@ -64,7 +66,7 @@ def test_cart_endpoint_returns_401_when_authenticated_user_id_is_missing(client)
 
     main.app.dependency_overrides[get_current_user] = _user_without_id
 
-    response = client.get("/api/v1/cart/")
+    response = client.get("/api/v1/customer/cart/")
 
     assert response.status_code == 401
     body = response.json()
@@ -83,7 +85,7 @@ def test_add_cart_item_rejects_invalid_quantity_with_standard_error_shape(client
         "sku": "SKU-1",
         "quantity": 0,
     }
-    response = client.post("/api/v1/cart/items", json=payload)
+    response = client.post("/api/v1/customer/cart/items", json=payload)
 
     assert response.status_code == 422
     body = response.json()
