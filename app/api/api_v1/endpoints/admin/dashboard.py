@@ -1,6 +1,8 @@
-from fastapi import APIRouter, status
+from datetime import datetime
+from typing import Optional, Literal
+from fastapi import APIRouter, HTTPException, status
 
-from app.schemas.dashboard_schema import AdminDashboardSummary
+from app.schemas.dashboard_schema import AdminDashboardSummary, RevenueChartResponse
 from app.schemas.common_schema import ApiResponse
 from app.services.dashboard_services import DashboardService
 from app.utils.responses import success_response
@@ -15,3 +17,17 @@ async def get_platform_summary():
     """
     data = await DashboardService.get_admin_summary()
     return success_response("Admin dashboard summary fetched successfully", data)
+
+@router.get("/revenue", response_model=ApiResponse[RevenueChartResponse])
+async def get_admin_revenue(
+    period: Literal["daily", "weekly", "monthly", "yearly"] = "daily",
+    start_date: Optional[datetime] = None,
+    end_date: Optional[datetime] = None
+):
+    try:
+        data = await DashboardService.get_revenue_chart(
+            period=period, start_date=start_date, end_date=end_date
+        )
+        return success_response("Admin revenue data fetched", RevenueChartResponse(data=data))
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
