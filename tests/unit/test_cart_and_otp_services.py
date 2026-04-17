@@ -7,9 +7,15 @@ from beanie import PydanticObjectId
 from fastapi import HTTPException
 
 from app.models.email_otp_model import OTPPurpose
+from app.models.cart_model import CartItem
 from app.models.product_variant_model import ProductVariant
 from app.schemas.cart_schema import CartItemAdd, CartItemUpdate
-from app.services.cart_services import CartService
+from app.services.cart_services import (
+    CartLimitExceeded,
+    CartService,
+    ProductUnavailable,
+    StockExceeded,
+)
 from app.services.email_otp_services import OTPService
 
 
@@ -26,10 +32,7 @@ async def test_add_to_cart_rejects_when_unique_item_limit_is_reached():
     user_id = PydanticObjectId()
     new_product_id = PydanticObjectId()
 
-    existing_items = [
-        SimpleNamespace(product_id=PydanticObjectId(), sku=f"SKU{i}", quantity=1)
-        for i in range(CartService.MAX_CART_ITEMS)
-    ]
+    existing_items = [CartItem(product_id=PydanticObjectId(), sku=f"SKU{i}", quantity=1) for i in range(CartService.MAX_CART_ITEMS)]
     cart = SimpleNamespace(items=existing_items, save=AsyncMock())
     product = SimpleNamespace(
         id=new_product_id,
@@ -40,14 +43,13 @@ async def test_add_to_cart_rejects_when_unique_item_limit_is_reached():
 
     with patch("app.services.cart_services.Product.get", new=AsyncMock(return_value=product)):
         with patch("app.services.cart_services.CartService.get_or_create_cart", new=AsyncMock(return_value=cart)):
-            with pytest.raises(HTTPException) as exc:
+            with pytest.raises(CartLimitExceeded) as exc:
                 await CartService.add_to_cart(
                     user_id,
                     CartItemAdd(product_id=new_product_id, sku="SKU-NEW", quantity=1),
                 )
 
-    assert exc.value.status_code == 400
-    assert "Cart limit reached" in str(exc.value.detail)
+    assert "Cart limit reached" in str(exc.value)
 
 
 @pytest.mark.asyncio
@@ -55,7 +57,7 @@ async def test_add_to_cart_rejects_when_requested_quantity_exceeds_stock():
     user_id = PydanticObjectId()
     product_id = PydanticObjectId()
 
-    existing_item = SimpleNamespace(product_id=product_id, sku="SKU-1", quantity=3)
+    existing_item = CartItem(product_id=product_id, sku="SKU-1", quantity=3)
     cart = SimpleNamespace(items=[existing_item], save=AsyncMock())
     product = SimpleNamespace(
         id=product_id,
@@ -66,14 +68,13 @@ async def test_add_to_cart_rejects_when_requested_quantity_exceeds_stock():
 
     with patch("app.services.cart_services.Product.get", new=AsyncMock(return_value=product)):
         with patch("app.services.cart_services.CartService.get_or_create_cart", new=AsyncMock(return_value=cart)):
-            with pytest.raises(HTTPException) as exc:
+            with pytest.raises(StockExceeded) as exc:
                 await CartService.add_to_cart(
                     user_id,
                     CartItemAdd(product_id=product_id, sku="SKU-1", quantity=2),
                 )
 
-    assert exc.value.status_code == 400
-    assert "Insufficient stock" in str(exc.value.detail)
+    assert "Insufficient stock" in str(exc.value)
 
 
 @pytest.mark.asyncio
@@ -84,8 +85,8 @@ async def test_get_cart_cleans_stale_items_and_mutates_storage_on_read():
 
     cart = SimpleNamespace(
         items=[
-            SimpleNamespace(product_id=valid_product_id, sku="A-1", quantity=5),
-            SimpleNamespace(product_id=removed_product_id, sku="B-1", quantity=2),
+            CartItem(product_id=valid_product_id, sku="A-1", quantity=5),
+            CartItem(product_id=removed_product_id, sku="B-1", quantity=2),
         ],
         save=AsyncMock(),
     )
@@ -107,9 +108,11 @@ async def test_get_cart_cleans_stale_items_and_mutates_storage_on_read():
 
     assert result.total_quantity == 3
     assert result.total_price == 240
-    assert len(result.items) == 1
+    assert len(result.items) == 2
     assert result.items[0].sku == "A-1"
-    cart.save.assert_awaited_once()
+    assert result.items[1].sku == "B-1"
+    assert result.items[1].is_available is False
+    cart.save.assert_not_called()
 
 
 @pytest.mark.asyncio
@@ -117,7 +120,7 @@ async def test_update_item_quantity_rejects_when_new_quantity_exceeds_stock():
     user_id = PydanticObjectId()
     product_id = PydanticObjectId()
     cart = SimpleNamespace(
-        items=[SimpleNamespace(product_id=product_id, sku="SKU-2", quantity=1)],
+        items=[CartItem(product_id=product_id, sku="SKU-2", quantity=1)],
         save=AsyncMock(),
     )
     product = SimpleNamespace(
@@ -128,7 +131,7 @@ async def test_update_item_quantity_rejects_when_new_quantity_exceeds_stock():
 
     with patch("app.services.cart_services.Cart.find_one", new=AsyncMock(return_value=cart)):
         with patch("app.services.cart_services.Product.get", new=AsyncMock(return_value=product)):
-            with pytest.raises(HTTPException) as exc:
+            with pytest.raises(StockExceeded) as exc:
                 await CartService.update_item_quantity(
                     user_id,
                     product_id,
@@ -136,19 +139,24 @@ async def test_update_item_quantity_rejects_when_new_quantity_exceeds_stock():
                     CartItemUpdate(quantity=5),
                 )
 
-    assert exc.value.status_code == 400
-    assert "Only 2 in stock" in str(exc.value.detail)
+    assert "Only 2 in stock" in str(exc.value)
 
 
-def test_validate_product_for_cart_rejects_deleted_or_unavailable_product():
-    with pytest.raises(HTTPException) as deleted_exc:
-        CartService._validate_product_for_cart(None)
-    assert deleted_exc.value.status_code == 404
+@pytest.mark.asyncio
+async def test_add_to_cart_rejects_deleted_or_unavailable_product():
+    user_id = PydanticObjectId()
+    product_id = PydanticObjectId()
+    cart = SimpleNamespace(items=[])
 
-    with pytest.raises(HTTPException) as unavailable_exc:
-        CartService._validate_product_for_cart(SimpleNamespace(is_deleted=False, is_available=False))
-    assert unavailable_exc.value.status_code == 400
-    assert "unavailable" in str(unavailable_exc.value.detail)
+    with patch("app.services.cart_services.CartService.get_or_create_cart", new=AsyncMock(return_value=cart)):
+        with patch("app.services.cart_services.Product.get", new=AsyncMock(return_value=None)):
+            with pytest.raises(ProductUnavailable) as exc:
+                await CartService.add_to_cart(
+                    user_id,
+                    CartItemAdd(product_id=product_id, sku="SKU-1", quantity=1),
+                )
+
+    assert "unavailable" in str(exc.value).lower()
 
 
 def test_as_utc_aware_normalizes_naive_datetime():

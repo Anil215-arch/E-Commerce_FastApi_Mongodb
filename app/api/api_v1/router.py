@@ -1,15 +1,76 @@
-from fastapi import APIRouter
-from app.api.api_v1.endpoints import email_otp_api, order_api, product_api, category_api, review_rating_api, user_api, cart_api, notification_api, device_token_api
+from fastapi import APIRouter, Depends
+from app.core.dependencies import RoleChecker
+from app.core.user_role import UserRole
+
+# Import nested modules
+from app.api.api_v1.endpoints.public import auth, products as public_products, categories as public_categories, reviews as public_reviews
+from app.api.api_v1.endpoints.customer import profile, cart, orders as customer_orders, notifications, device_tokens, reviews as customer_reviews
+from app.api.api_v1.endpoints.seller import products as seller_products, orders as seller_orders
+from app.api.api_v1.endpoints.admin import users as admin_users, categories as admin_categories, products as admin_products, orders as admin_orders
 
 api_router = APIRouter()
 
-# Combine all your endpoints here
-api_router.include_router(user_api.router, prefix="/users", tags=["Users"])
-api_router.include_router(product_api.router, prefix="/products", tags=["Products"])
-api_router.include_router(category_api.router, prefix="/categories", tags=["Categories"])
-api_router.include_router(cart_api.router, prefix="/cart", tags=["Cart"])
-api_router.include_router(email_otp_api.router, prefix="/auth", tags=["Authentication"])
-api_router.include_router(order_api.router, prefix="/orders", tags=["Orders"])
-api_router.include_router(review_rating_api.router, tags=["Reviews & Ratings"])
-api_router.include_router(notification_api.router, prefix="/notifications", tags=["Notifications"])
-api_router.include_router(device_token_api.router, prefix="/device-tokens", tags=["Device Tokens"])
+# ==========================================
+# 1. PUBLIC NAMESPACE (No role lock)
+# ==========================================
+api_router.include_router(auth.router, prefix="/auth", tags=["Auth"])
+api_router.include_router(public_products.router, prefix="/products", tags=["Products (Public)"])
+api_router.include_router(public_categories.router, prefix="/categories", tags=["Categories (Public)"])
+api_router.include_router(public_reviews.router, tags=["Reviews (Public)"])
+
+# ==========================================
+# 2. CUSTOMER NAMESPACE (Standard auth required)
+# ==========================================
+api_router.include_router(profile.router, prefix="/customer/profile", tags=["Customer Profile"])
+api_router.include_router(cart.router, prefix="/customer/cart", tags=["Customer Cart"])
+api_router.include_router(customer_orders.router, prefix="/customer/orders", tags=["Customer Orders"])
+api_router.include_router(notifications.router, prefix="/customer/notifications", tags=["Customer Notifications"])
+api_router.include_router(device_tokens.router, prefix="/customer/device-tokens", tags=["Device Tokens"])
+api_router.include_router(customer_reviews.router, prefix="/customer/reviews", tags=["Customer Reviews"])
+
+# ==========================================
+# 3. SELLER NAMESPACE (Strict Seller/Admin Lock)
+# ==========================================
+api_router.include_router(
+    seller_products.router, 
+    prefix="/seller/products", 
+    tags=["Seller Inventory"],
+    dependencies=[Depends(RoleChecker([UserRole.SELLER, UserRole.ADMIN, UserRole.SUPER_ADMIN]))]
+)
+api_router.include_router(
+    seller_orders.router, 
+    prefix="/seller/orders", 
+    tags=["Seller Fulfillment"],
+    dependencies=[Depends(RoleChecker([UserRole.SELLER, UserRole.ADMIN, UserRole.SUPER_ADMIN]))]
+)
+
+# ==========================================
+# 4. ADMIN NAMESPACE (Strict Admin Lock)
+# ==========================================
+api_router.include_router(
+    admin_users.router, 
+    prefix="/admin/users", 
+    tags=["Admin Users"],
+    dependencies=[Depends(RoleChecker([UserRole.ADMIN, UserRole.SUPER_ADMIN]))]
+)
+
+api_router.include_router(
+    admin_categories.router, 
+    prefix="/admin/categories", 
+    tags=["Admin Categories"],
+    dependencies=[Depends(RoleChecker([UserRole.ADMIN, UserRole.SUPER_ADMIN]))]
+)
+
+api_router.include_router(
+    admin_products.router, 
+    prefix="/admin/products", 
+    tags=["Admin Moderation"],
+    dependencies=[Depends(RoleChecker([UserRole.ADMIN, UserRole.SUPER_ADMIN]))]
+)
+
+api_router.include_router(
+    admin_orders.router, 
+    prefix="/admin/orders", 
+    tags=["Admin Intervention"],
+    dependencies=[Depends(RoleChecker([UserRole.ADMIN, UserRole.SUPER_ADMIN]))]
+)
