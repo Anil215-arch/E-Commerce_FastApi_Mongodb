@@ -5,8 +5,8 @@ from app.core.user_role import UserRole
 # Import nested modules
 from app.api.api_v1.endpoints.public import auth, products as public_products, categories as public_categories, reviews as public_reviews
 from app.api.api_v1.endpoints.customer import profile, cart, orders as customer_orders, notifications, device_tokens, reviews as customer_reviews
-from app.api.api_v1.endpoints.seller import products as seller_products, orders as seller_orders
-from app.api.api_v1.endpoints.admin import users as admin_users, categories as admin_categories, products as admin_products, orders as admin_orders
+from app.api.api_v1.endpoints.seller import products as seller_products, orders as seller_orders, dashboard as seller_dashboard
+from app.api.api_v1.endpoints.admin import users as admin_users, categories as admin_categories, products as admin_products, orders as admin_orders, dashboard as admin_dashboard
 
 api_router = APIRouter()
 
@@ -43,6 +43,13 @@ api_router.include_router(
     tags=["Seller Fulfillment"],
     dependencies=[Depends(RoleChecker([UserRole.SELLER, UserRole.ADMIN, UserRole.SUPER_ADMIN]))]
 )
+api_router.include_router(
+    seller_dashboard.router, 
+    prefix="/seller/dashboard", 
+    tags=["Seller Dashboard"],
+    dependencies=[Depends(RoleChecker([UserRole.SELLER, UserRole.ADMIN, UserRole.SUPER_ADMIN]))]
+)
+
 
 # ==========================================
 # 4. ADMIN NAMESPACE (Strict Admin Lock)
@@ -72,5 +79,12 @@ api_router.include_router(
     admin_orders.router, 
     prefix="/admin/orders", 
     tags=["Admin Intervention"],
+    dependencies=[Depends(RoleChecker([UserRole.ADMIN, UserRole.SUPER_ADMIN]))]
+)
+
+api_router.include_router(
+    admin_dashboard.router, 
+    prefix="/admin/dashboard", 
+    tags=["Admin Dashboard"],
     dependencies=[Depends(RoleChecker([UserRole.ADMIN, UserRole.SUPER_ADMIN]))]
 )
