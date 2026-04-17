@@ -4,7 +4,7 @@ from typing import List
 
 from app.core.dependencies import get_current_user, _require_user_id
 from app.models.user_model import User
-from app.schemas.notification_schema import NotificationResponse
+from app.schemas.notification_schema import NotificationResponse, UnreadNotificationCount
 from app.services.notification_services import NotificationService
 from app.schemas.common_schema import ApiResponse
 from app.utils.responses import success_response
@@ -27,3 +27,14 @@ async def mark_notification_read(notification_id: PydanticObjectId, current_user
         return success_response("Notification marked as read", NotificationResponse.model_validate(notification))
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
+    
+@router.get("/unread-count", response_model=ApiResponse[UnreadNotificationCount], status_code=status.HTTP_200_OK)
+async def get_unread_notification_count(current_user: User = Depends(get_current_user)):
+    """
+    Returns the total count of unread notifications for the authenticated customer.
+    """
+    user_id = _require_user_id(current_user)
+    count = await NotificationService.get_unread_count(user_id)
+    
+    data = UnreadNotificationCount(unread_count=count)
+    return success_response("Unread notification count fetched successfully", data)

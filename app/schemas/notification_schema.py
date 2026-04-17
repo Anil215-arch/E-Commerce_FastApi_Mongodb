@@ -18,3 +18,6 @@ class NotificationResponse(BaseModel):
         from_attributes=True,
         populate_by_name=True
     )
+    
+class UnreadNotificationCount(BaseModel):
+    unread_count: int
