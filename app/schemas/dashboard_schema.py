@@ -1,3 +1,4 @@
+from ast import List
 from pydantic import BaseModel
 
 class AdminDashboardSummary(BaseModel):
@@ -11,3 +12,11 @@ class AdminDashboardSummary(BaseModel):
 class SellerDashboardSummary(BaseModel):
     total_products: int
     total_orders: int
+    
+
+class DailyRevenue(BaseModel):
+    date: str
+    revenue: int
+
+class RevenueChartResponse(BaseModel):
+    data: list[DailyRevenue]
