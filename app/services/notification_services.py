@@ -57,6 +57,12 @@ class NotificationService:
             "user_id": user_id,
             "is_deleted": {"$ne": True}
         }).sort("-created_at").limit(limit).to_list()
+        
+    @classmethod
+    async def get_unread_count(cls, user_id: PydanticObjectId) -> int:
+        return await Notification.find(
+            {"user_id": user_id, "is_read": False}
+        ).count()
 
     @staticmethod
     async def mark_as_read(notification_id: PydanticObjectId, user_id: PydanticObjectId) -> Notification:

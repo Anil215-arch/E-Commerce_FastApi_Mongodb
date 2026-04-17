@@ -92,3 +92,36 @@ def test_add_cart_item_rejects_invalid_quantity_with_standard_error_shape(client
     assert body["status"] == "error"
     assert body["message"] == "Validation failed"
     assert isinstance(body["data"], list)
+
+
+def test_unread_notification_count_returns_success_envelope(client):
+    async def _user_with_id():
+        return SimpleNamespace(id=PydanticObjectId())
+
+    main.app.dependency_overrides[get_current_user] = _user_with_id
+
+    with patch(
+        "app.api.api_v1.endpoints.customer.notifications.NotificationService.get_unread_count",
+        new=AsyncMock(return_value=7),
+    ):
+        response = client.get("/api/v1/customer/notifications/unread-count")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["status"] == "success"
+    assert body["message"] == "Unread notification count fetched successfully"
+    assert body["data"]["unread_count"] == 7
+
+
+def test_unread_notification_count_returns_401_when_user_id_missing(client):
+    async def _user_without_id():
+        return SimpleNamespace(id=None)
+
+    main.app.dependency_overrides[get_current_user] = _user_without_id
+
+    response = client.get("/api/v1/customer/notifications/unread-count")
+
+    assert response.status_code == 401
+    body = response.json()
+    assert body["status"] == "error"
+    assert "missing" in body["message"].lower()
