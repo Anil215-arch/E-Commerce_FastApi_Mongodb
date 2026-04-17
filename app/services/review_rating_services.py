@@ -34,6 +34,12 @@ class ReviewService:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Product not found or unavailable")
 
         order_id = await ReviewService._check_verified_purchase(user_id, product_id)
+        
+        if not order_id:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN, 
+                detail="You can only review products that you have purchased and received."
+            )
 
         new_review = ReviewAndRating(
             product_id=product_id,
