@@ -28,6 +28,15 @@ async def add_address(data: UserAddAddress, current_user: User = Depends(get_cur
     updated_user = await UserServices.add_user_address(current_user, data)
     return success_response("Address added successfully", updated_user)
 
+@router.put("/addresses/{address_index}", response_model=ApiResponse[UserResponse])
+async def update_address(
+    address_index: int,
+    data: UserAddAddress,
+    current_user: User = Depends(get_current_user)
+):
+    updated_user = await UserServices.update_user_address(current_user, address_index, data)
+    return success_response("Address updated successfully", updated_user)
+
 @router.delete("/addresses/{address_index}", response_model=ApiResponse[UserResponse])
 async def remove_address(address_index: int, current_user: User = Depends(get_current_user)):
     updated_user = await UserServices.remove_user_address(current_user, address_index)
