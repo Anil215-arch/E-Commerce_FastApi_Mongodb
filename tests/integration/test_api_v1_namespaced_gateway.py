@@ -4,9 +4,11 @@ from unittest.mock import AsyncMock, patch
 
 from beanie import PydanticObjectId
 
-import main
+import app.main as main
 from app.core.dependencies import get_bearer_token, get_current_user
 from app.core.user_role import UserRole
+
+# cspell:ignore Bengaluru Karnataka
 
 
 def _override_user(role: UserRole, user_id: PydanticObjectId | None = None):
@@ -142,7 +144,9 @@ def test_seller_product_create_forwards_user_id_to_service(client):
         response = client.post("/api/v1/seller/products/", json=_valid_product_create_payload())
 
     assert response.status_code == 201
-    called_args = mock_create.await_args.args
+    await_args = mock_create.await_args
+    assert await_args is not None
+    called_args = await_args.args
     assert str(called_args[1]) == str(seller_id)
 
 

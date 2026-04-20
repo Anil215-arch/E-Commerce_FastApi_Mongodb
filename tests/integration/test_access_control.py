@@ -4,7 +4,7 @@ from unittest.mock import AsyncMock
 from app.core.dependencies import get_current_user
 from app.core.user_role import UserRole
 from app.services.user_services import UserServices
-from main import app
+from app.main import app
 
 
 def _override_user(role: UserRole):

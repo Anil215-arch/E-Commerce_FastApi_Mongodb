@@ -1,4 +1,5 @@
 import os
+import uvicorn
 from fastapi import FastAPI, HTTPException, Request, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
@@ -6,6 +7,7 @@ from fastapi.responses import JSONResponse
 from pydantic import ValidationError
 from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
+
 from app.core.database import init_db
 from app.api.api_v1.router import api_router
 from app.core.config import settings
@@ -45,7 +47,6 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
         content=error_response("Validation failed", exc.errors()),
     )
 
-
 @app.exception_handler(ValidationError)
 async def pydantic_validation_exception_handler(request: Request, exc: ValidationError):
     try:
@@ -58,7 +59,6 @@ async def pydantic_validation_exception_handler(request: Request, exc: Validatio
         content=error_response("Validation failed", jsonable_encoder(errors)),
     )
 
-
 @app.exception_handler(Exception)
 async def unhandled_exception_handler(request: Request, exc: Exception):
     print(f"CRITICAL ERROR: {exc}")
@@ -70,3 +70,11 @@ async def unhandled_exception_handler(request: Request, exc: Exception):
 @app.get("/", response_model=ApiResponse[None])
 async def root():
     return success_response(f"Welcome to {settings.PROJECT_NAME}")
+
+if __name__ == "__main__":
+    uvicorn.run(
+        "app.main:app", 
+        host="0.0.0.0", 
+        port=8000, 
+        reload=True
+    )
