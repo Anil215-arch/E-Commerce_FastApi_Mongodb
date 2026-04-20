@@ -7,6 +7,9 @@ from app.api.api_v1.endpoints.public import auth, products as public_products, c
 from app.api.api_v1.endpoints.customer import profile, cart, orders as customer_orders, notifications, device_tokens, reviews as customer_reviews
 from app.api.api_v1.endpoints.seller import products as seller_products, orders as seller_orders, dashboard as seller_dashboard
 from app.api.api_v1.endpoints.admin import users as admin_users, categories as admin_categories, products as admin_products, orders as admin_orders, dashboard as admin_dashboard
+# Inside router.py
+from app.api.api_v1.endpoints import wishlist_api
+
 
 api_router = APIRouter()
 
@@ -27,6 +30,7 @@ api_router.include_router(customer_orders.router, prefix="/customer/orders", tag
 api_router.include_router(notifications.router, prefix="/customer/notifications", tags=["Customer Notifications"])
 api_router.include_router(device_tokens.router, prefix="/customer/device-tokens", tags=["Device Tokens"])
 api_router.include_router(customer_reviews.router, prefix="/customer/reviews", tags=["Customer Reviews"])
+api_router.include_router(wishlist_api.router, prefix="/customers/wishlist", tags=["Wishlist"])
 
 # ==========================================
 # 3. SELLER NAMESPACE (Strict Seller/Admin Lock)

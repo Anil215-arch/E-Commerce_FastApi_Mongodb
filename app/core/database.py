@@ -13,6 +13,7 @@ from app.models.transaction_model import Transaction
 from app.models.user_model import User
 from app.models.invoice_model import Invoice
 from app.models.counter_model import Counter
+from app.models.wishlist_model import Wishlist
 
 
 async def init_db():
@@ -31,7 +32,8 @@ async def init_db():
             Counter,
             ReviewAndRating,
             DeviceToken,
-            Notification
+            Notification,
+            Wishlist
         ],
     )
     

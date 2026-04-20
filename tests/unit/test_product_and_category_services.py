@@ -49,6 +49,29 @@ async def test_delete_variant_rejects_when_product_would_have_no_variants_left()
 
 
 @pytest.mark.asyncio
+async def test_delete_variant_triggers_wishlist_cleanup_for_removed_sku():
+    product_id = PydanticObjectId()
+    product = SimpleNamespace(
+        category_id=PydanticObjectId(),
+        variants=[SimpleNamespace(sku="SKU-1"), SimpleNamespace(sku="SKU-2")],
+        updated_by=None,
+        save=AsyncMock(),
+    )
+    cleanup_mock = AsyncMock()
+
+    with patch("app.services.product_services.ProductService._get_product_or_raise", new=AsyncMock(return_value=product)):
+        with patch("app.services.product_services.ProductService._get_category_or_raise", new=AsyncMock(return_value=object())):
+            with patch("app.services.product_services.ProductMapper.serialize_product", return_value={"ok": True}):
+                with patch("app.services.product_services.WishlistService.remove_ghost_product_references", new=cleanup_mock):
+                    await ProductService.delete_variant(product_id, "SKU-1", PydanticObjectId())
+
+    assert len(product.variants) == 1
+    assert product.variants[0].sku == "SKU-2"
+    product.save.assert_awaited_once()
+    cleanup_mock.assert_awaited_once_with(product_id, "SKU-1")
+
+
+@pytest.mark.asyncio
 async def test_upload_product_images_rejects_file_above_size_limit():
     product = SimpleNamespace(images=[], category_id=PydanticObjectId(), save=AsyncMock())
     image = SimpleNamespace(
@@ -92,6 +115,75 @@ async def test_update_product_rejects_variants_payload_in_general_update():
 
     assert exc.value.status_code == 400
     assert "dedicated variant endpoints" in str(exc.value.detail).lower()
+
+
+@pytest.mark.asyncio
+async def test_update_product_unavailable_triggers_wishlist_cleanup():
+    product_id = PydanticObjectId()
+    current_user_id = PydanticObjectId()
+    product = SimpleNamespace(
+        category_id=PydanticObjectId(),
+        set=AsyncMock(),
+    )
+    updated_product = SimpleNamespace(id=product_id)
+    cleanup_mock = AsyncMock()
+
+    with patch("app.services.product_services.Product.get", new=AsyncMock(side_effect=[product, updated_product])):
+        with patch("app.services.product_services.ProductService._get_category_or_raise", new=AsyncMock(return_value=object())):
+            with patch("app.services.product_services.ProductMapper.serialize_product", return_value={"ok": True}):
+                with patch("app.services.product_services.WishlistService.remove_ghost_product_references", new=cleanup_mock):
+                    await ProductService.update_product(
+                        product_id,
+                        ProductUpdate(is_available=False),
+                        current_user_id,
+                    )
+
+    product.set.assert_awaited_once()
+    cleanup_mock.assert_awaited_once_with(product_id)
+
+
+@pytest.mark.asyncio
+async def test_update_product_without_unavailable_flag_does_not_trigger_cleanup():
+    product_id = PydanticObjectId()
+    current_user_id = PydanticObjectId()
+    product = SimpleNamespace(
+        category_id=PydanticObjectId(),
+        set=AsyncMock(),
+    )
+    updated_product = SimpleNamespace(id=product_id)
+    cleanup_mock = AsyncMock()
+
+    with patch("app.services.product_services.Product.get", new=AsyncMock(side_effect=[product, updated_product])):
+        with patch("app.services.product_services.ProductService._get_category_or_raise", new=AsyncMock(return_value=object())):
+            with patch("app.services.product_services.ProductMapper.serialize_product", return_value={"ok": True}):
+                with patch("app.services.product_services.WishlistService.remove_ghost_product_references", new=cleanup_mock):
+                    await ProductService.update_product(
+                        product_id,
+                        ProductUpdate(name="Updated Product Name"),
+                        current_user_id,
+                    )
+
+    cleanup_mock.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+async def test_delete_product_triggers_wishlist_cleanup_after_soft_delete():
+    product_id = PydanticObjectId()
+    current_user_id = PydanticObjectId()
+    product = SimpleNamespace(
+        is_deleted=False,
+        images=[],
+        soft_delete=AsyncMock(),
+    )
+    cleanup_mock = AsyncMock()
+
+    with patch("app.services.product_services.Product.get", new=AsyncMock(return_value=product)):
+        with patch("app.services.product_services.WishlistService.remove_ghost_product_references", new=cleanup_mock):
+            result = await ProductService.delete_product(product_id, current_user_id)
+
+    assert result is True
+    product.soft_delete.assert_awaited_once_with(current_user_id)
+    cleanup_mock.assert_awaited_once_with(product_id)
 
 
 @pytest.mark.asyncio
