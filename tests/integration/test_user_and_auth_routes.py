@@ -182,7 +182,7 @@ def test_update_address_route_passes_index_and_payload(client):
         "app.api.api_v1.endpoints.customer.profile.UserServices.update_user_address",
         new=AsyncMock(return_value=service_result),
     ) as mock_update:
-        response = client.patch("/api/v1/customer/profile/addresses/0", json=_address_payload(city="Mysuru"))
+        response = client.put("/api/v1/customer/profile/addresses/0", json=_address_payload(city="Mysuru"))
 
     assert response.status_code == 200
     body = response.json()
@@ -231,7 +231,7 @@ def test_update_address_route_surfaces_not_found_error(client):
         "app.api.api_v1.endpoints.customer.profile.UserServices.update_user_address",
         new=AsyncMock(side_effect=HTTPException(status_code=404, detail="Address not found at the specified index.")),
     ):
-        response = client.patch("/api/v1/customer/profile/addresses/99", json=_address_payload())
+        response = client.put("/api/v1/customer/profile/addresses/99", json=_address_payload())
 
     assert response.status_code == 404
     body = response.json()
@@ -297,7 +297,7 @@ def test_update_address_route_returns_422_for_missing_city(client):
         "app.api.api_v1.endpoints.customer.profile.UserServices.update_user_address",
         new=AsyncMock(),
     ) as mock_update:
-        response = client.patch("/api/v1/customer/profile/addresses/0", json=payload)
+        response = client.put("/api/v1/customer/profile/addresses/0", json=payload)
 
     assert response.status_code == 422
     body = response.json()
@@ -316,7 +316,7 @@ def test_update_address_route_returns_422_for_non_integer_index(client):
         "app.api.api_v1.endpoints.customer.profile.UserServices.update_user_address",
         new=AsyncMock(),
     ) as mock_update:
-        response = client.patch("/api/v1/customer/profile/addresses/not-a-number", json=_address_payload())
+        response = client.put("/api/v1/customer/profile/addresses/not-a-number", json=_address_payload())
 
     assert response.status_code == 422
     body = response.json()

@@ -29,6 +29,7 @@ from app.models.review_rating_model import ReviewAndRating
 from app.models.revoked_token_model import RevokedToken
 from app.models.transaction_model import Transaction
 from app.models.user_model import User
+from app.models.wishlist_model import Wishlist
 from app.schemas.category_schema import CategoryResponse
 from app.schemas.order_schema import OrderResponse
 from app.schemas.user_schema import UserResponse
@@ -53,6 +54,7 @@ class SchemaSpec:
 
 MODEL_SPECS: list[ModelSpec] = [
     ModelSpec("User", "users", User),
+    ModelSpec("Wishlist", "wishlists", Wishlist),
     ModelSpec("Category", "categories", Category),
     ModelSpec("Product", "products", Product),
     ModelSpec("Cart", "carts", Cart),

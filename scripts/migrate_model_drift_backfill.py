@@ -60,6 +60,16 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Unset legacy products.rating after mapping to aggregate rating fields.",
     )
+    parser.add_argument(
+        "--migrate-legacy-user-wishlist",
+        action="store_true",
+        help="Migrate users.wishlist (embedded) entries to wishlists collection when entries contain both product_id and sku.",
+    )
+    parser.add_argument(
+        "--drop-legacy-user-wishlist",
+        action="store_true",
+        help="Unset users.wishlist after optional migration.",
+    )
     return parser.parse_args()
 
 
@@ -92,6 +102,8 @@ async def migrate(
     dry_run: bool,
     drop_legacy_order_total_amount: bool,
     drop_legacy_product_rating: bool,
+    migrate_legacy_user_wishlist: bool,
+    drop_legacy_user_wishlist: bool,
 ) -> None:
     client = AsyncIOMotorClient(mongodb_url)
     db = client[database_name]
@@ -100,9 +112,9 @@ async def migrate(
         print(f"Database: {database_name}")
 
         # 1) AuditDocument field backfill across users/categories/products/orders
-        print("\n[1/4] Audit field backfill")
+        print("\n[1/6] Audit field backfill")
         audit_missing_filter = missing_any_fields_filter(AUDIT_FIELDS)
-        for collection_name in AUDIT_COLLECTIONS:
+        for collection_name in [*AUDIT_COLLECTIONS, "wishlists"]:
             collection = db[collection_name]
             affected = await count_filter(collection, audit_missing_filter)
             print(f"- {collection_name}: documents missing audit fields = {affected}")
@@ -134,7 +146,7 @@ async def migrate(
             print(f"  matched={result.matched_count} modified={result.modified_count}")
 
         # 2) User model specific fields
-        print("\n[2/4] User-specific field backfill")
+        print("\n[2/6] User-specific field backfill")
         users = db["users"]
         users_missing_addresses = await count_filter(users, missing_or_null_filter("addresses"))
         print(f"- users missing addresses = {users_missing_addresses}")
@@ -146,8 +158,69 @@ async def migrate(
             )
             print(f"  matched={result.matched_count} modified={result.modified_count}")
 
-        # 3) Order model upgrade from legacy total_amount shape
-        print("\n[3/4] Order shape upgrade")
+        # 3) Optional migration for legacy users.wishlist -> wishlists collection
+        print("\n[3/6] Legacy users.wishlist migration (optional)")
+        wishlists = db["wishlists"]
+        users_with_legacy_wishlist = await count_filter(users, {"wishlist": {"$exists": True, "$ne": []}})
+        users_with_wishlist_field = await count_filter(users, {"wishlist": {"$exists": True}})
+        print(f"- users with legacy wishlist data = {users_with_legacy_wishlist}")
+
+        migrated_rows = 0
+        skipped_rows = 0
+        if not dry_run and migrate_legacy_user_wishlist and users_with_legacy_wishlist > 0:
+            async for user in users.find({"wishlist": {"$exists": True, "$ne": []}}, {"wishlist": 1}):
+                user_id = user.get("_id")
+                entries = user.get("wishlist") or []
+                for entry in entries:
+                    if not isinstance(entry, dict):
+                        skipped_rows += 1
+                        continue
+
+                    product_id = entry.get("product_id")
+                    sku = entry.get("sku")
+                    if not product_id or not sku:
+                        skipped_rows += 1
+                        continue
+
+                    await wishlists.update_one(
+                        {
+                            "user_id": user_id,
+                            "product_id": product_id,
+                            "sku": sku,
+                        },
+                        {
+                            "$setOnInsert": {
+                                "created_by": user_id,
+                                "updated_by": user_id,
+                                "is_deleted": False,
+                            },
+                            "$set": {
+                                "updated_by": user_id,
+                            },
+                        },
+                        upsert=True,
+                    )
+                    migrated_rows += 1
+
+            print(f"  migrated rows={migrated_rows} skipped rows={skipped_rows}")
+        elif migrate_legacy_user_wishlist:
+            print("  no legacy rows to migrate")
+        else:
+            print("- migration skipped (use --migrate-legacy-user-wishlist to enable)")
+
+        if not dry_run and drop_legacy_user_wishlist and users_with_wishlist_field > 0:
+            result = await users.update_many(
+                {"wishlist": {"$exists": True}},
+                {"$unset": {"wishlist": ""}},
+            )
+            print(f"  dropped users.wishlist matched={result.matched_count} modified={result.modified_count}")
+        elif drop_legacy_user_wishlist:
+            print("  no users.wishlist field found for cleanup")
+        else:
+            print("- cleanup skipped (use --drop-legacy-user-wishlist to enable)")
+
+        # 4) Order model upgrade from legacy total_amount shape
+        print("\n[4/6] Order shape upgrade")
         orders = db["orders"]
         order_required_new_fields = [
             "shipping_address",
@@ -156,6 +229,7 @@ async def migrate(
             "tax_amount",
             "shipping_fee",
             "grand_total",
+            "cancellation_reason",
         ]
         orders_missing_new_shape = await count_filter(orders, missing_any_fields_filter(order_required_new_fields))
         orders_with_legacy_total = await count_filter(orders, {"total_amount": {"$exists": True}})
@@ -175,14 +249,15 @@ async def migrate(
                             "tax_amount": {"$ifNull": ["$tax_amount", 0]},
                             "shipping_fee": {"$ifNull": ["$shipping_fee", 0]},
                             "grand_total": {"$ifNull": ["$grand_total", {"$ifNull": ["$total_amount", 0]}]},
+                            "cancellation_reason": {"$ifNull": ["$cancellation_reason", None]},
                         }
                     }
                 ],
             )
             print(f"  matched={result.matched_count} modified={result.modified_count}")
 
-        # 4) Product rating model drift migration
-        print("\n[4/5] Product rating aggregate backfill")
+        # 5) Product rating model drift migration
+        print("\n[5/6] Product rating aggregate backfill")
         products = db["products"]
         reviews = db["reviews"]
 
@@ -387,8 +462,8 @@ async def migrate(
             )
             print(f"  fallback aggregate backfill matched={result.matched_count} modified={result.modified_count}")
 
-        # 5) Optional legacy field cleanup
-        print("\n[5/5] Optional cleanup")
+        # 6) Optional legacy field cleanup
+        print("\n[6/6] Optional cleanup")
         if drop_legacy_order_total_amount:
             remaining_legacy_total = await count_filter(orders, {"total_amount": {"$exists": True}})
             print(f"- legacy orders.total_amount remaining before cleanup = {remaining_legacy_total}")
@@ -432,5 +507,7 @@ if __name__ == "__main__":
             dry_run=args.dry_run,
             drop_legacy_order_total_amount=args.drop_legacy_order_total_amount,
             drop_legacy_product_rating=args.drop_legacy_product_rating,
+            migrate_legacy_user_wishlist=args.migrate_legacy_user_wishlist,
+            drop_legacy_user_wishlist=args.drop_legacy_user_wishlist,
         )
     )

@@ -16,6 +16,7 @@ from app.schemas.product_variant_schema import (
     ProductVariantResponse,
     ProductVariantUpdate,
 )
+from app.services.wishlist_services import WishlistService
 
 
 UPLOAD_DIR = "media/products"
@@ -136,6 +137,7 @@ class ProductService:
             raise HTTPException(status_code=400, detail="A product must have at least one variant")
 
         await product.save()
+        await WishlistService.remove_ghost_product_references(product_id, sku)
         return ProductMapper.serialize_product(product, category)
 
     @staticmethod
@@ -212,6 +214,9 @@ class ProductService:
         updated_product = await Product.get(product_id)
         if not updated_product:
             raise HTTPException(status_code=404, detail="Product not found after update")
+
+        if update_data.get("is_available") is False:
+            await WishlistService.remove_ghost_product_references(product_id)
             
         return ProductMapper.serialize_product(updated_product, category)
 
@@ -227,4 +232,5 @@ class ProductService:
                 os.remove(local_path)
 
         await product.soft_delete(current_user_id)
+        await WishlistService.remove_ghost_product_references(product_id)
         return True
