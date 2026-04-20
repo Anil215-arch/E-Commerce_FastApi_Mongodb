@@ -467,6 +467,20 @@ class UserServices:
         current_user.updated_by = current_user.id
         await current_user.save()
         return UserResponse.model_validate(current_user)
+    
+    @staticmethod
+    async def update_user_address(current_user: User, address_index: int, data: UserAddAddress) -> UserResponse:
+        """Updates an existing address in the user's address book by its list index."""
+        if address_index < 0 or address_index >= len(current_user.addresses):
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Address not found at the specified index."
+            )
+            
+        current_user.addresses[address_index] = data.address
+        current_user.updated_by = current_user.id
+        await current_user.save()
+        return UserResponse.model_validate(current_user)
 
     @staticmethod
     async def remove_user_address(current_user: User, address_index: int) -> UserResponse:

@@ -90,22 +90,23 @@ async def test_checkout_creates_one_transaction_and_split_orders_per_seller():
 
     with patch.object(Transaction, "get_pymongo_collection", return_value=object()):
         with patch.object(Order, "get_pymongo_collection", return_value=object()):
-            with patch("app.services.order_services.OrderService._load_checkout_items", new=AsyncMock(return_value=[item_a, item_b])):
-                with patch("app.services.order_services.OrderService._reserve_stock", new=AsyncMock(return_value=True)):
-                    with patch.object(Transaction, "insert", _tx_insert):
-                        with patch.object(Transaction, "save", _noop_save):
-                            with patch.object(Order, "insert", _order_insert):
-                                with patch.object(Order, "save", _noop_save):
-                                    with patch.object(DummyPaymentGateway, "process_payment", new=AsyncMock(return_value={"status": "SUCCESS", "txn_id": "gateway-123"})):
-                                        with patch("app.services.order_services.CartService.clear_cart", new=AsyncMock(return_value=True)) as mock_clear:
-                                            result = await OrderService.checkout(
-                                                user_id,
-                                                CheckoutRequest(
-                                                    shipping_address=_address(),
-                                                    billing_address=_address(),
-                                                    payment_method=PaymentMethod.CARD,
-                                                ),
-                                            )
+            with patch("app.services.order_services.User.get", new=AsyncMock(return_value=SimpleNamespace(addresses=[_address()]))):
+                with patch("app.services.order_services.OrderService._load_checkout_items", new=AsyncMock(return_value=[item_a, item_b])):
+                    with patch("app.services.order_services.OrderService._reserve_stock", new=AsyncMock(return_value=True)):
+                        with patch.object(Transaction, "insert", _tx_insert):
+                            with patch.object(Transaction, "save", _noop_save):
+                                with patch.object(Order, "insert", _order_insert):
+                                    with patch.object(Order, "save", _noop_save):
+                                        with patch.object(DummyPaymentGateway, "process_payment", new=AsyncMock(return_value={"status": "SUCCESS", "txn_id": "gateway-123"})):
+                                            with patch("app.services.order_services.CartService.clear_cart", new=AsyncMock(return_value=True)) as mock_clear:
+                                                result = await OrderService.checkout(
+                                                    user_id,
+                                                    CheckoutRequest(
+                                                        shipping_address_index=0,
+                                                        billing_address_index=0,
+                                                        payment_method=PaymentMethod.CARD,
+                                                    ),
+                                                )
 
     assert result.transaction_status == TransactionStatus.SUCCESS
     assert result.amount == 1752

@@ -323,8 +323,8 @@ def test_namespaced_core_loop_smoke_with_service_stubs(client):
         checkout = client.post(
             "/api/v1/customer/orders/checkout",
             json={
-                "shipping_address": address_payload,
-                "billing_address": address_payload,
+                "shipping_address_index": 0,
+                "billing_address_index": 0,
                 "payment_method": "CARD",
             },
         )

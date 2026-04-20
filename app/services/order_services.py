@@ -199,6 +199,19 @@ class OrderService:
 
     @staticmethod
     async def checkout(user_id: PydanticObjectId, data: CheckoutRequest) -> CheckoutBatchResponse:
+        user = await User.get(user_id)
+        if not user:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+
+        try:
+            extracted_shipping = user.addresses[data.shipping_address_index]
+            extracted_billing = user.addresses[data.billing_address_index]
+        except IndexError:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Invalid shipping or billing address index. Address does not exist."
+            )
+            
         checkout_items = await OrderService._load_checkout_items(user_id)
         seller_groups = OrderService._group_items_by_seller(checkout_items)
 
@@ -258,8 +271,8 @@ class OrderService:
                     checkout_batch_id=checkout_batch_id,
                     transaction_id=created_transaction.id,
                     items=payload["items"],  # type: ignore[arg-type]
-                    shipping_address=data.shipping_address,
-                    billing_address=data.billing_address,
+                    shipping_address=extracted_shipping,
+                    billing_address=extracted_billing,
                     subtotal=payload["subtotal"],  # type: ignore[arg-type]
                     tax_amount=payload["tax_amount"],  # type: ignore[arg-type]
                     shipping_fee=payload["shipping_fee"],  # type: ignore[arg-type]

@@ -10,10 +10,9 @@ from app.schemas.address_schema import Address
 
 
 class CheckoutRequest(BaseModel):
-    shipping_address: Address = Field(..., description="Where to ship the physical products")
-    billing_address: Address = Field(..., description="Address associated with the payment method")
+    shipping_address_index: int = Field(..., ge=0, description="Array index of the user's saved shipping address")
+    billing_address_index: int = Field(..., ge=0, description="Array index of the user's saved billing address")
     payment_method: PaymentMethod = Field(default=PaymentMethod.CARD, description="Chosen payment method")
-
 
 class OrderResponse(BaseModel):
     id: PydanticObjectId = Field(alias="_id")
