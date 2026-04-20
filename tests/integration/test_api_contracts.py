@@ -3,7 +3,7 @@ from unittest.mock import AsyncMock, patch
 
 from beanie import PydanticObjectId
 
-import main
+import app.main as main
 from app.core.dependencies import get_current_user
 
 
