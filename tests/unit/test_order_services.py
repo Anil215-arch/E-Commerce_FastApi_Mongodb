@@ -1,8 +1,10 @@
+import asyncio
 from types import SimpleNamespace
 from unittest.mock import AsyncMock, patch
 
 import pytest
 from beanie import PydanticObjectId
+from fastapi import HTTPException
 
 from app.core.user_role import UserRole
 from app.models.order_model import Order, OrderItemSnapshot, OrderPaymentStatus, OrderStatus
@@ -14,7 +16,7 @@ from app.models.transaction_model import (
 )
 from app.models.product_variant_model import ProductVariant
 from app.schemas.address_schema import Address
-from app.schemas.order_schema import CheckoutRequest
+from app.schemas.order_schema import CheckoutBatchResponse, CheckoutRequest
 from app.services.order_services import DummyPaymentGateway, OrderService
 
 
@@ -42,7 +44,7 @@ async def test_load_checkout_items_uses_live_price_and_seller_snapshot():
         is_available=True,
         is_deleted=False,
         created_by=seller_id,
-        variants=[ProductVariant(sku="SKU-1", price=1000, discount_price=800, stock=5)],
+        variants=[ProductVariant(sku="SKU-1", price=1000, discount_price=800, available_stock=5)],
     )
     find_cursor = SimpleNamespace(to_list=AsyncMock(return_value=[product]))
 
@@ -92,27 +94,32 @@ async def test_checkout_creates_one_transaction_and_split_orders_per_seller():
         with patch.object(Order, "get_pymongo_collection", return_value=object()):
             with patch("app.services.order_services.User.get", new=AsyncMock(return_value=SimpleNamespace(addresses=[_address()]))):
                 with patch("app.services.order_services.OrderService._load_checkout_items", new=AsyncMock(return_value=[item_a, item_b])):
-                    with patch("app.services.order_services.OrderService._reserve_stock", new=AsyncMock(return_value=True)):
-                        with patch.object(Transaction, "insert", _tx_insert):
-                            with patch.object(Transaction, "save", _noop_save):
-                                with patch.object(Order, "insert", _order_insert):
-                                    with patch.object(Order, "save", _noop_save):
-                                        with patch.object(DummyPaymentGateway, "process_payment", new=AsyncMock(return_value={"status": "SUCCESS", "txn_id": "gateway-123"})):
-                                            with patch("app.services.order_services.CartService.clear_cart", new=AsyncMock(return_value=True)) as mock_clear:
-                                                result = await OrderService.checkout(
-                                                    user_id,
-                                                    CheckoutRequest(
-                                                        shipping_address_index=0,
-                                                        billing_address_index=0,
-                                                        payment_method=PaymentMethod.CARD,
-                                                    ),
-                                                )
+                    with patch("app.services.order_services.Order.find", return_value=SimpleNamespace(to_list=AsyncMock(return_value=[]))):
+                        with patch("app.services.order_services.InventoryService.reserve_stock", new=AsyncMock()) as mock_reserve:
+                            with patch("app.services.order_services.InventoryService.confirm_stock_deduction", new=AsyncMock()) as mock_confirm:
+                                with patch.object(Transaction, "insert", _tx_insert):
+                                    with patch.object(Transaction, "save", _noop_save):
+                                        with patch.object(Order, "insert", _order_insert):
+                                            with patch.object(Order, "save", _noop_save):
+                                                with patch.object(DummyPaymentGateway, "process_payment", new=AsyncMock(return_value={"status": "SUCCESS", "txn_id": "gateway-123"})):
+                                                    with patch("app.services.order_services.CartService.clear_cart", new=AsyncMock(return_value=True)) as mock_clear:
+                                                        result = await OrderService.checkout(
+                                                            user_id,
+                                                            CheckoutRequest(
+                                                                checkout_batch_id="batch-checkout-main-001",
+                                                                shipping_address_index=0,
+                                                                billing_address_index=0,
+                                                                payment_method=PaymentMethod.CARD,
+                                                            ),
+                                                        )
 
     assert result.transaction_status == TransactionStatus.SUCCESS
     assert result.amount == 1752
     assert len(result.orders) == 2
     assert {order.seller_id for order in result.orders} == {seller_a, seller_b}
     assert len({order.transaction_id for order in result.orders}) == 1
+    assert mock_reserve.await_count == 2
+    assert mock_confirm.await_count == 2
     mock_clear.assert_awaited_once_with(user_id)
 
 
@@ -179,16 +186,91 @@ async def test_cancel_order_applies_partial_refund_to_shared_transaction():
         with patch("app.services.order_services.Transaction.find_one", new=AsyncMock(return_value=transaction)):
             with patch.object(Order, "save", _noop_save):
                 with patch.object(Transaction, "save", _noop_save):
-                    with patch("app.services.order_services.OrderService._rollback_inventory", new=AsyncMock()) as mock_rollback:
-                        result = await OrderService.cancel_order(
-                            order_id,
-                            SimpleNamespace(id=admin_id, role=UserRole.ADMIN),
+                    with patch("app.services.order_services.InventoryService.restore_stock", new=AsyncMock()) as mock_restore:
+                        with patch("app.services.order_services.EventBus.publish", new=AsyncMock()):
+                            result = await OrderService.cancel_order(
+                                order_id,
+                                SimpleNamespace(id=admin_id, role=UserRole.ADMIN),
                                 "Customer requested cancellation before dispatch",
-                        )
+                            )
 
     assert result.payment_status == OrderPaymentStatus.REFUNDED
     assert result.refunded_amount == 522
     assert transaction.status == TransactionStatus.PARTIALLY_REFUNDED
     assert transaction.refunded_amount == 522
     assert transaction.allocations[0].refunded_amount == 522
-    mock_rollback.assert_awaited_once()
+    mock_restore.assert_awaited_once()
+
+
+@pytest.mark.asyncio
+async def test_checkout_parallel_requests_respect_atomic_stock_limit():
+    user_id = PydanticObjectId()
+    seller_id = PydanticObjectId()
+    item = OrderItemSnapshot(
+        product_id=PydanticObjectId(),
+        seller_id=seller_id,
+        sku="SKU-ATOM-1",
+        product_name="Atomic Product",
+        quantity=1,
+        purchase_price=500,
+    )
+
+    available_stock = 3
+    reserve_lock = asyncio.Lock()
+
+    async def _reserve_stock(*, product_id, sku, quantity):
+        nonlocal available_stock
+        async with reserve_lock:
+            if available_stock < quantity:
+                raise HTTPException(status_code=409, detail="Stock reservation failed")
+            available_stock -= quantity
+
+    async def _tx_insert(self):
+        self.id = PydanticObjectId()
+
+    async def _order_insert(self):
+        self.id = PydanticObjectId()
+
+    async def _noop_save(self):
+        return None
+
+    async def _attempt_checkout(i: int):
+        return await OrderService.checkout(
+            user_id,
+            CheckoutRequest(
+                checkout_batch_id=f"parallel-batch-{i}",
+                shipping_address_index=0,
+                billing_address_index=0,
+                payment_method=PaymentMethod.CARD,
+            ),
+        )
+
+    with patch.object(Transaction, "get_pymongo_collection", return_value=object()):
+        with patch.object(Order, "get_pymongo_collection", return_value=object()):
+            with patch("app.services.order_services.User.get", new=AsyncMock(return_value=SimpleNamespace(addresses=[_address()]))):
+                with patch("app.services.order_services.OrderService._load_checkout_items", new=AsyncMock(return_value=[item])):
+                    with patch("app.services.order_services.Order.find", return_value=SimpleNamespace(to_list=AsyncMock(return_value=[]))):
+                        with patch("app.services.order_services.InventoryService.reserve_stock", new=AsyncMock(side_effect=_reserve_stock)):
+                            with patch("app.services.order_services.InventoryService.confirm_stock_deduction", new=AsyncMock()):
+                                with patch("app.services.order_services.InvoiceService.create_invoice_from_order", new=AsyncMock()):
+                                    with patch("app.services.order_services.CartService.clear_cart", new=AsyncMock(return_value=True)):
+                                        with patch.object(DummyPaymentGateway, "process_payment", new=AsyncMock(return_value={"status": "SUCCESS", "txn_id": "gateway-atomic"})):
+                                            with patch.object(Transaction, "insert", _tx_insert):
+                                                with patch.object(Transaction, "save", _noop_save):
+                                                    with patch.object(Order, "insert", _order_insert):
+                                                        with patch.object(Order, "save", _noop_save):
+                                                            results = await asyncio.gather(
+                                                                *[_attempt_checkout(i) for i in range(10)],
+                                                                return_exceptions=True,
+                                                            )
+
+    successes = [result for result in results if isinstance(result, CheckoutBatchResponse)]
+    conflict_failures = [
+        result
+        for result in results
+        if isinstance(result, HTTPException) and result.status_code == 409
+    ]
+
+    assert len(successes) == 3
+    assert len(conflict_failures) == 7
+    assert available_stock == 0

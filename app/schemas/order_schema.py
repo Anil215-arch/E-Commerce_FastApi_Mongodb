@@ -10,6 +10,12 @@ from app.schemas.address_schema import Address
 
 
 class CheckoutRequest(BaseModel):
+    checkout_batch_id: str = Field(
+        ...,
+        min_length=8,
+        max_length=128,
+        description="Client-provided idempotency key for checkout",
+    )
     shipping_address_index: int = Field(..., ge=0, description="Array index of the user's saved shipping address")
     billing_address_index: int = Field(..., ge=0, description="Array index of the user's saved billing address")
     payment_method: PaymentMethod = Field(default=PaymentMethod.CARD, description="Chosen payment method")

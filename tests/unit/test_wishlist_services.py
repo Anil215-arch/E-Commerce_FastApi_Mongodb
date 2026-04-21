@@ -12,7 +12,7 @@ from app.services.wishlist_services import WishlistService
 
 
 def _product_with_variants(product_id: PydanticObjectId, skus: list[str]):
-    variants = [ProductVariant(sku=sku, price=1000, discount_price=None, stock=5) for sku in skus]
+    variants = [ProductVariant(sku=sku, price=1000, discount_price=None, available_stock=5) for sku in skus]
     return SimpleNamespace(
         id=product_id,
         name="Phone X",

@@ -78,9 +78,9 @@ def pick_cart_items(products: list[Product], user_index: int) -> list[CartItem]:
 
         variant_index = (user_index + len(selected)) % len(product.variants)
         variant = product.variants[variant_index]
-        qty = min(2 + (user_index % 2), max(1, variant.stock))
+        qty = min(2 + (user_index % 2), max(1, variant.available_stock))
 
-        if variant.stock < 1:
+        if variant.available_stock < 1:
             continue
 
         product_id = product.id

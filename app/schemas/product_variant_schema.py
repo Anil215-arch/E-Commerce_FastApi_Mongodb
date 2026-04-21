@@ -7,7 +7,9 @@ class ProductVariantCreate(BaseModel):
     sku: str = Field(..., min_length=3, max_length=50)
     price: int = Field(..., gt=0)
     discount_price: Optional[int] = Field(None, gt=0)
-    stock: int = Field(..., ge=0)
+    
+    available_stock: int = Field(..., ge=0)
+    reserved_stock: int = Field(0, ge=0)
     attributes: Dict[str, str] = Field(default_factory=dict)
 
     @model_validator(mode="after")
@@ -22,7 +24,8 @@ class ProductVariantCreate(BaseModel):
                 "sku": "APPLE-MBA-M2-256",
                 "price": 99999,
                 "discount_price": 19999,
-                "stock": 10,
+                "available_stock": 10,
+                "reserved_stock": 0,
                 "attributes": {
                     "Processor": "Apple M2",
                     "RAM": "8GB",
@@ -38,7 +41,8 @@ class ProductVariantUpdate(BaseModel):
     sku: str = Field(..., min_length=3, max_length=50)
     price: Optional[int] = Field(None, gt=0)
     discount_price: Optional[int] = Field(None, gt=0)
-    stock: Optional[int] = Field(None, ge=0)
+    available_stock: Optional[int] = Field(None, ge=0)
+    reserved_stock: Optional[int] = Field(None, ge=0)
     attributes: Optional[Dict[str, str]] = None
 
     @model_validator(mode="after")
@@ -51,5 +55,7 @@ class ProductVariantResponse(BaseModel):
     sku: str = Field(..., min_length=3, max_length=50)
     price: int = Field(..., gt=0)
     discount_price: Optional[int] = Field(None, gt=0)
-    stock: int = Field(..., ge=0)
+    
+    available_stock: int = Field(..., ge=0)
+    reserved_stock: int = Field(..., ge=0)
     attributes: Dict[str, str] = Field(default_factory=dict)

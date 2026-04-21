@@ -3,6 +3,7 @@ import random
 import uuid
 import logging
 import traceback
+from datetime import datetime, timedelta, timezone
 from collections import OrderedDict
 from typing import TypedDict
 
@@ -25,6 +26,7 @@ from app.schemas.order_schema import CheckoutBatchResponse, CheckoutRequest, Ord
 from app.events.bus import EventBus
 from app.events.order_events import OrderDeliveredEvent, OrderCancelledEvent
 from app.services.cart_services import CartService
+from app.services.inventory_services import InventoryService
 
 logger = logging.getLogger(__name__)
 
@@ -59,6 +61,8 @@ class OrderService:
     TAX_RATE = 0.18
     FREE_SHIPPING_THRESHOLD = 1000
     SHIPPING_FEE = 50
+    CHECKOUT_EXPIRY_MINUTES = 15
+    EXPIRY_CLEANUP_INTERVAL_SECONDS = 60
     ALLOWED_STATUS_TRANSITIONS: dict[OrderStatus, set[OrderStatus]] = {
         OrderStatus.PENDING: {OrderStatus.CONFIRMED, OrderStatus.CANCELLED},
         OrderStatus.CONFIRMED: {OrderStatus.SHIPPED, OrderStatus.CANCELLED},
@@ -67,34 +71,6 @@ class OrderService:
         OrderStatus.COMPLETED: set(),
         OrderStatus.CANCELLED: set(),
     }
-
-    @staticmethod
-    async def _reserve_stock(product_id: PydanticObjectId, sku: str, quantity: int) -> bool:
-        collection = Product.get_pymongo_collection()  # type: ignore
-        result = await collection.update_one(
-            {
-                "_id": product_id,
-                "is_deleted": {"$ne": True},
-                "is_available": True,
-                "variants": {
-                    "$elemMatch": {
-                        "sku": sku,
-                        "stock": {"$gte": quantity},
-                    }
-                },
-            },
-            {"$inc": {"variants.$.stock": -quantity}},
-        )
-        return result.modified_count > 0
-
-    @staticmethod
-    async def _rollback_inventory(reserved_items: list[OrderItemSnapshot]) -> None:
-        collection = Product.get_pymongo_collection()  # type: ignore
-        for item in reserved_items:
-            await collection.update_one(
-                {"_id": item.product_id, "variants.sku": item.sku},
-                {"$inc": {"variants.$.stock": item.quantity}},
-            )
 
     @staticmethod
     async def _load_checkout_items(user_id: PydanticObjectId) -> list[OrderItemSnapshot]:
@@ -130,12 +106,12 @@ class OrderService:
                     detail=f"Variant {cart_item.sku} for {product.name} no longer exists.",
                 )
 
-            if variant.stock < cart_item.quantity:
+            if variant.available_stock < cart_item.quantity:
                 raise HTTPException(
                     status_code=status.HTTP_409_CONFLICT,
                     detail=(
                         f"Insufficient stock for {product.name} ({cart_item.sku}). "
-                        f"Requested {cart_item.quantity}, available {variant.stock}."
+                        f"Requested {cart_item.quantity}, available {variant.available_stock}."
                     ),
                 )
 
@@ -177,31 +153,122 @@ class OrderService:
         return tax_amount, shipping_fee, grand_total
 
     @staticmethod
-    async def _rollback_checkout(
+    async def _build_checkout_batch_response(existing_orders: list[Order]) -> CheckoutBatchResponse:
+        if not existing_orders:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="No orders found for checkout batch.",
+            )
+
+        transaction = await Transaction.find_one({"_id": existing_orders[0].transaction_id})
+        if not transaction:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Checkout batch is missing transaction data.",
+            )
+        if transaction.id is None:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Checkout batch transaction has no identifier.",
+            )
+
+        return CheckoutBatchResponse(
+            checkout_batch_id=existing_orders[0].checkout_batch_id,
+            transaction_id=transaction.id,
+            amount=transaction.amount,
+            transaction_status=transaction.status,
+            payment_method=transaction.payment_method,
+            orders=[OrderResponse.model_validate(order) for order in existing_orders],
+        )
+
+    @staticmethod
+    async def _mark_checkout_failed(
         transaction: Transaction | None,
         orders: list[Order],
-        reserved_items: list[OrderItemSnapshot],
-        user_id: PydanticObjectId,
+        user_id: PydanticObjectId
     ) -> None:
+        """
+        Idempotent failure finalization.
+        Ensures no zombie PENDING records remain.
+        """
+
         if transaction and transaction.status == TransactionStatus.PENDING:
             transaction.status = TransactionStatus.FAILED
             transaction.updated_by = user_id
             await transaction.save()
 
         for order in orders:
+            if order.status == OrderStatus.PENDING:
+                order.status = OrderStatus.CANCELLED
+                if order.payment_status == OrderPaymentStatus.PENDING:
+                    order.payment_status = OrderPaymentStatus.FAILED
+                order.expires_at = None
+                order.updated_by = user_id
+                await order.save()
+
+    @staticmethod
+    async def cleanup_expired_orders() -> None:
+        now = datetime.now(timezone.utc)
+        expired_orders = await Order.find(
+            {
+                "status": OrderStatus.PENDING,
+                "cleanup_processed": False,
+                "expires_at": {"$lte": now},
+                "is_deleted": {"$ne": True},
+            }
+        ).to_list()
+
+        touched_transactions: set[str] = set()
+        for order in expired_orders:
+            for item in order.items:
+                await InventoryService.release_reserved_stock(
+                    product_id=item.product_id,
+                    sku=item.sku,
+                    quantity=item.quantity,
+                )
+
             order.status = OrderStatus.CANCELLED
-            if order.payment_status == OrderPaymentStatus.PENDING:
-                order.payment_status = OrderPaymentStatus.FAILED
-            order.updated_by = user_id
+            order.payment_status = OrderPaymentStatus.FAILED
+            order.cancellation_reason = "Checkout session expired."
+            order.expires_at = None
+            order.cleanup_processed = True
             await order.save()
 
-        await OrderService._rollback_inventory(reserved_items)
+            transaction_key = str(order.transaction_id)
+            if transaction_key in touched_transactions:
+                continue
+
+            touched_transactions.add(transaction_key)
+            transaction = await Transaction.find_one({"_id": order.transaction_id})
+            if transaction and transaction.status == TransactionStatus.PENDING:
+                transaction.status = TransactionStatus.FAILED
+                await transaction.save()
+
+    @staticmethod
+    async def run_cleanup_loop() -> None:
+        while True:
+            try:
+                await OrderService.cleanup_expired_orders()
+            except Exception:
+                logger.exception("Expired order cleanup loop failed")
+            await asyncio.sleep(OrderService.EXPIRY_CLEANUP_INTERVAL_SECONDS)
 
     @staticmethod
     async def checkout(user_id: PydanticObjectId, data: CheckoutRequest) -> CheckoutBatchResponse:
         user = await User.get(user_id)
         if not user:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+
+        checkout_batch_id = data.checkout_batch_id
+        existing_orders = await Order.find(
+            {
+                "checkout_batch_id": checkout_batch_id,
+                "user_id": user_id,
+                "is_deleted": {"$ne": True},
+            }
+        ).to_list()
+        if existing_orders:
+            return await OrderService._build_checkout_batch_response(existing_orders)
 
         try:
             extracted_shipping = user.addresses[data.shipping_address_index]
@@ -219,16 +286,16 @@ class OrderService:
         created_orders: list[Order] = []
         created_transaction: Transaction | None = None
         payment_captured = False
-        checkout_batch_id = uuid.uuid4().hex
+        expires_at = datetime.now(timezone.utc) + timedelta(minutes=OrderService.CHECKOUT_EXPIRY_MINUTES)
 
         try:
+
             for item in checkout_items:
-                success = await OrderService._reserve_stock(item.product_id, item.sku, item.quantity)
-                if not success:
-                    raise HTTPException(
-                        status_code=status.HTTP_409_CONFLICT,
-                        detail=f"Failed to reserve stock for {item.product_name} ({item.sku}).",
-                    )
+                await InventoryService.reserve_stock(
+                    product_id=item.product_id,
+                    sku=item.sku,
+                    quantity=item.quantity
+                )
                 reserved_items.append(item)
 
             seller_order_payloads: list[SellerOrderPayload] = []
@@ -279,6 +346,7 @@ class OrderService:
                     grand_total=payload["grand_total"],  # type: ignore[arg-type]
                     status=OrderStatus.PENDING,
                     payment_status=OrderPaymentStatus.PENDING,
+                    expires_at=expires_at,
                     created_by=user_id,
                     updated_by=user_id,
                 )
@@ -311,6 +379,12 @@ class OrderService:
                 )
 
             payment_captured = True
+            for item in reserved_items:
+                await InventoryService.confirm_stock_deduction(
+                    product_id=item.product_id,
+                    sku=item.sku,
+                    quantity=item.quantity
+                )
             created_transaction.status = TransactionStatus.SUCCESS
             created_transaction.gateway_transaction_id = payment_result["txn_id"]
             created_transaction.updated_by = user_id
@@ -319,6 +393,7 @@ class OrderService:
             for order in created_orders:
                 order.status = OrderStatus.CONFIRMED
                 order.payment_status = OrderPaymentStatus.PAID
+                order.expires_at = None
                 order.updated_by = user_id
                 await order.save()
                 
@@ -346,7 +421,13 @@ class OrderService:
             )
         except HTTPException:
             if not payment_captured:
-                await OrderService._rollback_checkout(created_transaction, created_orders, reserved_items, user_id)
+                for item in reserved_items:
+                    await InventoryService.release_reserved_stock(
+                        product_id=item.product_id,
+                        sku=item.sku,
+                        quantity=item.quantity
+                    )
+                await OrderService._mark_checkout_failed(created_transaction, created_orders, user_id)
             raise
         except Exception:
             if payment_captured:
@@ -355,7 +436,13 @@ class OrderService:
                     detail="Payment was captured, but order finalization needs manual review.",
                 )
 
-            await OrderService._rollback_checkout(created_transaction, created_orders, reserved_items, user_id)
+            for item in reserved_items:
+                await InventoryService.release_reserved_stock(
+                    product_id=item.product_id,
+                    sku=item.sku,
+                    quantity=item.quantity
+                )
+            await OrderService._mark_checkout_failed(created_transaction, created_orders, user_id)
             raise HTTPException(
                 status_code=status.HTTP_502_BAD_GATEWAY,
                 detail="Checkout failed because the payment gateway is unreachable. Inventory released.",
@@ -437,6 +524,8 @@ class OrderService:
         if not order:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Order not found")
 
+        original_payment_status = order.payment_status
+
         if current_user.role == UserRole.CUSTOMER and order.user_id != current_user.id:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
@@ -467,6 +556,13 @@ class OrderService:
                 detail="Order is already cancelled.",
             )
 
+        # Guard against the brief partial-finalization window after payment capture.
+        if order.payment_status == OrderPaymentStatus.PAID and order.status != OrderStatus.CONFIRMED:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="Order is currently finalizing. Please retry cancellation in a few moments."
+            )
+
         transaction = await Transaction.find_one({"_id": order.transaction_id})
         if transaction:
             if transaction.status in {TransactionStatus.SUCCESS, TransactionStatus.PARTIALLY_REFUNDED}:
@@ -492,10 +588,23 @@ class OrderService:
             transaction.updated_by = current_user.id
             await transaction.save()
 
-        await OrderService._rollback_inventory(order.items)
+        for item in order.items:
+            if original_payment_status == OrderPaymentStatus.PENDING:
+                await InventoryService.release_reserved_stock(
+                    product_id=item.product_id,
+                    sku=item.sku,
+                    quantity=item.quantity
+                )
+            else:
+                await InventoryService.restore_stock(
+                    product_id=item.product_id,
+                    sku=item.sku,
+                    quantity=item.quantity
+                )
 
         order.status = OrderStatus.CANCELLED
         order.cancellation_reason = reason # Persist the audit trail
+        order.expires_at = None
         if order.payment_status == OrderPaymentStatus.PENDING:
             order.payment_status = OrderPaymentStatus.FAILED
         order.updated_by = current_user.id

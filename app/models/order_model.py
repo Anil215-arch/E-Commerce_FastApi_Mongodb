@@ -1,3 +1,4 @@
+from datetime import datetime
 from enum import Enum
 from typing import List, Optional
 
@@ -55,6 +56,8 @@ class Order(AuditDocument):
     status: OrderStatus = Field(default=OrderStatus.PENDING)
     payment_status: OrderPaymentStatus = Field(default=OrderPaymentStatus.PENDING)
     refunded_amount: int = Field(default=0, ge=0)
+    expires_at: Optional[datetime] = Field(default=None)
+    cleanup_processed: bool = Field(default=False)
     
     cancellation_reason: Optional[str] = Field(default=None, max_length=500, description="Reason provided when the order was cancelled")    
 
@@ -66,4 +69,5 @@ class Order(AuditDocument):
             IndexModel([("transaction_id", ASCENDING)]),
             IndexModel([("checkout_batch_id", ASCENDING)]),
             IndexModel([("checkout_batch_id", ASCENDING), ("seller_id", ASCENDING)], unique=True),
+            IndexModel([("status", ASCENDING), ("expires_at", ASCENDING)]),
         ]

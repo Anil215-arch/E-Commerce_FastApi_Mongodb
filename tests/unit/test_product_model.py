@@ -15,13 +15,13 @@ def test_product_sync_price_uses_effective_variant_price():
                 sku="ACER-16-512",
                 price=120000,
                 discount_price=100000,
-                stock=5,
+                available_stock=5,
             ),
             ProductVariant(
                 sku="ACER-32-1024",
                 price=150000,
                 discount_price=None,
-                stock=3,
+                available_stock=3,
             ),
         ],
     )

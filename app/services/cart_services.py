@@ -62,13 +62,13 @@ class CartService:
                 for item in new_items:
                     if item.product_id == data.product_id and item.sku == data.sku:
                         new_qty = item.quantity + data.quantity
-                        if new_qty > variant.stock:
-                            raise StockExceeded(f"Insufficient stock. Available: {variant.stock}")
+                        if new_qty > variant.available_stock:
+                            raise StockExceeded(f"Insufficient stock. Available: {variant.available_stock}")
                         item.quantity = new_qty
                         break
             else:
-                if data.quantity > variant.stock:
-                    raise StockExceeded(f"Insufficient stock. Available: {variant.stock}")
+                if data.quantity > variant.available_stock:
+                    raise StockExceeded(f"Insufficient stock. Available: {variant.available_stock}")
                 new_items.append(CartItem(**data.model_dump()))
 
             collection = Cart.get_pymongo_collection() # type: ignore
@@ -101,8 +101,8 @@ class CartService:
             
             if not variant:
                 raise VariantNotFound("Variant no longer exists.")
-            if data.quantity > variant.stock:
-                raise StockExceeded(f"Only {variant.stock} in stock.")
+            if data.quantity > variant.available_stock:
+                raise StockExceeded(f"Only {variant.available_stock} in stock.")
 
             new_items = []
             found = False
@@ -192,10 +192,10 @@ class CartService:
                 is_available = False
             else:
                 variant = next((v for v in product.variants if v.sku == item.sku), None)
-                if not variant or variant.stock <= 0:
+                if not variant or variant.available_stock <= 0:
                     is_available = False
                 else:
-                    available_stock = variant.stock
+                    available_stock = variant.available_stock
                     variant_response = ProductVariantResponse(**variant.model_dump())
                     
                     effective_qty = min(item.quantity, available_stock)

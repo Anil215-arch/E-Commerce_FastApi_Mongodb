@@ -6,6 +6,7 @@ from app.core.user_role import UserRole
 from app.api.api_v1.endpoints.public import auth, products as public_products, categories as public_categories, reviews as public_reviews
 from app.api.api_v1.endpoints.customer import profile, cart, orders as customer_orders, notifications, device_tokens, reviews as customer_reviews
 from app.api.api_v1.endpoints.seller import products as seller_products, orders as seller_orders, dashboard as seller_dashboard
+from app.api.api_v1.endpoints.seller import inventory as seller_inventory
 from app.api.api_v1.endpoints.admin import users as admin_users, categories as admin_categories, products as admin_products, orders as admin_orders, dashboard as admin_dashboard
 # Inside router.py
 from app.api.api_v1.endpoints import wishlist_api
@@ -51,6 +52,12 @@ api_router.include_router(
     seller_dashboard.router, 
     prefix="/seller/dashboard", 
     tags=["Seller Dashboard"],
+    dependencies=[Depends(RoleChecker([UserRole.SELLER, UserRole.ADMIN, UserRole.SUPER_ADMIN]))]
+)
+api_router.include_router(
+    seller_inventory.router,
+    prefix="/seller/inventory",
+    tags=["Seller Inventory Management"],
     dependencies=[Depends(RoleChecker([UserRole.SELLER, UserRole.ADMIN, UserRole.SUPER_ADMIN]))]
 )
 

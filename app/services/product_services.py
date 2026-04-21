@@ -63,9 +63,8 @@ class ProductService:
 
     @staticmethod
     def _merge_variant_update(existing_variant: ProductVariant, data: ProductVariantUpdate) -> ProductVariant:
-        update_data = data.model_dump(exclude_unset=True, exclude={"sku"})
-
         merged_payload = existing_variant.model_dump()
+        update_data = data.model_dump(exclude_unset=True, exclude={"sku"})
         merged_payload.update(update_data)
         return ProductVariant(**merged_payload)
 
