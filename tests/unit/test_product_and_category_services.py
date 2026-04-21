@@ -23,7 +23,7 @@ async def test_product_update_variant_rejects_path_body_sku_mismatch():
                 await ProductService.update_variant(
                     PydanticObjectId(),
                     "SKU-PATH",
-                    ProductVariantUpdate(sku="SKU-BODY", price=100, stock=3),
+                    ProductVariantUpdate(sku="SKU-BODY", price=100, available_stock=3),
                     PydanticObjectId(),
                 )
 
@@ -107,7 +107,7 @@ async def test_update_product_rejects_variants_payload_in_general_update():
                     PydanticObjectId(),
                     ProductUpdate(
                         variants=[
-                            ProductVariantUpdate(sku="SKU-1", price=100, stock=1),
+                            ProductVariantUpdate(sku="SKU-1", price=100, available_stock=1),
                         ]
                     ),
                     PydanticObjectId(),

@@ -38,7 +38,7 @@ async def test_add_to_cart_rejects_when_unique_item_limit_is_reached():
         id=new_product_id,
         is_deleted=False,
         is_available=True,
-        variants=[SimpleNamespace(sku="SKU-NEW", stock=10)],
+        variants=[SimpleNamespace(sku="SKU-NEW", available_stock=10)],
     )
 
     with patch("app.services.cart_services.Product.get", new=AsyncMock(return_value=product)):
@@ -63,7 +63,7 @@ async def test_add_to_cart_rejects_when_requested_quantity_exceeds_stock():
         id=product_id,
         is_deleted=False,
         is_available=True,
-        variants=[SimpleNamespace(sku="SKU-1", stock=4)],
+        variants=[SimpleNamespace(sku="SKU-1", available_stock=4)],
     )
 
     with patch("app.services.cart_services.Product.get", new=AsyncMock(return_value=product)):
@@ -90,7 +90,7 @@ async def test_get_cart_cleans_stale_items_and_mutates_storage_on_read():
         ],
         save=AsyncMock(),
     )
-    valid_variant = ProductVariant(sku="A-1", price=100, discount_price=80, stock=3)
+    valid_variant = ProductVariant(sku="A-1", price=100, discount_price=80, available_stock=3)
     valid_product = SimpleNamespace(
         id=valid_product_id,
         name="Laptop",
@@ -126,7 +126,7 @@ async def test_update_item_quantity_rejects_when_new_quantity_exceeds_stock():
     product = SimpleNamespace(
         is_deleted=False,
         is_available=True,
-        variants=[SimpleNamespace(sku="SKU-2", stock=2)],
+        variants=[SimpleNamespace(sku="SKU-2", available_stock=2)],
     )
 
     with patch("app.services.cart_services.Cart.find_one", new=AsyncMock(return_value=cart)):

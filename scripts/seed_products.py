@@ -145,14 +145,14 @@ def build_variants(parent_name: str, subcategory_name: str, round_no: int) -> li
             sku=f"{prefix}-S",
             price=std_price,
             discount_price=std_price - 80,
-            stock=15 + (round_no % 20),
+            available_stock=15 + (round_no % 20),
             attributes={"tier": "Standard", "finish": "Matte"},
         ),
         ProductVariant(
             sku=f"{prefix}-P",
             price=pro_price,
             discount_price=pro_price - 120,
-            stock=8 + (round_no % 15),
+            available_stock=8 + (round_no % 15),
             attributes={"tier": "Pro", "finish": "Glossy"},
         ),
     ]

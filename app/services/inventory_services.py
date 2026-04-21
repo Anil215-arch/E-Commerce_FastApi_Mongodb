@@ -1,0 +1,284 @@
+from datetime import datetime, timezone
+
+from beanie import PydanticObjectId
+from fastapi import HTTPException, status
+from pymongo import ReturnDocument
+from pymongo.errors import DuplicateKeyError
+
+from app.models.inventory_ledger_model import InventoryLedger
+from app.models.product_model import Product
+from app.models.product_variant_model import ProductVariant
+from app.schemas.inventory_schema import InventoryVariantResponse
+
+
+class InventoryService:
+
+    @staticmethod
+    async def _get_variant_or_raise(
+        product_id: PydanticObjectId,
+        sku: str,
+        seller_id: PydanticObjectId,
+    ) -> ProductVariant:
+        query: dict = {
+            "_id": product_id,
+            "is_deleted": {"$ne": True},
+            "created_by": seller_id,
+        }
+        product = await Product.find_one(query)
+        if not product:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Product not found",
+            )
+
+        variant = next((item for item in product.variants if item.sku == sku), None)
+        if not variant:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Variant not found",
+            )
+        return variant
+
+    @staticmethod
+    async def get_variant_inventory(
+        product_id: PydanticObjectId,
+        sku: str,
+        seller_id: PydanticObjectId,
+    ) -> InventoryVariantResponse:
+        variant = await InventoryService._get_variant_or_raise(product_id, sku, seller_id)
+        return InventoryVariantResponse(
+            product_id=product_id,
+            sku=sku,
+            available_stock=variant.available_stock,
+            reserved_stock=variant.reserved_stock,
+            total_stock=variant.available_stock + variant.reserved_stock,
+        )
+
+    @staticmethod
+    async def adjust_available_stock(
+        product_id: PydanticObjectId,
+        sku: str,
+        owner_seller_id: PydanticObjectId,
+        actor_user_id: PydanticObjectId,
+        request_id: str,
+        delta: int,
+        reason: str,
+    ) -> InventoryVariantResponse:
+        collection = Product.get_pymongo_collection()  # type: ignore
+        ledger_collection = InventoryLedger.get_pymongo_collection()  # type: ignore
+
+        update_filter: dict = {
+            "_id": product_id,
+            "is_deleted": {"$ne": True},
+            "created_by": owner_seller_id,
+            "variants": {"$elemMatch": {"sku": sku}},
+        }
+        if delta < 0:
+            update_filter = {
+                "_id": product_id,
+                "is_deleted": {"$ne": True},
+                "created_by": owner_seller_id,
+                "variants": {
+                    "$elemMatch": {
+                        "sku": sku,
+                        "available_stock": {"$gte": abs(delta)},
+                    }
+                },
+            }
+
+        try:
+            async with collection.database.client.start_session() as session:
+                async def _run_transactional_mutation() -> None:
+                    previous_product = await collection.find_one_and_update(
+                        update_filter,
+                        {"$inc": {"variants.$.available_stock": delta}},
+                        projection={"variants.$": 1},
+                        return_document=ReturnDocument.BEFORE,
+                        session=session,
+                    )
+
+                    if not previous_product:
+                        raise HTTPException(
+                            status_code=status.HTTP_409_CONFLICT,
+                            detail="Inventory update failed. Check product, SKU, ownership, or available stock.",
+                        )
+
+                    previous_variant = (previous_product.get("variants") or [None])[0]
+                    if not previous_variant:
+                        raise HTTPException(
+                            status_code=status.HTTP_409_CONFLICT,
+                            detail="Inventory update failed because matching SKU snapshot was unavailable.",
+                        )
+
+                    previous_stock = int(previous_variant.get("available_stock", 0))
+                    new_stock = previous_stock + delta
+                    if new_stock < 0:
+                        raise HTTPException(
+                            status_code=status.HTTP_409_CONFLICT,
+                            detail="Inventory update failed because resulting stock would be negative.",
+                        )
+
+                    now = datetime.now(timezone.utc)
+                    await ledger_collection.insert_one(
+                        {
+                            "product_id": product_id,
+                            "sku": sku,
+                            "user_id": actor_user_id,
+                            "actor_user_id": actor_user_id,
+                            "owner_seller_id": owner_seller_id,
+                            "request_id": request_id,
+                            "delta": delta,
+                            "previous_stock": previous_stock,
+                            "new_stock": new_stock,
+                            "reason": reason,
+                            "created_at": now,
+                            "updated_at": now,
+                            "is_deleted": False,
+                            "created_by": actor_user_id,
+                            "updated_by": actor_user_id,
+                        },
+                        session=session,
+                    )
+
+                transaction_ctx = await session.start_transaction()
+                async with transaction_ctx:
+                    await _run_transactional_mutation()
+        except DuplicateKeyError:
+            prior = await ledger_collection.find_one(
+                {
+                    "product_id": product_id,
+                    "sku": sku,
+                    "request_id": request_id,
+                    "actor_user_id": actor_user_id,
+                }
+            )
+            if not prior:
+                raise HTTPException(
+                    status_code=status.HTTP_409_CONFLICT,
+                    detail="Duplicate idempotency key detected, but no matching prior record was found.",
+                )
+            if int(prior.get("delta", 0)) != delta or str(prior.get("reason", "")) != reason:
+                raise HTTPException(
+                    status_code=status.HTTP_409_CONFLICT,
+                    detail="Idempotency key has already been used with a different payload.",
+                )
+
+        return await InventoryService.get_variant_inventory(product_id, sku, owner_seller_id)
+
+    @staticmethod
+    async def reserve_stock(product_id: PydanticObjectId, sku: str, quantity: int) -> None:
+        """
+        Move stock from available -> reserved
+        Atomic operation (prevents race conditions)
+        """
+        collection = Product.get_pymongo_collection()  # type: ignore
+
+        result = await collection.update_one(
+            {
+                "_id": product_id,
+                "is_deleted": {"$ne": True},
+                "is_available": True,
+                "variants": {
+                    "$elemMatch": {
+                        "sku": sku,
+                        "available_stock": {"$gte": quantity}
+                    }
+                }
+            },
+            {
+                "$inc": {
+                    "variants.$.available_stock": -quantity,
+                    "variants.$.reserved_stock": quantity
+                }
+            }
+        )
+
+        if result.modified_count == 0:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail=f"Stock reservation failed for SKU {sku}"
+            )
+
+    @staticmethod
+    async def confirm_stock_deduction(product_id: PydanticObjectId, sku: str, quantity: int) -> None:
+        """
+        Finalize stock after payment success
+        (reserved_stock → burned permanently)
+        """
+        collection = Product.get_pymongo_collection()  # type: ignore
+
+        result = await collection.update_one(
+            {
+                "_id": product_id,
+                "variants": {
+                    "$elemMatch": {
+                        "sku": sku,
+                        "reserved_stock": {"$gte": quantity}
+                    }
+                }
+            },
+            {
+                "$inc": {
+                    "variants.$.reserved_stock": -quantity
+                }
+            }
+        )
+
+        if result.modified_count == 0:
+            raise HTTPException(
+                status_code=500,
+                detail="Stock confirmation failed (inconsistent state)"
+            )
+
+    @staticmethod
+    async def release_reserved_stock(product_id: PydanticObjectId, sku: str, quantity: int) -> None:
+        """
+        Rollback stock (payment failed / crash recovery)
+        """
+        collection = Product.get_pymongo_collection()  # type: ignore
+
+        result = await collection.update_one(
+            {
+                "_id": product_id,
+                "variants": {
+                    "$elemMatch": {
+                        "sku": sku,
+                        "reserved_stock": {"$gte": quantity}
+                    }
+                }
+            },
+            {
+                "$inc": {
+                    "variants.$.available_stock": quantity,
+                    "variants.$.reserved_stock": -quantity
+                }
+            }
+        )
+
+        if result.modified_count == 0:
+            raise HTTPException(
+                status_code=500,
+                detail="Reserved stock release failed (inconsistent state)"
+            )
+    
+    @staticmethod
+    async def restore_stock(product_id: PydanticObjectId, sku: str, quantity: int) -> None:
+        collection = Product.get_pymongo_collection()  # type: ignore
+
+        result = await collection.update_one(
+            {
+                "_id": product_id,
+                "variants.sku": sku
+            },
+            {
+                "$inc": {
+                    "variants.$.available_stock": quantity
+                }
+            }
+        )
+
+        if result.modified_count == 0:
+            raise HTTPException(
+                status_code=500,
+                detail="Stock restore failed (variant or product not found)"
+            )

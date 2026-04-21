@@ -1,4 +1,5 @@
 import os
+import asyncio
 import uvicorn
 from fastapi import FastAPI, HTTPException, Request, status
 from fastapi.encoders import jsonable_encoder
@@ -12,6 +13,7 @@ from app.core.database import init_db
 from app.api.api_v1.router import api_router
 from app.core.config import settings
 from app.events import register_event_handlers
+from app.services.order_services import OrderService
 from app.utils.responses import error_response, success_response
 from app.schemas.common_schema import ApiResponse
 
@@ -19,7 +21,15 @@ from app.schemas.common_schema import ApiResponse
 async def lifespan(app: FastAPI):
     await init_db()
     register_event_handlers()
-    yield
+    cleanup_task = asyncio.create_task(OrderService.run_cleanup_loop())
+    try:
+        yield
+    finally:
+        cleanup_task.cancel()
+        try:
+            await cleanup_task
+        except asyncio.CancelledError:
+            pass
 
 app = FastAPI(
     title=settings.PROJECT_NAME,

@@ -61,7 +61,14 @@ def test_product_create_requires_admin_or_seller_role(client):
             "brand": "Acme",
             "category_id": str(PydanticObjectId()),
             "variants": [
-                {"sku": "PHX-01", "price": 10000, "discount_price": 9000, "stock": 5, "attributes": {}}
+                {
+                    "sku": "PHX-01",
+                    "price": 10000,
+                    "discount_price": 9000,
+                    "available_stock": 5,
+                    "reserved_stock": 0,
+                    "attributes": {}
+                }
             ],
             "rating": 4.5,
             "num_reviews": 0,

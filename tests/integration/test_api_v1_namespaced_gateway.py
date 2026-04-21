@@ -36,7 +36,8 @@ def _valid_product_create_payload() -> dict:
                 "sku": "PHX-01",
                 "price": 10000,
                 "discount_price": 9000,
-                "stock": 5,
+                "available_stock": 5,
+                "reserved_stock": 0,
                 "attributes": {},
             }
         ],
@@ -122,7 +123,8 @@ def test_seller_product_create_forwards_user_id_to_service(client):
                 "sku": "PHX-01",
                 "price": 10000,
                 "discount_price": 9000,
-                "stock": 5,
+                "available_stock": 5,
+                "reserved_stock": 0,
                 "attributes": {},
             }
         ],
@@ -268,7 +270,8 @@ def test_namespaced_core_loop_smoke_with_service_stubs(client):
                                 "sku": "PHX-01",
                                 "price": 10000,
                                 "discount_price": 9000,
-                                "stock": 5,
+                                "available_stock": 5,
+                                "reserved_stock": 0,
                                 "attributes": {},
                             }
                         ],
@@ -323,6 +326,7 @@ def test_namespaced_core_loop_smoke_with_service_stubs(client):
         checkout = client.post(
             "/api/v1/customer/orders/checkout",
             json={
+                "checkout_batch_id": "gateway-smoke-batch-001",
                 "shipping_address_index": 0,
                 "billing_address_index": 0,
                 "payment_method": "CARD",

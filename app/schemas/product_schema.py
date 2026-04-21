@@ -43,7 +43,9 @@ class ProductCreate(BaseModel):
                         "sku": "APPLE-MBA-M2-256",
                         "price": 99999,
                         "discount_price": 19999,
-                        "stock": 10
+                        "available_stock": 10,
+                        "reserved_stock": 0,
+                        "attributes": {}
                     }
                 ],
                 "rating": 4.5,

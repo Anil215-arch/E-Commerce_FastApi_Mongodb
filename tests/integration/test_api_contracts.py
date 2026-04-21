@@ -19,7 +19,8 @@ def test_products_list_returns_paginated_items_without_double_data(client):
                 "sku": "PHN-001",
                 "price": 50000,
                 "discount_price": 45000,
-                "stock": 5,
+                "available_stock": 5,
+                "reserved_stock": 0,
                 "attributes": {},
             }
         ],
