@@ -11,6 +11,8 @@ from app.models.product_model import Product
 from app.models.review_rating_model import ReviewAndRating
 from app.schemas.review_rating_schema import ReviewCreate, ReviewUpdate
 from app.utils.pagination import CursorUtils
+from app.validators.review_validator import ReviewDomainValidator
+from app.core.exceptions import DomainValidationError
 
 class ReviewService:
     
@@ -40,13 +42,14 @@ class ReviewService:
                 status_code=status.HTTP_403_FORBIDDEN, 
                 detail="You can only review products that you have purchased and received."
             )
-
+        clean_review_text = ReviewDomainValidator.validate_review_text(review_data.review)
+        clean_images = ReviewDomainValidator.validate_images(review_data.images)
         new_review = ReviewAndRating(
             product_id=product_id,
             user_id=user_id,
             rating=review_data.rating,
-            review=review_data.review,
-            images=review_data.images,
+            review=clean_review_text,
+            images=clean_images,
             is_verified=bool(order_id),
             order_id=order_id,
             created_by=user_id,
@@ -91,6 +94,11 @@ class ReviewService:
         review_data: ReviewUpdate
     ) -> ReviewAndRating:
         
+        if review_data.review is not None:
+            review_data.review = ReviewDomainValidator.validate_review_text(review_data.review)
+        if review_data.images is not None:
+            review_data.images = ReviewDomainValidator.validate_images(review_data.images)
+            
         review_doc = await ReviewAndRating.get(review_id)
         if not review_doc or review_doc.is_deleted:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Review not found")

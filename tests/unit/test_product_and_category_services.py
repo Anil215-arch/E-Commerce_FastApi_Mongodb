@@ -398,3 +398,65 @@ async def test_get_category_tree_builds_nested_children():
     assert tree[0]["name"] == "Root"
     assert len(tree[0]["children"]) == 1
     assert tree[0]["children"][0]["name"] == "Child"
+
+
+@pytest.mark.asyncio
+async def test_create_category_rejects_when_depth_limit_is_exceeded():
+    parent_id = PydanticObjectId()
+    payload = SimpleNamespace(name="Mobiles", parent_id=parent_id)
+
+    root = SimpleNamespace(id=PydanticObjectId(), parent_id=None, is_deleted=False)
+    parent = SimpleNamespace(id=parent_id, parent_id=root.id, is_deleted=False)
+
+    async def _category_get_side_effect(requested_id):
+        if requested_id == parent_id:
+            return parent
+        if requested_id == root.id:
+            return root
+        return None
+
+    with patch("app.services.category_services.Category.get", new=AsyncMock(side_effect=_category_get_side_effect)):
+        with patch(
+            "app.services.category_services.CategoryDomainValidator.validate_depth_limit",
+            side_effect=DomainValidationError("Category hierarchy cannot exceed a depth of 4 levels."),
+        ) as mock_depth:
+            with pytest.raises(DomainValidationError) as exc:
+                await CategoryService.create_category(payload, PydanticObjectId())
+
+    assert "cannot exceed a depth" in str(exc.value).lower()
+    mock_depth.assert_called_once()
+
+
+@pytest.mark.asyncio
+async def test_update_category_rejects_when_new_parent_chain_exceeds_depth_limit():
+    category_id = PydanticObjectId()
+    new_parent_id = PydanticObjectId()
+    category = SimpleNamespace(id=category_id, parent_id=None, is_deleted=False, save=AsyncMock())
+
+    root = SimpleNamespace(id=PydanticObjectId(), parent_id=None, is_deleted=False)
+    new_parent = SimpleNamespace(id=new_parent_id, parent_id=root.id, is_deleted=False)
+
+    async def _category_get_side_effect(requested_id):
+        if requested_id == category_id:
+            return category
+        if requested_id == new_parent_id:
+            return new_parent
+        if requested_id == root.id:
+            return root
+        return None
+
+    with patch("app.services.category_services.Category.get", new=AsyncMock(side_effect=_category_get_side_effect)):
+        with patch("app.services.category_services.CategoryService._creates_cycle", new=AsyncMock(return_value=False)):
+            with patch(
+                "app.services.category_services.CategoryDomainValidator.validate_depth_limit",
+                side_effect=DomainValidationError("Category hierarchy cannot exceed a depth of 4 levels."),
+            ) as mock_depth:
+                with pytest.raises(DomainValidationError) as exc:
+                    await CategoryService.update_category(
+                        category_id,
+                        CategoryUpdate(parent_id=new_parent_id),
+                        PydanticObjectId(),
+                    )
+
+    assert "cannot exceed a depth" in str(exc.value).lower()
+    mock_depth.assert_called_once()

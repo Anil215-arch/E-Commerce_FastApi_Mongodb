@@ -1,14 +1,28 @@
-from pydantic import BaseModel, Field, ConfigDict, field_serializer
+from pydantic import BaseModel, Field, ConfigDict, field_serializer, model_validator
 from typing import Optional, List
 from beanie import PydanticObjectId
 
 class CategoryCreate(BaseModel):
     name: str = Field(..., min_length=2, max_length=100)
     parent_id: Optional[PydanticObjectId] = None
+    
+    @model_validator(mode="before")
+    @classmethod
+    def normalize_name(cls, data):
+        if isinstance(data, dict) and "name" in data and isinstance(data["name"], str):
+            data["name"] = data["name"].strip()
+        return data
 
 class CategoryUpdate(BaseModel):
     name: Optional[str] = Field(None, min_length=2, max_length=100)
     parent_id: Optional[PydanticObjectId] = None
+    
+    @model_validator(mode="before")
+    @classmethod
+    def normalize_name(cls, data):
+        if isinstance(data, dict) and "name" in data and isinstance(data["name"], str):
+            data["name"] = data["name"].strip()
+        return data
 
 class CategoryResponse(BaseModel):
     id: PydanticObjectId = Field(alias="_id")

@@ -4,6 +4,8 @@ from pymongo.errors import DuplicateKeyError
 from app.models.wishlist_model import Wishlist
 from app.models.product_model import Product
 from app.schemas.wishlist_schema import WishlistPopulatedResponse
+from app.validators.wishlist_validator import WishlistDomainValidator
+from app.core.exceptions import DomainValidationError
 
 class WishlistService:
 
@@ -21,6 +23,9 @@ class WishlistService:
     
     @staticmethod
     async def add_item(user_id: PydanticObjectId, product_id: PydanticObjectId, sku: str) -> None:
+        current_count = await Wishlist.find({"user_id": user_id, "is_deleted": {"$ne": True}}).count()
+        WishlistDomainValidator.validate_capacity(current_count)
+        WishlistDomainValidator.validate_sku(sku)
         # 1. Validate Product and Variant Existence
         product = await Product.find_one({"_id": product_id, "is_deleted": {"$ne": True}, "is_available": True})
         if not product:
@@ -47,6 +52,7 @@ class WishlistService:
 
     @staticmethod
     async def remove_item(user_id: PydanticObjectId, product_id: PydanticObjectId, sku: str) -> None:
+        WishlistDomainValidator.validate_sku(sku)
         result = await Wishlist.find_one(
             {"user_id": user_id, "product_id": product_id, "sku": sku, "is_deleted": {"$ne": True}}
         )
