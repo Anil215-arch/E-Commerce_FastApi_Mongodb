@@ -11,24 +11,34 @@ class ProductCreate(BaseModel):
     brand: str = Field(..., min_length=2, max_length=100)
     category_id: PydanticObjectId
 
-    variants: List[ProductVariantCreate] = Field(default_factory=list)
+    variants: List[ProductVariantCreate] = Field(default_factory=list) 
 
     specifications: Dict[str, str] = Field(default_factory=dict)
 
     is_available: bool = True
     is_featured: bool = False
 
-    @model_validator(mode="after")
-    def validate_variants_size(self):
-        if len(self.variants) == 0:
-            raise ValueError("At least one product variant is required.")
-        return self
+    @model_validator(mode="before")
+    @classmethod
+    def normalize(cls, data):
+        if isinstance(data, dict):
+            if "name" in data:
+                data["name"] = data["name"].strip()
+            if "description" in data:
+                data["description"] = data["description"].strip()
+            if "brand" in data:
+                data["brand"] = data["brand"].strip()
+        return data
 
     @model_validator(mode="after")
-    def validate_unique_variant_sku(self):
-        sku_counts = [variant.sku for variant in self.variants]
-        if len(sku_counts) != len(set(sku_counts)):
+    def validate_variants(self):
+        if len(self.variants) == 0:
+            raise ValueError("At least one product variant is required.")
+
+        skus = [variant.sku for variant in self.variants]
+        if len(skus) != len(set(skus)):
             raise ValueError("Variant SKUs must be unique within a product.")
+
         return self
 
     model_config = ConfigDict(
@@ -48,8 +58,6 @@ class ProductCreate(BaseModel):
                         "attributes": {}
                     }
                 ],
-                "rating": 4.5,
-                "num_reviews": 120,
                 "specifications": {
                     "Processor": "Apple M2",
                     "RAM": "8GB",
@@ -60,7 +68,6 @@ class ProductCreate(BaseModel):
             }
         }
     )
-
 
 class ProductUpdate(BaseModel):
     name: Optional[str] = Field(None, min_length=3, max_length=200)
@@ -78,14 +85,27 @@ class ProductUpdate(BaseModel):
     is_available: Optional[bool] = None
     is_featured: Optional[bool] = None
 
+    @model_validator(mode="before")
+    @classmethod
+    def normalize(cls, data):
+        if isinstance(data, dict):
+            if "name" in data:
+                data["name"] = data["name"].strip()
+            if "description" in data:
+                data["description"] = data["description"].strip()
+            if "brand" in data:
+                data["brand"] = data["brand"].strip()
+        return data
+
     @model_validator(mode="after")
     def validate_unique_variant_sku(self):
         if self.variants is None:
             return self
 
-        sku_counts = [variant.sku for variant in self.variants]
-        if len(sku_counts) != len(set(sku_counts)):
+        skus = [variant.sku for variant in self.variants]
+        if len(skus) != len(set(skus)):
             raise ValueError("Variant SKUs must be unique within a product.")
+
         return self
 
 
