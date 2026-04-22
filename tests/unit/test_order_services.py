@@ -20,6 +20,7 @@ from app.schemas.address_schema import Address
 from app.schemas.order_schema import CheckoutBatchResponse, CheckoutRequest
 from app.services.order_services import DummyPaymentGateway, OrderService
 from app.validators.order_validator import OrderDomainValidator
+from app.validators.transaction_validator import TransactionDomainValidator
 
 
 def _address() -> Address:
@@ -70,6 +71,48 @@ def test_order_domain_validator_rejects_whitespace_cancellation_reason():
         OrderDomainValidator.validate_cancellation_reason("          ")
 
     assert "cannot be empty" in str(exc.value).lower()
+
+
+def test_transaction_domain_validator_rejects_allocation_sum_mismatch():
+    allocations = [
+        TransactionAllocation(
+            order_id=PydanticObjectId(),
+            seller_id=PydanticObjectId(),
+            amount=100,
+            refunded_amount=0,
+        )
+    ]
+
+    with pytest.raises(DomainValidationError) as exc:
+        TransactionDomainValidator.validate_allocations(total_amount=120, allocations=allocations)
+
+    assert "allocations sum" in str(exc.value).lower()
+
+
+def test_transaction_domain_validator_rejects_refund_imbalance():
+    allocations = [
+        TransactionAllocation(
+            order_id=PydanticObjectId(),
+            seller_id=PydanticObjectId(),
+            amount=200,
+            refunded_amount=50,
+        ),
+        TransactionAllocation(
+            order_id=PydanticObjectId(),
+            seller_id=PydanticObjectId(),
+            amount=100,
+            refunded_amount=20,
+        ),
+    ]
+
+    with pytest.raises(DomainValidationError) as exc:
+        TransactionDomainValidator.validate_refund_math(
+            total_amount=300,
+            total_refunded=100,
+            allocations=allocations,
+        )
+
+    assert "refund imbalance" in str(exc.value).lower()
 
 
 @pytest.mark.asyncio

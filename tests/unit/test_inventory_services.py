@@ -6,6 +6,7 @@ from beanie import PydanticObjectId
 from fastapi import HTTPException
 from pymongo.errors import DuplicateKeyError
 
+from app.core.exceptions import DomainValidationError
 from app.schemas.inventory_schema import InventoryVariantResponse
 from app.services.inventory_services import InventoryService
 
@@ -182,3 +183,31 @@ async def test_adjust_available_stock_rejects_when_decrement_exceeds_available_s
 
     assert exc.value.status_code == 409
     fake_ledger_collection.insert_one.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+async def test_adjust_available_stock_rejects_short_request_id_before_db_calls():
+    with pytest.raises(DomainValidationError) as exc:
+        await InventoryService.adjust_available_stock(
+            product_id=PydanticObjectId(),
+            sku="SKU-VALID-1",
+            owner_seller_id=PydanticObjectId(),
+            actor_user_id=PydanticObjectId(),
+            request_id="short",
+            delta=5,
+            reason="manual adjustment",
+        )
+
+    assert "request_id" in str(exc.value).lower()
+
+
+@pytest.mark.asyncio
+async def test_reserve_stock_rejects_non_positive_quantity_before_db_calls():
+    with pytest.raises(DomainValidationError) as exc:
+        await InventoryService.reserve_stock(
+            product_id=PydanticObjectId(),
+            sku="SKU-VALID-1",
+            quantity=0,
+        )
+
+    assert "strictly positive" in str(exc.value).lower()
