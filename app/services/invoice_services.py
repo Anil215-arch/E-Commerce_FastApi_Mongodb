@@ -9,6 +9,7 @@ from app.core.user_role import UserRole
 from fastapi import HTTPException, status
 from beanie import PydanticObjectId
 from app.services.sequence_services import SequenceService
+from app.validators.invoice_validator import InvoiceDomainValidator
 
 class InvoiceService:
     
@@ -21,7 +22,17 @@ class InvoiceService:
 
         # 2. Generate Atomic Sequence
         invoice_number = await SequenceService.next_invoice_number()
-
+        InvoiceDomainValidator.validate_items(order.items)
+        InvoiceDomainValidator.validate_financial_math(
+            subtotal=order.subtotal,
+            tax=order.tax_amount,
+            shipping=order.shipping_fee,
+            grand_total=order.grand_total
+        )
+        InvoiceDomainValidator.validate_transaction_coverage(
+            invoice_total=order.grand_total,
+            transaction_amount=transaction.amount
+        )
         # 3. Snapshot and Save
         invoice = Invoice(
             invoice_number=invoice_number,

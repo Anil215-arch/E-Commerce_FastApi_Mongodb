@@ -28,6 +28,7 @@ from app.events.order_events import OrderDeliveredEvent, OrderCancelledEvent
 from app.services.cart_services import CartService
 from app.services.inventory_services import InventoryService
 from app.validators.order_validator import OrderDomainValidator
+from app.validators.transaction_validator import TransactionDomainValidator
 
 logger = logging.getLogger(__name__)
 
@@ -286,6 +287,7 @@ class OrderService:
             )
             
         checkout_items = await OrderService._load_checkout_items(user_id)
+        TransactionDomainValidator.validate_checkout_items(checkout_items)
         if not checkout_items:
             raise HTTPException(status_code=400, detail="No valid items for checkout")
         
@@ -380,6 +382,10 @@ class OrderService:
                 )
 
             created_transaction.allocations = allocations
+            TransactionDomainValidator.validate_allocations(
+                total_amount=created_transaction.amount, 
+                allocations=created_transaction.allocations
+            )
             created_transaction.updated_by = user_id
             await created_transaction.save()
 
@@ -596,6 +602,11 @@ class OrderService:
                         TransactionStatus.REFUNDED
                         if transaction.refunded_amount >= transaction.amount
                         else TransactionStatus.PARTIALLY_REFUNDED
+                    )
+                    TransactionDomainValidator.validate_refund_math(
+                        total_amount=transaction.amount,
+                        total_refunded=transaction.refunded_amount,
+                        allocations=transaction.allocations
                     )
             elif transaction.status == TransactionStatus.PENDING:
                 transaction.status = TransactionStatus.FAILED

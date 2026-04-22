@@ -9,7 +9,7 @@ from app.models.inventory_ledger_model import InventoryLedger
 from app.models.product_model import Product
 from app.models.product_variant_model import ProductVariant
 from app.schemas.inventory_schema import InventoryVariantResponse
-
+from app.validators.inventory_validator import InventoryDomainValidator
 
 class InventoryService:
 
@@ -64,6 +64,10 @@ class InventoryService:
         delta: int,
         reason: str,
     ) -> InventoryVariantResponse:
+        
+        InventoryDomainValidator.validate_request_id(request_id)
+        InventoryDomainValidator.validate_reason(reason)
+        InventoryDomainValidator.validate_sku(sku)
         collection = Product.get_pymongo_collection()  # type: ignore
         ledger_collection = InventoryLedger.get_pymongo_collection()  # type: ignore
 
@@ -117,7 +121,7 @@ class InventoryService:
                             status_code=status.HTTP_409_CONFLICT,
                             detail="Inventory update failed because resulting stock would be negative.",
                         )
-
+                    InventoryDomainValidator.validate_stock_ceiling(new_stock)
                     now = datetime.now(timezone.utc)
                     await ledger_collection.insert_one(
                         {
@@ -162,7 +166,6 @@ class InventoryService:
                     status_code=status.HTTP_409_CONFLICT,
                     detail="Idempotency key has already been used with a different payload.",
                 )
-
         return await InventoryService.get_variant_inventory(product_id, sku, owner_seller_id)
 
     @staticmethod
@@ -171,6 +174,8 @@ class InventoryService:
         Move stock from available -> reserved
         Atomic operation (prevents race conditions)
         """
+        InventoryDomainValidator.validate_sku(sku)
+        InventoryDomainValidator.validate_operation_quantity(quantity)
         collection = Product.get_pymongo_collection()  # type: ignore
 
         result = await collection.update_one(
@@ -205,6 +210,8 @@ class InventoryService:
         Finalize stock after payment success
         (reserved_stock → burned permanently)
         """
+        InventoryDomainValidator.validate_sku(sku)
+        InventoryDomainValidator.validate_operation_quantity(quantity)
         collection = Product.get_pymongo_collection()  # type: ignore
 
         result = await collection.update_one(
@@ -235,6 +242,8 @@ class InventoryService:
         """
         Rollback stock (payment failed / crash recovery)
         """
+        InventoryDomainValidator.validate_sku(sku)
+        InventoryDomainValidator.validate_operation_quantity(quantity)
         collection = Product.get_pymongo_collection()  # type: ignore
 
         result = await collection.update_one(
@@ -263,6 +272,8 @@ class InventoryService:
     
     @staticmethod
     async def restore_stock(product_id: PydanticObjectId, sku: str, quantity: int) -> None:
+        InventoryDomainValidator.validate_sku(sku)
+        InventoryDomainValidator.validate_operation_quantity(quantity)
         collection = Product.get_pymongo_collection()  # type: ignore
 
         result = await collection.update_one(

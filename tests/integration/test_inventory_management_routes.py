@@ -168,3 +168,19 @@ def test_adjust_inventory_rejects_invalid_increment_payload(client):
     body = response.json()
     assert body["status"] == "error"
     assert "validation" in body["message"].lower()
+
+
+def test_adjust_inventory_rejects_short_request_id_with_domain_error_shape(client):
+    product_id = PydanticObjectId()
+    main.app.dependency_overrides[get_current_user] = _override_user(UserRole.SELLER)
+
+    response = client.patch(
+        f"/api/v1/seller/inventory/products/{product_id}/variants/SKU-INV-4",
+        json={"request_id": "short", "delta": 1, "reason": "manual adjustment"},
+    )
+
+    assert response.status_code == 422
+    body = response.json()
+    assert body["status"] == "error"
+    assert body["message"] == "Validation failed"
+    assert isinstance(body["data"], list)
