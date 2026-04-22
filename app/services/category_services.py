@@ -3,6 +3,7 @@ from beanie import PydanticObjectId
 from app.models.category_model import Category
 from app.models.product_model import Product
 from app.schemas.category_schema import CategoryCreate, CategoryUpdate
+from app.validators.category_validator import CategoryDomainValidator
 
 class CategoryService:
     @staticmethod
@@ -45,8 +46,20 @@ class CategoryService:
         if error:
             return None, error
 
+        clean_name = CategoryDomainValidator.validate_name(data.name)
+        if parent_id is not None:
+            depth = 1
+            current_parent = await Category.get(parent_id)
+
+            while current_parent is not None and not current_parent.is_deleted:
+                if current_parent.parent_id is None:
+                    break
+                depth += 1
+                current_parent = await Category.get(current_parent.parent_id)
+
+            CategoryDomainValidator.validate_depth_limit(depth + 1)
         new_category = Category(
-            name=data.name,
+            name=clean_name,
             parent_id=parent_id,
             created_by=current_user_id,
             updated_by=current_user_id
@@ -97,7 +110,7 @@ class CategoryService:
             return category, None
 
         if "name" in update_data:
-            category.name = update_data["name"]
+            category.name = CategoryDomainValidator.validate_name(update_data["name"])
 
         if "parent_id" in update_data:
             new_parent_id = update_data["parent_id"]
@@ -110,7 +123,18 @@ class CategoryService:
                     return None, "New parent category not found."
                 if await CategoryService._creates_cycle(category.id, new_parent_id):
                     return None, "Invalid parent category: circular hierarchy detected."
-            
+
+                depth = 1
+                current_parent = new_parent
+
+                while current_parent is not None and not current_parent.is_deleted:
+                    if current_parent.parent_id is None:
+                        break
+                    depth += 1
+                    current_parent = await Category.get(current_parent.parent_id)
+
+                CategoryDomainValidator.validate_depth_limit(depth + 1)
+
             category.parent_id = new_parent_id
             
         category.updated_by = current_user_id

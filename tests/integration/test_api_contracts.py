@@ -4,6 +4,7 @@ from unittest.mock import AsyncMock, patch
 from beanie import PydanticObjectId
 
 import app.main as main
+from app.core.exceptions import DomainValidationError
 from app.core.dependencies import get_current_user
 from app.core.user_role import UserRole
 
@@ -212,3 +213,47 @@ def test_unread_notification_count_returns_401_when_user_id_missing(client):
     body = response.json()
     assert body["status"] == "error"
     assert "missing" in body["message"].lower()
+
+
+def test_review_create_maps_domain_validation_error_to_400(client):
+    async def _user_with_id():
+        return SimpleNamespace(id=PydanticObjectId(), role=UserRole.CUSTOMER)
+
+    main.app.dependency_overrides[get_current_user] = _user_with_id
+
+    with patch(
+        "app.api.api_v1.endpoints.customer.reviews.ReviewService.create_review",
+        new=AsyncMock(side_effect=DomainValidationError("Review text is too short.")),
+    ):
+        response = client.post(
+            f"/api/v1/customer/reviews/products/{PydanticObjectId()}",
+            json={"rating": 5, "review": "great", "images": []},
+        )
+
+    assert response.status_code == 400
+    body = response.json()
+    assert body["status"] == "error"
+    assert body["message"] == "Domain validation failed"
+    assert "too short" in body["data"].lower()
+
+
+def test_wishlist_add_maps_domain_validation_error_to_400(client):
+    async def _user_with_id():
+        return SimpleNamespace(id=PydanticObjectId())
+
+    main.app.dependency_overrides[get_current_user] = _user_with_id
+
+    with patch(
+        "app.api.api_v1.endpoints.wishlist_api.WishlistService.add_item",
+        new=AsyncMock(side_effect=DomainValidationError("Wishlist is full.")),
+    ):
+        response = client.post(
+            "/api/v1/customers/wishlist/",
+            json={"product_id": str(PydanticObjectId()), "sku": "PHX-01"},
+        )
+
+    assert response.status_code == 400
+    body = response.json()
+    assert body["status"] == "error"
+    assert body["message"] == "Domain validation failed"
+    assert "wishlist is full" in body["data"].lower()

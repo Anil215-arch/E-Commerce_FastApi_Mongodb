@@ -6,6 +6,7 @@ from beanie import PydanticObjectId
 from fastapi import HTTPException
 from pymongo.errors import DuplicateKeyError
 
+from app.core.exceptions import DomainValidationError
 from app.models.product_variant_model import ProductVariant
 from app.services import wishlist_services
 from app.services.wishlist_services import WishlistService
@@ -35,6 +36,7 @@ async def test_add_item_inserts_wishlist_row_for_valid_product_and_sku(monkeypat
     )
 
     with patch("app.services.wishlist_services.Wishlist") as wishlist_cls:
+        wishlist_cls.find.return_value.count = AsyncMock(return_value=0)
         wishlist_cls.return_value.insert = insert_mock
         await WishlistService.add_item(user_id, product_id, "PHX-01")
 
@@ -58,6 +60,7 @@ async def test_add_item_is_idempotent_on_duplicate_key(monkeypatch):
     )
 
     with patch("app.services.wishlist_services.Wishlist") as wishlist_cls:
+        wishlist_cls.find.return_value.count = AsyncMock(return_value=0)
         wishlist_cls.return_value.insert = insert_mock
         await WishlistService.add_item(user_id, product_id, "PHX-01")
 
@@ -66,6 +69,11 @@ async def test_add_item_is_idempotent_on_duplicate_key(monkeypatch):
 
 @pytest.mark.asyncio
 async def test_add_item_raises_404_when_product_not_found(monkeypatch):
+    monkeypatch.setattr(
+        wishlist_services.Wishlist,
+        "find",
+        lambda _query: SimpleNamespace(count=AsyncMock(return_value=0)),
+    )
     monkeypatch.setattr(wishlist_services.Product, "find_one", AsyncMock(return_value=None))
 
     with pytest.raises(HTTPException) as exc_info:
@@ -79,6 +87,11 @@ async def test_add_item_raises_404_when_product_not_found(monkeypatch):
 async def test_add_item_raises_404_when_variant_not_found(monkeypatch):
     product_id = PydanticObjectId()
     monkeypatch.setattr(
+        wishlist_services.Wishlist,
+        "find",
+        lambda _query: SimpleNamespace(count=AsyncMock(return_value=0)),
+    )
+    monkeypatch.setattr(
         wishlist_services.Product,
         "find_one",
         AsyncMock(return_value=_product_with_variants(product_id, ["PHX-01"])),
@@ -89,6 +102,23 @@ async def test_add_item_raises_404_when_variant_not_found(monkeypatch):
 
     assert exc_info.value.status_code == 404
     assert "variant sku" in str(exc_info.value.detail).lower()
+
+
+@pytest.mark.asyncio
+async def test_add_item_rejects_when_wishlist_is_full(monkeypatch):
+    find_one_mock = AsyncMock()
+    monkeypatch.setattr(
+        wishlist_services.Wishlist,
+        "find",
+        lambda _query: SimpleNamespace(count=AsyncMock(return_value=100)),
+    )
+    monkeypatch.setattr(wishlist_services.Product, "find_one", find_one_mock)
+
+    with pytest.raises(DomainValidationError) as exc_info:
+        await WishlistService.add_item(PydanticObjectId(), PydanticObjectId(), "PHX-01")
+
+    assert "wishlist is full" in str(exc_info.value).lower()
+    find_one_mock.assert_not_awaited()
 
 
 @pytest.mark.asyncio
