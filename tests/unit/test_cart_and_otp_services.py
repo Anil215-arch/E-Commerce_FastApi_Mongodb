@@ -6,6 +6,7 @@ import pytest
 from beanie import PydanticObjectId
 from fastapi import HTTPException
 
+from app.core.exceptions import DomainValidationError
 from app.models.email_otp_model import OTPPurpose
 from app.models.cart_model import CartItem
 from app.models.product_variant_model import ProductVariant
@@ -171,16 +172,18 @@ async def test_verify_otp_deletes_document_when_expired():
     otp_doc = SimpleNamespace(
         expires_at=datetime.now(timezone.utc) - timedelta(seconds=1),
         delete=AsyncMock(),
+        save=AsyncMock(),
         hashed_otp="ignored",
+        attempts=0,
     )
 
     with patch("app.services.email_otp_services.EmailOTPVerification.find_one", new=AsyncMock(return_value=otp_doc)):
-        with pytest.raises(HTTPException) as exc:
+        with pytest.raises(DomainValidationError) as exc:
             await OTPService.verify_otp("user@example.com", "123456", OTPPurpose.REGISTRATION)
 
-    assert exc.value.status_code == 400
-    assert "expired" in str(exc.value.detail).lower()
+    assert "expired" in str(exc.value).lower()
     otp_doc.delete.assert_awaited_once()
+    otp_doc.save.assert_not_awaited()
 
 
 @pytest.mark.asyncio
@@ -188,17 +191,20 @@ async def test_verify_otp_rejects_invalid_code_without_deleting_document():
     otp_doc = SimpleNamespace(
         expires_at=datetime.now(timezone.utc) + timedelta(minutes=5),
         delete=AsyncMock(),
+        save=AsyncMock(),
         hashed_otp="hashed",
+        attempts=0,
     )
 
     with patch("app.services.email_otp_services.EmailOTPVerification.find_one", new=AsyncMock(return_value=otp_doc)):
         with patch("app.services.email_otp_services.OTPService._verify_otp_hash", return_value=False):
-            with pytest.raises(HTTPException) as exc:
+            with pytest.raises(DomainValidationError) as exc:
                 await OTPService.verify_otp("user@example.com", "000000", OTPPurpose.PASSWORD_RESET)
 
-    assert exc.value.status_code == 400
-    assert "Invalid OTP code" in str(exc.value.detail)
+    assert "invalid otp code" in str(exc.value).lower()
+    assert otp_doc.attempts == 1
     otp_doc.delete.assert_not_called()
+    otp_doc.save.assert_awaited_once()
 
 
 @pytest.mark.asyncio
@@ -206,7 +212,9 @@ async def test_verify_otp_accepts_valid_code_and_deletes_document():
     otp_doc = SimpleNamespace(
         expires_at=datetime.now(timezone.utc) + timedelta(minutes=5),
         delete=AsyncMock(),
+        save=AsyncMock(),
         hashed_otp="hashed",
+        attempts=0,
     )
 
     with patch("app.services.email_otp_services.EmailOTPVerification.find_one", new=AsyncMock(return_value=otp_doc)):
@@ -214,14 +222,14 @@ async def test_verify_otp_accepts_valid_code_and_deletes_document():
             assert await OTPService.verify_otp("user@example.com", "123456", OTPPurpose.REGISTRATION) is True
 
     otp_doc.delete.assert_awaited_once()
+    otp_doc.save.assert_not_awaited()
 
 
 @pytest.mark.asyncio
 async def test_create_and_send_otp_replaces_previous_record_and_dispatches_email():
-    delete_query = SimpleNamespace(delete=AsyncMock())
     created_doc = SimpleNamespace(insert=AsyncMock())
     otp_model = MagicMock()
-    otp_model.find.return_value = delete_query
+    otp_model.find_one = AsyncMock(return_value=None)
     otp_model.return_value = created_doc
 
     with patch("app.services.email_otp_services.EmailOTPVerification", otp_model):
@@ -231,10 +239,29 @@ async def test_create_and_send_otp_replaces_previous_record_and_dispatches_email
                     with patch("builtins.print") as mock_print:
                         await OTPService.create_and_send_otp("user@example.com", OTPPurpose.REGISTRATION)
 
-    delete_query.delete.assert_awaited_once()
+    otp_model.find_one.assert_awaited_once()
     created_doc.insert.assert_awaited_once()
     mock_send.assert_awaited_once()
     mock_print.assert_not_called()
+
+
+@pytest.mark.asyncio
+async def test_verify_otp_rejects_when_attempt_limit_is_exceeded_and_deletes_doc():
+    otp_doc = SimpleNamespace(
+        expires_at=datetime.now(timezone.utc) + timedelta(minutes=5),
+        delete=AsyncMock(),
+        save=AsyncMock(),
+        hashed_otp="hashed",
+        attempts=5,
+    )
+
+    with patch("app.services.email_otp_services.EmailOTPVerification.find_one", new=AsyncMock(return_value=otp_doc)):
+        with pytest.raises(DomainValidationError) as exc:
+            await OTPService.verify_otp("user@example.com", "123456", OTPPurpose.REGISTRATION)
+
+    assert "maximum verification attempts" in str(exc.value).lower()
+    otp_doc.delete.assert_awaited_once()
+    otp_doc.save.assert_not_awaited()
 
 
 def test_cart_item_add_schema_rejects_zero_quantity():

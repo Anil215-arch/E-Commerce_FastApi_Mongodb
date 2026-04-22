@@ -1,4 +1,4 @@
-from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator, model_validator
 
 class VerifyOTPRequest(BaseModel):
     email: EmailStr = Field(..., description="Email address to verify")
@@ -10,6 +10,12 @@ class VerifyOTPRequest(BaseModel):
         if isinstance(value, str):
             return value.strip().lower()
         return value
+    
+    @model_validator(mode="after")
+    def validate_otp_code_digits(self):
+        if not self.otp_code.isdigit():
+            raise ValueError("OTP code must contain exactly 6 digits")
+        return self
 
     model_config = ConfigDict(
         json_schema_extra={
@@ -67,6 +73,14 @@ class ResetPasswordRequest(BaseModel):
         if isinstance(value, str):
             return value.strip().lower()
         return value
+
+    @model_validator(mode="after")
+    def validate_fields(self):
+        if not self.otp_code.isdigit():
+            raise ValueError("OTP code must contain exactly 6 digits")
+        if not self.new_password.strip():
+            raise ValueError("New password cannot be empty or whitespace")
+        return self
 
     model_config = ConfigDict(
         json_schema_extra={

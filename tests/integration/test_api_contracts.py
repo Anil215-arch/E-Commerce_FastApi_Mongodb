@@ -257,3 +257,47 @@ def test_wishlist_add_maps_domain_validation_error_to_400(client):
     assert body["status"] == "error"
     assert body["message"] == "Domain validation failed"
     assert "wishlist is full" in body["data"].lower()
+
+
+def test_device_token_register_rejects_whitespace_token_with_422(client):
+    async def _user_with_id():
+        return SimpleNamespace(id=PydanticObjectId())
+
+    main.app.dependency_overrides[get_current_user] = _user_with_id
+
+    with patch(
+        "app.api.api_v1.endpoints.customer.device_tokens.DeviceTokenService.register_token",
+        new=AsyncMock(),
+    ) as mock_register:
+        response = client.post(
+            "/api/v1/customer/device-tokens/",
+            json={"token": "          ", "platform": "ANDROID"},
+        )
+
+    assert response.status_code == 422
+    body = response.json()
+    assert body["status"] == "error"
+    assert body["message"] == "Validation failed"
+    mock_register.assert_not_awaited()
+
+
+def test_device_token_register_maps_domain_validation_error_to_400(client):
+    async def _user_with_id():
+        return SimpleNamespace(id=PydanticObjectId())
+
+    main.app.dependency_overrides[get_current_user] = _user_with_id
+
+    with patch(
+        "app.api.api_v1.endpoints.customer.device_tokens.DeviceTokenService.register_token",
+        new=AsyncMock(side_effect=DomainValidationError("Maximum device limit reached.")),
+    ):
+        response = client.post(
+            "/api/v1/customer/device-tokens/",
+            json={"token": "abcdefghijk", "platform": "ANDROID"},
+        )
+
+    assert response.status_code == 400
+    body = response.json()
+    assert body["status"] == "error"
+    assert body["message"] == "Domain validation failed"
+    assert "maximum device limit" in body["data"].lower()
