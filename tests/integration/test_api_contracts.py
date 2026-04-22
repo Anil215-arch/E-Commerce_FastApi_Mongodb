@@ -5,6 +5,7 @@ from beanie import PydanticObjectId
 
 import app.main as main
 from app.core.dependencies import get_current_user
+from app.core.user_role import UserRole
 
 
 def test_products_list_returns_paginated_items_without_double_data(client):
@@ -133,6 +134,51 @@ def test_add_cart_item_rejects_invalid_sku_pattern_with_standard_error_shape(cli
     assert body["status"] == "error"
     assert body["message"] == "Validation failed"
     assert isinstance(body["data"], list)
+
+
+def test_order_checkout_rejects_whitespace_batch_id_with_standard_error_shape(client):
+    async def _user_with_id():
+        return SimpleNamespace(id=PydanticObjectId(), role=UserRole.CUSTOMER)
+
+    main.app.dependency_overrides[get_current_user] = _user_with_id
+
+    with patch(
+        "app.services.order_services.User.get",
+        new=AsyncMock(return_value=SimpleNamespace(addresses=[SimpleNamespace()])),
+    ):
+        response = client.post(
+            "/api/v1/customer/orders/checkout",
+            json={
+                "checkout_batch_id": "        ",
+                "shipping_address_index": 0,
+                "billing_address_index": 0,
+                "payment_method": "CARD",
+            },
+        )
+
+    assert response.status_code == 400
+    body = response.json()
+    assert body["status"] == "error"
+    assert body["message"] == "Domain validation failed"
+    assert "checkout_batch_id cannot be empty" in body["data"].lower()
+
+
+def test_order_cancel_rejects_whitespace_reason_with_standard_error_shape(client):
+    async def _user_with_id():
+        return SimpleNamespace(id=PydanticObjectId(), role=UserRole.CUSTOMER)
+
+    main.app.dependency_overrides[get_current_user] = _user_with_id
+
+    response = client.patch(
+        f"/api/v1/customer/orders/{PydanticObjectId()}/cancel",
+        json={"reason": "          "},
+    )
+
+    assert response.status_code == 400
+    body = response.json()
+    assert body["status"] == "error"
+    assert body["message"] == "Domain validation failed"
+    assert "cannot be empty" in body["data"].lower()
 
 
 def test_unread_notification_count_returns_success_envelope(client):

@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import List, Optional
 
 from beanie import PydanticObjectId
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from app.models.order_model import OrderItemSnapshot, OrderPaymentStatus, OrderStatus
 from app.models.transaction_model import PaymentMethod, TransactionStatus
@@ -19,6 +19,12 @@ class CheckoutRequest(BaseModel):
     shipping_address_index: int = Field(..., ge=0, description="Array index of the user's saved shipping address")
     billing_address_index: int = Field(..., ge=0, description="Array index of the user's saved billing address")
     payment_method: PaymentMethod = Field(default=PaymentMethod.CARD, description="Chosen payment method")
+
+    @model_validator(mode="after")
+    def validate_indexes(self):
+        if self.shipping_address_index < 0 or self.billing_address_index < 0:
+            raise ValueError("Address indexes must be non-negative")
+        return self
 
 class OrderResponse(BaseModel):
     id: PydanticObjectId = Field(alias="_id")
