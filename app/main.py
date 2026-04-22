@@ -12,6 +12,7 @@ from contextlib import asynccontextmanager
 from app.core.database import init_db
 from app.api.api_v1.router import api_router
 from app.core.config import settings
+from app.core.exceptions import DomainValidationError
 from app.events import register_event_handlers
 from app.services.order_services import OrderService
 from app.utils.responses import error_response, success_response
@@ -67,6 +68,14 @@ async def pydantic_validation_exception_handler(request: Request, exc: Validatio
     return JSONResponse(
         status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
         content=error_response("Validation failed", jsonable_encoder(errors)),
+    )
+
+    
+@app.exception_handler(DomainValidationError)
+async def domain_validation_exception_handler(request: Request, exc: DomainValidationError):
+    return JSONResponse(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        content=error_response("Domain validation failed", exc.detail),
     )
 
 @app.exception_handler(Exception)
