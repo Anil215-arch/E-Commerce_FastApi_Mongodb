@@ -45,12 +45,6 @@ class ProductService:
 
 
     @staticmethod
-    def _ensure_variant_sku_unique(variants: List[ProductVariant]) -> None:
-        sku = [variant.sku for variant in variants]
-        if len(sku) != len(set(sku)):
-            raise HTTPException(status_code=400, detail="Variant SKUs must be unique within a product")
-
-    @staticmethod
     def _build_variant(data: ProductVariantCreate) -> ProductVariant:
         return ProductVariant(**data.model_dump())
 
@@ -83,7 +77,6 @@ class ProductService:
             )
             
         variants = [ProductService._build_variant(variant) for variant in data.variants]
-        ProductService._ensure_variant_sku_unique(variants)
 
         new_product = Product(
             name=data.name,
@@ -116,7 +109,6 @@ class ProductService:
             raise HTTPException(status_code=400, detail="Variant SKU already exists for this product")
 
         product.variants.append(ProductService._build_variant(data))
-        ProductService._ensure_variant_sku_unique(product.variants)
         product.updated_by = current_user_id
         await product.save()
         return ProductMapper.serialize_product(product, category)
@@ -131,7 +123,7 @@ class ProductService:
         product = await ProductService._get_product_or_raise(product_id)
         category = await ProductService._get_category_or_raise(product.category_id)
 
-        if data.sku != sku:
+        if data.sku and data.sku != sku:
             raise HTTPException(status_code=400, detail="Variant SKU in path and body must match")
 
         variant_index = ProductService._find_variant_index_or_raise(product, sku)
@@ -202,7 +194,8 @@ class ProductService:
                 shutil.copyfileobj(image.file, buffer)
 
             image_paths.append(f"/media/products/{unique_filename}")
-
+            
+        ProductDomainValidator.validate_images(image_paths)
         product.images = image_paths
         product.updated_by = current_user_id
         await product.save()

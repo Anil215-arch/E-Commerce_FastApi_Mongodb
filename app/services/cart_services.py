@@ -7,9 +7,11 @@ from app.models.cart_model import Cart, CartItem
 from app.models.product_model import Product
 from app.schemas.cart_schema import CartItemAdd, CartItemUpdate, CartResponse, CartItemDetailed
 from app.schemas.product_variant_schema import ProductVariantResponse
+from app.core.exceptions import DomainValidationError
+from app.validators.cart_validator import CartDomainValidator
 
 # Domain Exceptions
-class CartError(Exception): pass
+class CartError(DomainValidationError): pass
 class CartConflictError(CartError): pass
 class CartLimitExceeded(CartError): pass
 class ProductUnavailable(CartError): pass
@@ -40,6 +42,7 @@ class CartService:
 
     @staticmethod
     async def add_to_cart(user_id: PydanticObjectId, data: CartItemAdd) -> Cart:
+        CartDomainValidator.validate_anti_hoarding(data.quantity)
         for attempt in range(CartService.MAX_RETRIES):
             cart = await CartService.get_or_create_cart(user_id)
             
@@ -91,6 +94,7 @@ class CartService:
 
     @staticmethod
     async def update_item_quantity(user_id: PydanticObjectId, product_id: PydanticObjectId, sku: str, data: CartItemUpdate) -> Cart:
+        CartDomainValidator.validate_anti_hoarding(data.quantity)
         for attempt in range(CartService.MAX_RETRIES):
             cart = await Cart.find_one(Cart.user_id == user_id)
             if not cart:
