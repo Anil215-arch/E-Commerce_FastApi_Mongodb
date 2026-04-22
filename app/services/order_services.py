@@ -27,6 +27,7 @@ from app.events.bus import EventBus
 from app.events.order_events import OrderDeliveredEvent, OrderCancelledEvent
 from app.services.cart_services import CartService
 from app.services.inventory_services import InventoryService
+from app.validators.order_validator import OrderDomainValidator
 
 logger = logging.getLogger(__name__)
 
@@ -258,7 +259,12 @@ class OrderService:
         user = await User.get(user_id)
         if not user:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
-
+        
+        OrderDomainValidator.validate_checkout_request(
+            checkout_batch_id=data.checkout_batch_id,
+            shipping_index=data.shipping_address_index,
+            billing_index=data.billing_address_index
+        )
         checkout_batch_id = data.checkout_batch_id
         existing_orders = await Order.find(
             {
@@ -280,6 +286,9 @@ class OrderService:
             )
             
         checkout_items = await OrderService._load_checkout_items(user_id)
+        if not checkout_items:
+            raise HTTPException(status_code=400, detail="No valid items for checkout")
+        
         seller_groups = OrderService._group_items_by_seller(checkout_items)
 
         reserved_items: list[OrderItemSnapshot] = []
@@ -303,6 +312,12 @@ class OrderService:
             for group in seller_groups:
                 subtotal = group["subtotal"]
                 tax_amount, shipping_fee, grand_total = OrderService._calculate_order_totals(subtotal)
+                OrderDomainValidator.validate_financial_math(
+                    subtotal=subtotal, 
+                    tax=tax_amount, 
+                    shipping=shipping_fee, 
+                    grand_total=grand_total
+                )
                 transaction_amount += grand_total
                 seller_order_payloads.append(
                     {
@@ -520,6 +535,7 @@ class OrderService:
 
     @staticmethod
     async def cancel_order(order_id: PydanticObjectId, current_user: User, reason: str) -> OrderResponse:
+        reason = OrderDomainValidator.validate_cancellation_reason(reason)
         order = await Order.find_one({"_id": order_id, "is_deleted": {"$ne": True}})
         if not order:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Order not found")

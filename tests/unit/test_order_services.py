@@ -7,6 +7,7 @@ from beanie import PydanticObjectId
 from fastapi import HTTPException
 
 from app.core.user_role import UserRole
+from app.core.exceptions import DomainValidationError
 from app.models.order_model import Order, OrderItemSnapshot, OrderPaymentStatus, OrderStatus
 from app.models.transaction_model import (
     PaymentMethod,
@@ -18,6 +19,7 @@ from app.models.product_variant_model import ProductVariant
 from app.schemas.address_schema import Address
 from app.schemas.order_schema import CheckoutBatchResponse, CheckoutRequest
 from app.services.order_services import DummyPaymentGateway, OrderService
+from app.validators.order_validator import OrderDomainValidator
 
 
 def _address() -> Address:
@@ -30,6 +32,44 @@ def _address() -> Address:
         state="Karnataka",
         country="India",
     )
+
+
+def test_order_item_snapshot_rejects_blank_sku():
+    with pytest.raises(ValueError, match="SKU cannot be empty"):
+        OrderItemSnapshot(
+            product_id=PydanticObjectId(),
+            seller_id=PydanticObjectId(),
+            sku="   ",
+            product_name="Laptop",
+            quantity=1,
+            purchase_price=100,
+        )
+
+
+def test_checkout_request_validator_rejects_whitespace_batch_id():
+    CheckoutRequest.model_construct(
+        checkout_batch_id="        ",
+        shipping_address_index=0,
+        billing_address_index=0,
+        payment_method=PaymentMethod.CARD,
+    )
+
+    with pytest.raises(DomainValidationError, match="checkout_batch_id cannot be empty"):
+        OrderDomainValidator.validate_checkout_request("        ", 0, 0)
+
+
+def test_order_domain_validator_rejects_invalid_financial_math():
+    with pytest.raises(DomainValidationError) as exc:
+        OrderDomainValidator.validate_financial_math(subtotal=100, tax=18, shipping=50, grand_total=200)
+
+    assert "financial math mismatch" in str(exc.value).lower()
+
+
+def test_order_domain_validator_rejects_whitespace_cancellation_reason():
+    with pytest.raises(DomainValidationError) as exc:
+        OrderDomainValidator.validate_cancellation_reason("          ")
+
+    assert "cannot be empty" in str(exc.value).lower()
 
 
 @pytest.mark.asyncio

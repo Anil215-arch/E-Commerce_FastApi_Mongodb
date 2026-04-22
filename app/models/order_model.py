@@ -3,7 +3,7 @@ from enum import Enum
 from typing import List, Optional
 
 from beanie import PydanticObjectId
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 from pymongo import ASCENDING, DESCENDING, IndexModel
 
 from app.models.base_model import AuditDocument
@@ -34,6 +34,19 @@ class OrderItemSnapshot(BaseModel):
     product_name: str
     quantity: int = Field(..., gt=0)
     purchase_price: int = Field(..., ge=0, description="Snapshot of effective_price at checkout")
+
+    @model_validator(mode="after")
+    def validate_snapshot(self):
+        if self.quantity <= 0:
+            raise ValueError("Quantity must be greater than 0")
+
+        if self.purchase_price < 0:
+            raise ValueError("Purchase price cannot be negative")
+
+        if not self.sku.strip():
+            raise ValueError("SKU cannot be empty")
+
+        return self
 
 
 class Order(AuditDocument):
