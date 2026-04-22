@@ -1,22 +1,42 @@
+import re
 from datetime import datetime, timezone
 from typing import List
-from app.schemas.address_schema import Address
 from beanie import Document
 from pydantic import EmailStr, Field, field_validator
 from pymongo import ASCENDING, IndexModel
 from app.core.user_role import UserRole
 from app.models.base_model import AuditDocument
-
-    
+from app.schemas.address_schema import Address
 
 class User(AuditDocument):
-    user_name: str = Field(..., min_length=2, max_length=100, description="User name is required")
-    email: EmailStr = Field(..., description="Email is required")
+    # Enforce safe characters: alphanumeric, spaces, underscores, hyphens. Strip leading/trailing.
+    user_name: str = Field(
+        ..., 
+        min_length=2, 
+        max_length=100, 
+        pattern=r"^[a-zA-Z0-9][a-zA-Z0-9_ -]+$",
+        description="User name is required"
+    )
+    email: EmailStr = Field(..., max_length=254, description="Email is required")
     hashed_password: str = Field(..., description="Unique password is required")
-    mobile: str = Field(..., min_length=10, max_length=15, description="Enter your mobile no.")
+    # Enforce strict international or local numeric format (e.g., +919876543210 or 9876543210)
+    mobile: str = Field(
+        ..., 
+        min_length=10, 
+        max_length=15, 
+        pattern=r"^\+?[1-9]\d{9,14}$",
+        description="Enter your mobile no."
+    )
     role: UserRole = Field(default=UserRole.CUSTOMER, description="User role")
     is_verified: bool = Field(default=False, description="False until email OTP is verified")
-    addresses: List[Address] = Field(default_factory=list, description="User's saved addresses")
+    addresses: List[Address] = Field(default_factory=list, max_length=10, description="User's saved addresses")
+
+    @field_validator("user_name", mode="before")
+    @classmethod
+    def strip_username(cls, value: str) -> str:
+        if isinstance(value, str):
+            return value.strip()
+        return value
 
     @field_validator("email", mode="before")
     @classmethod
