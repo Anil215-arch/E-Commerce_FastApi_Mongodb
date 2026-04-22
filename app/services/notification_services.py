@@ -1,7 +1,8 @@
 import asyncio
 from typing import List, Optional, Dict, Any
 from beanie import PydanticObjectId
-
+from app.validators.notification_validator import NotificationDomainValidator
+from app.core.exceptions import DomainValidationError
 from app.models.notification_model import Notification, NotificationType
 from app.models.device_token_model import DeviceToken
 from app.push.push_provider import PushProvider
@@ -16,14 +17,15 @@ class NotificationService:
         notification_type: NotificationType,
         metadata: Optional[Dict[str, Any]] = None
     ) -> Notification:
-        
+        clean_title, clean_message = NotificationDomainValidator.validate_text(title, message)
+        clean_metadata = NotificationDomainValidator.validate_metadata(metadata)
         # 1. Persist the database record
         notification = Notification(
             user_id=user_id,
-            title=title,
-            message=message,
+            title=clean_title,
+            message=clean_message,
             type=notification_type,
-            metadata=metadata or {},
+            metadata=clean_metadata,
             created_by=user_id,
             updated_by=user_id
         )
@@ -42,9 +44,9 @@ class NotificationService:
         push_tasks = [
             PushProvider.send_push(
                 token=device.token,
-                title=title,
-                body=message,
-                data=metadata
+                title=clean_title,
+                body=clean_message,
+                data=clean_metadata
             ) for device in device_tokens
         ]
         await asyncio.gather(*push_tasks, return_exceptions=True)
