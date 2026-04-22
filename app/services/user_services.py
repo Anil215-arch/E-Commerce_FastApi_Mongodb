@@ -30,8 +30,6 @@ from app.core.security import (
     get_password_hash,
     verify_password,
 )
-from app.validators.address_validator import AddressValidator
-from app.validators.user_validator import UserValidator
 
 
 class UserServices:
@@ -161,7 +159,6 @@ class UserServices:
         
     @staticmethod
     async def user_registration(user: UserRegister) -> UserResponse:
-        UserValidator.validate_registration(user)
         user_email = await User.find_one(User.email == user.email)
         if user_email:
             if not user_email.is_verified:
@@ -321,8 +318,6 @@ class UserServices:
         if not update_data:
             return UserResponse.model_validate(current_user)
 
-        UserValidator.validate_profile_update(data)
-        
         if "user_name" in update_data:
             existing_user = await User.find_one(
                 (User.user_name == update_data["user_name"]) & (User.id != current_user.id)
@@ -356,7 +351,6 @@ class UserServices:
         if not update_data:
             return UserResponse.model_validate(target_user)
 
-        UserValidator.validate_profile_update(data)
         if current_user.id == target_user.id:
             return await UserServices.update_my_profile(current_user, data)
 
@@ -462,7 +456,6 @@ class UserServices:
     @staticmethod
     async def add_user_address(current_user: User, data: UserAddAddress) -> UserResponse:
         """Appends a new address to the user's address book."""
-        data.address = AddressValidator.normalize_and_validate(data.address)
         # Optional: Limit the number of addresses a user can save (e.g., max 10)
         if len(current_user.addresses) >= 10:
             raise HTTPException(
@@ -483,7 +476,7 @@ class UserServices:
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="Address not found at the specified index."
             )
-        data.address = AddressValidator.normalize_and_validate(data.address) 
+            
         current_user.addresses[address_index] = data.address
         current_user.updated_by = current_user.id
         await current_user.save()
