@@ -51,23 +51,7 @@ class Product(AuditDocument):
         if len(skus) != len(set(skus)):
             raise ValueError("Duplicate SKUs are not allowed")
 
-        # 3. Image validation (minimal, no type change)
-        seen_images = set()
-        for img in self.images:
-            img_str = str(img).strip()
-
-            if not img_str:
-                raise ValueError("Empty image URL not allowed")
-
-            if len(img_str) > 500:
-                raise ValueError("Image URL too long")
-
-            if img_str in seen_images:
-                raise ValueError("Duplicate image URLs")
-
-            seen_images.add(img_str)
-
-        # 4. Specification validation (minimal, no type change)
+        # 3. Specification validation (minimal, no type change)
         for k, v in self.specifications.items():
             key = str(k).strip()
             if not key:
@@ -75,7 +59,7 @@ class Product(AuditDocument):
             if len(key) > 50 or len(str(v)) > 500:
                 raise ValueError("Specification size exceeded")
 
-        # 5. Rating validation
+        # 4. Rating validation
         expected_keys = {"1", "2", "3", "4", "5"}
         if set(self.rating_breakdown.keys()) != expected_keys:
             raise ValueError("Invalid rating breakdown keys")
@@ -100,7 +84,7 @@ class Product(AuditDocument):
             if abs(self.average_rating - expected_avg) > 0.01:
                 raise ValueError("average_rating mismatch")
 
-        # 6. Price sync (safe)
+        # 5. Price sync (safe)
         self.price = min(
             (v.effective_price for v in self.variants if v.effective_price > 0),
             default=0

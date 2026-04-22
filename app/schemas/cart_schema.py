@@ -5,11 +5,11 @@ from app.schemas.product_variant_schema import ProductVariantResponse
 
 class CartItemAdd(BaseModel):
     product_id: PydanticObjectId
-    sku: str
-    quantity: int = Field(default=1, ge=1)
+    sku: str = Field(..., min_length=3, max_length=50, pattern=r"^[A-Za-z0-9\-_]+$")
+    quantity: int = Field(default=1, ge=1, le=10)
 
 class CartItemUpdate(BaseModel):
-    quantity: int = Field(..., ge=1, description="New exact quantity")
+    quantity: int = Field(..., ge=1, le=10, description="New exact quantity")
 
 class CartItemDetailed(BaseModel):
     product_id: PydanticObjectId

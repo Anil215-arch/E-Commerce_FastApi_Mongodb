@@ -95,6 +95,46 @@ def test_add_cart_item_rejects_invalid_quantity_with_standard_error_shape(client
     assert isinstance(body["data"], list)
 
 
+def test_add_cart_item_rejects_quantity_above_limit_with_standard_error_shape(client):
+    async def _user_with_id():
+        return SimpleNamespace(id=PydanticObjectId())
+
+    main.app.dependency_overrides[get_current_user] = _user_with_id
+
+    payload = {
+        "product_id": str(PydanticObjectId()),
+        "sku": "SKU-1",
+        "quantity": 11,
+    }
+    response = client.post("/api/v1/customer/cart/items", json=payload)
+
+    assert response.status_code == 422
+    body = response.json()
+    assert body["status"] == "error"
+    assert body["message"] == "Validation failed"
+    assert isinstance(body["data"], list)
+
+
+def test_add_cart_item_rejects_invalid_sku_pattern_with_standard_error_shape(client):
+    async def _user_with_id():
+        return SimpleNamespace(id=PydanticObjectId())
+
+    main.app.dependency_overrides[get_current_user] = _user_with_id
+
+    payload = {
+        "product_id": str(PydanticObjectId()),
+        "sku": "BAD SKU!*",
+        "quantity": 1,
+    }
+    response = client.post("/api/v1/customer/cart/items", json=payload)
+
+    assert response.status_code == 422
+    body = response.json()
+    assert body["status"] == "error"
+    assert body["message"] == "Validation failed"
+    assert isinstance(body["data"], list)
+
+
 def test_unread_notification_count_returns_success_envelope(client):
     async def _user_with_id():
         return SimpleNamespace(id=PydanticObjectId())

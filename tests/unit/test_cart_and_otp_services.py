@@ -240,3 +240,18 @@ async def test_create_and_send_otp_replaces_previous_record_and_dispatches_email
 def test_cart_item_add_schema_rejects_zero_quantity():
     with pytest.raises(Exception):
         CartItemAdd(product_id=PydanticObjectId(), sku="SKU", quantity=0)
+
+
+def test_cart_item_add_schema_rejects_quantity_above_limit():
+    with pytest.raises(Exception):
+        CartItemAdd(product_id=PydanticObjectId(), sku="SKU", quantity=11)
+
+
+def test_cart_item_update_schema_rejects_quantity_above_limit():
+    with pytest.raises(Exception):
+        CartItemUpdate(quantity=11)
+
+
+def test_cart_item_add_schema_rejects_invalid_sku_format():
+    with pytest.raises(Exception):
+        CartItemAdd(product_id=PydanticObjectId(), sku="BAD SKU!*", quantity=1)

@@ -1,5 +1,6 @@
 from io import BytesIO
 from types import SimpleNamespace
+from unittest.mock import mock_open
 from unittest.mock import AsyncMock, patch
 
 import pytest
@@ -277,6 +278,29 @@ async def test_update_product_rejects_invalid_specification_value_length():
                 )
 
     assert "specification size exceeded" in str(exc.value).lower()
+
+
+@pytest.mark.asyncio
+async def test_upload_product_images_rejects_duplicate_image_urls_in_existing_product_state():
+    product = SimpleNamespace(
+        images=["/media/products/dup.jpg", "/media/products/dup.jpg"],
+        category_id=PydanticObjectId(),
+        save=AsyncMock(),
+    )
+    image = SimpleNamespace(
+        filename="ok.jpg",
+        content_type="image/jpeg",
+        file=BytesIO(b"\xff\xd8\xff\xe0validjpeg"),
+    )
+
+    with patch("app.services.product_services.Product.get", new=AsyncMock(return_value=product)):
+        with patch("builtins.open", mock_open()):
+            with patch("app.services.product_services.shutil.copyfileobj"):
+                with pytest.raises(DomainValidationError) as exc:
+                    await ProductService.upload_product_images(PydanticObjectId(), [image], PydanticObjectId())
+
+    assert "duplicate image urls" in str(exc.value).lower()
+    product.save.assert_not_awaited()
 
 
 @pytest.mark.asyncio

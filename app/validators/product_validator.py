@@ -12,9 +12,6 @@ class ProductDomainValidator:
         attributes: Dict[str, str]
     ) -> None:
         """Validates the math and structural integrity of a single variant."""
-        if discount_price is not None and discount_price >= price:
-            raise DomainValidationError("Discount price must be strictly less than the base price.")
-        
         if reserved_stock > available_stock:
             raise DomainValidationError("Reserved stock cannot exceed available stock.")
 
