@@ -2,7 +2,7 @@ import os
 import shutil
 import uuid
 from typing import List
-
+from app.validators.product_validator import ProductDomainValidator
 from beanie import PydanticObjectId
 from fastapi import HTTPException, UploadFile
 from app.utils.product_mapper import ProductMapper
@@ -71,7 +71,17 @@ class ProductService:
     @staticmethod
     async def create_product(data: ProductCreate, current_user_id: PydanticObjectId) -> ProductResponse:
         category = await ProductService._get_category_or_raise(data.category_id)
-
+        
+        ProductDomainValidator.validate_specifications(data.specifications)
+        for v in data.variants:
+            ProductDomainValidator.validate_variant_data(
+                price=v.price, 
+                discount_price=v.discount_price, 
+                available_stock=v.available_stock, 
+                reserved_stock=v.reserved_stock, 
+                attributes=v.attributes     
+            )
+            
         variants = [ProductService._build_variant(variant) for variant in data.variants]
         ProductService._ensure_variant_sku_unique(variants)
 
@@ -92,6 +102,13 @@ class ProductService:
 
     @staticmethod
     async def add_variant(product_id: PydanticObjectId, data: ProductVariantCreate, current_user_id: PydanticObjectId) -> ProductResponse:
+        ProductDomainValidator.validate_variant_data(
+            price=data.price, 
+            discount_price=data.discount_price, 
+            available_stock=data.available_stock, 
+            reserved_stock=data.reserved_stock, 
+            attributes=data.attributes
+        )
         product = await ProductService._get_product_or_raise(product_id)
         category = await ProductService._get_category_or_raise(product.category_id)
 
@@ -118,7 +135,14 @@ class ProductService:
             raise HTTPException(status_code=400, detail="Variant SKU in path and body must match")
 
         variant_index = ProductService._find_variant_index_or_raise(product, sku)
-        product.variants[variant_index] = ProductService._merge_variant_update(product.variants[variant_index], data)
+        merged_variant = product.variants[variant_index] = ProductService._merge_variant_update(product.variants[variant_index], data)
+        ProductDomainValidator.validate_variant_data(
+            price=merged_variant.price,
+            discount_price=merged_variant.discount_price,
+            available_stock=merged_variant.available_stock,
+            reserved_stock=merged_variant.reserved_stock,
+            attributes=merged_variant.attributes
+        )
         product.updated_by = current_user_id
         await product.save()
         return ProductMapper.serialize_product(product, category)
@@ -196,7 +220,13 @@ class ProductService:
 
         if not update_data:
             return ProductMapper.serialize_product(product, category)
-
+        
+        if "specifications" in update_data:
+            ProductDomainValidator.validate_specifications(update_data["specifications"])
+        
+        if "images" in update_data:
+            ProductDomainValidator.validate_images(update_data["images"])
+            
         if "category_id" in update_data:
             if update_data["category_id"] is None:
                 raise HTTPException(status_code=400, detail="category_id cannot be null")

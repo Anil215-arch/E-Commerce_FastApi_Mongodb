@@ -26,6 +26,6 @@ def test_product_sync_price_uses_effective_variant_price():
         ],
     )
 
-    product.sync_price()
+    product.sync_price_db()
 
     assert product.price == 100000

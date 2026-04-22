@@ -6,9 +6,11 @@ import pytest
 from beanie import PydanticObjectId
 from fastapi import HTTPException
 
+from app.core.exceptions import DomainValidationError
+from app.models.product_variant_model import ProductVariant
 from app.schemas.category_schema import CategoryUpdate
-from app.schemas.product_schema import ProductUpdate
-from app.schemas.product_variant_schema import ProductVariantUpdate
+from app.schemas.product_schema import ProductCreate, ProductUpdate
+from app.schemas.product_variant_schema import ProductVariantCreate, ProductVariantUpdate
 from app.services.category_services import CategoryService
 from app.services.product_services import ProductService
 
@@ -164,6 +166,117 @@ async def test_update_product_without_unavailable_flag_does_not_trigger_cleanup(
                     )
 
     cleanup_mock.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+async def test_add_variant_rejects_reserved_stock_above_available():
+    with pytest.raises(DomainValidationError) as exc:
+        await ProductService.add_variant(
+            PydanticObjectId(),
+            ProductVariantCreate(
+                sku="SKU-1",
+                price=100,
+                discount_price=90,
+                available_stock=1,
+                reserved_stock=2,
+                attributes={},
+            ),
+            PydanticObjectId(),
+        )
+
+    assert "reserved stock cannot exceed available stock" in str(exc.value).lower()
+
+
+@pytest.mark.asyncio
+async def test_update_variant_rejects_partial_payload_that_breaks_price_rules():
+    product = SimpleNamespace(
+        category_id=PydanticObjectId(),
+        variants=[
+            ProductVariant(
+                sku="SKU-1",
+                price=100,
+                discount_price=80,
+                available_stock=5,
+                reserved_stock=0,
+                attributes={},
+            )
+        ],
+        updated_by=None,
+        save=AsyncMock(),
+    )
+
+    with patch("app.services.product_services.ProductService._get_product_or_raise", new=AsyncMock(return_value=product)):
+        with patch("app.services.product_services.ProductService._get_category_or_raise", new=AsyncMock(return_value=object())):
+            with pytest.raises(DomainValidationError) as exc:
+                await ProductService.update_variant(
+                    PydanticObjectId(),
+                    "SKU-1",
+                    ProductVariantUpdate(sku="SKU-1", reserved_stock=6),
+                    PydanticObjectId(),
+                )
+
+    assert "reserved stock cannot exceed available stock" in str(exc.value).lower()
+    product.save.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+async def test_create_product_runs_domain_validation_for_specs_and_each_variant():
+    category_id = PydanticObjectId()
+    payload = ProductCreate(
+        name="Phone X",
+        description="Modern smartphone with long battery and excellent camera setup",
+        brand="Acme",
+        category_id=category_id,
+        variants=[
+            ProductVariantCreate(
+                sku="SKU-1",
+                price=100,
+                discount_price=90,
+                available_stock=5,
+                reserved_stock=0,
+                attributes={"Color": "Black"},
+            ),
+            ProductVariantCreate(
+                sku="SKU-2",
+                price=150,
+                discount_price=120,
+                available_stock=3,
+                reserved_stock=1,
+                attributes={"Color": "Blue"},
+            ),
+        ],
+        specifications={"Material": "Aluminum"},
+    )
+    validator_specs_mock = patch("app.services.product_services.ProductDomainValidator.validate_specifications")
+    validator_variant_mock = patch("app.services.product_services.ProductDomainValidator.validate_variant_data")
+    inserted_product = SimpleNamespace(id=PydanticObjectId())
+    new_product_doc = SimpleNamespace(insert=AsyncMock(return_value=inserted_product))
+
+    with patch("app.services.product_services.ProductService._get_category_or_raise", new=AsyncMock(return_value=SimpleNamespace(id=category_id))):
+        with validator_specs_mock as validate_specs:
+            with validator_variant_mock as validate_variant:
+                with patch("app.services.product_services.Product", return_value=new_product_doc):
+                    with patch("app.services.product_services.ProductMapper.serialize_product", return_value={"ok": True}):
+                        await ProductService.create_product(payload, PydanticObjectId())
+
+    validate_specs.assert_called_once_with(payload.specifications)
+    assert validate_variant.call_count == 2
+
+
+@pytest.mark.asyncio
+async def test_update_product_rejects_invalid_specification_value_length():
+    product = SimpleNamespace(category_id=PydanticObjectId(), set=AsyncMock())
+
+    with patch("app.services.product_services.Product.get", new=AsyncMock(return_value=product)):
+        with patch("app.services.product_services.ProductService._get_category_or_raise", new=AsyncMock(return_value=object())):
+            with pytest.raises(DomainValidationError) as exc:
+                await ProductService.update_product(
+                    PydanticObjectId(),
+                    ProductUpdate(specifications={"LongSpec": "x" * 501}),
+                    PydanticObjectId(),
+                )
+
+    assert "specification size exceeded" in str(exc.value).lower()
 
 
 @pytest.mark.asyncio

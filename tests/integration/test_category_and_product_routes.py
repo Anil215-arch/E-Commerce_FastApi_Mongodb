@@ -5,6 +5,7 @@ from unittest.mock import AsyncMock, patch
 from beanie import PydanticObjectId
 
 import app.main as main
+from app.core.exceptions import DomainValidationError
 from app.core.dependencies import get_current_user
 from app.core.user_role import UserRole
 
@@ -122,3 +123,43 @@ def test_category_list_route_success_shape(client):
     body = response.json()
     assert body["status"] == "success"
     assert len(body["data"]) == 2
+
+
+def test_seller_product_create_maps_domain_validation_error_to_400(client):
+    async def _seller_user():
+        return SimpleNamespace(id=PydanticObjectId(), role=UserRole.SELLER)
+
+    main.app.dependency_overrides[get_current_user] = _seller_user
+
+    with patch(
+        "app.api.api_v1.endpoints.seller.products.ProductService.create_product",
+        new=AsyncMock(side_effect=DomainValidationError("Reserved stock cannot exceed available stock.")),
+    ):
+        response = client.post(
+            "/api/v1/seller/products/",
+            json={
+                "name": "Phone X",
+                "description": "Modern smartphone with long battery and strong camera",
+                "brand": "Acme",
+                "category_id": str(PydanticObjectId()),
+                "variants": [
+                    {
+                        "sku": "PHX-01",
+                        "price": 10000,
+                        "discount_price": 9000,
+                        "available_stock": 5,
+                        "reserved_stock": 0,
+                        "attributes": {},
+                    }
+                ],
+                "specifications": {},
+                "is_available": True,
+                "is_featured": False,
+            },
+        )
+
+    assert response.status_code == 400
+    body = response.json()
+    assert body["status"] == "error"
+    assert body["message"] == "Domain validation failed"
+    assert "reserved stock cannot exceed available stock" in body["data"].lower()
