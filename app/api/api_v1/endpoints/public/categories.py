@@ -1,7 +1,8 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, Request, status
 from beanie import PydanticObjectId
 from typing import List
 
+from app.core.rate_limiter import ip_key_func, limiter
 from app.schemas.category_schema import CategoryResponse, CategoryTreeResponse
 from app.schemas.common_schema import ApiResponse
 from app.utils.responses import success_response
@@ -10,7 +11,8 @@ from app.services.category_services import CategoryService
 router = APIRouter()
 
 @router.get("/tree", response_model=ApiResponse[List[CategoryTreeResponse]], response_model_by_alias=False)
-async def get_category_tree():
+@limiter.limit("60/minute", key_func=ip_key_func)
+async def get_category_tree(request: Request):
     """
     Public endpoint to fetch the hierarchical category tree.
     """
@@ -18,7 +20,8 @@ async def get_category_tree():
     return success_response("Category tree fetched successfully", tree)
 
 @router.get("/", response_model=ApiResponse[List[CategoryResponse]], response_model_by_alias=False)
-async def list_categories():
+@limiter.limit("60/minute", key_func=ip_key_func)
+async def list_categories(request: Request):
     """
     Public endpoint to fetch all categories as a flat list.
     """
@@ -26,7 +29,8 @@ async def list_categories():
     return success_response("Categories fetched successfully", categories)
 
 @router.get("/{id}", response_model=ApiResponse[CategoryResponse], response_model_by_alias=False)
-async def get_category_by_id(id: PydanticObjectId):
+@limiter.limit("60/minute", key_func=ip_key_func)
+async def get_category_by_id(request: Request, id: PydanticObjectId):
     """
     Public endpoint to fetch specific category details.
     """

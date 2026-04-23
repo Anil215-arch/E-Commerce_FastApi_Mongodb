@@ -1,6 +1,6 @@
 from beanie import PydanticObjectId
-from fastapi import APIRouter, Depends, HTTPException, Query, status
-
+from fastapi import APIRouter, Depends, HTTPException, Query, status, Request
+from app.core.rate_limiter import user_limiter
 from app.core.dependencies import _require_user_id, get_current_user
 from app.core.user_role import UserRole
 from app.models.user_model import User
@@ -17,7 +17,9 @@ router = APIRouter()
     "/products/{product_id}/variants/{sku}",
     response_model=ApiResponse[InventoryVariantResponse],
 )
+@user_limiter.limit("30/minute")
 async def get_variant_inventory(
+    request: Request,
     product_id: PydanticObjectId,
     sku: str,
     seller_id: PydanticObjectId | None = Query(default=None),
@@ -51,7 +53,9 @@ async def get_variant_inventory(
     "/products/{product_id}/variants/{sku}",
     response_model=ApiResponse[InventoryVariantResponse],
 )
+@user_limiter.limit("10/minute")
 async def adjust_variant_inventory(
+    request: Request,
     product_id: PydanticObjectId,
     sku: str,
     payload: InventoryAdjustRequest,
