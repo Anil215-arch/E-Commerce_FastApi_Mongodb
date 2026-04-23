@@ -1,7 +1,8 @@
-from fastapi import APIRouter, status, Query
+from fastapi import APIRouter, Request, status, Query
 from beanie import PydanticObjectId
 from typing import Optional
 
+from app.core.rate_limiter import ip_key_func, limiter
 from app.schemas.review_rating_schema import ReviewResponse
 from app.services.review_rating_services import ReviewService
 from app.schemas.common_schema import ApiResponse, PaginatedResponse, PaginationMeta
@@ -10,7 +11,9 @@ from app.utils.responses import success_response
 router = APIRouter()
 
 @router.get("/products/{product_id}/reviews", response_model=ApiResponse[PaginatedResponse[ReviewResponse]], status_code=status.HTTP_200_OK)
+@limiter.limit("60/minute", key_func=ip_key_func)
 async def get_product_reviews(
+    request: Request,
     product_id: PydanticObjectId,
     limit: int = Query(10, ge=1, le=50),
     cursor: Optional[str] = Query(None)

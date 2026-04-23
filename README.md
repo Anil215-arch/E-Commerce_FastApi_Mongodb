@@ -298,7 +298,7 @@ Key persistence patterns:
 - Product text index (`name`, `brand`, `description`)
 - Unique constraints (email, username, variant SKU, invoice number, etc.)
 
-## Scripts (Seed, Migration, Audit)
+## Scripts (Seed)
 
 Run all scripts from the project root.
 
@@ -306,42 +306,6 @@ Run all scripts from the project root.
 
 ```powershell
 python scripts/seed_super_admin.py --user-name admin --email admin@shop.com --mobile 9999999999 --password StrongPass@123
-python scripts/seed_categories.py
-python scripts/seed_products.py --count 120
-python scripts/seed_customers_with_carts.py --count 10 --password Customer@123
-```
-
-Useful options:
-
-- `seed_categories.py --dry-run`
-- `seed_products.py --dry-run --enrich-existing`
-- `seed_customers_with_carts.py --dry-run`
-
-### Migrations
-
-```powershell
-python scripts/migrate_cart_version.py --dry-run
-python scripts/migrate_user_is_deleted.py --dry-run
-python scripts/migrate_user_is_verified.py --dry-run
-python scripts/migrate_model_drift_backfill.py --dry-run
-python scripts/backfill_realistic_audit_data.py --dry-run
-```
-
-Then rerun without `--dry-run` to apply changes.
-
-Examples with extra options:
-
-```powershell
-python scripts/migrate_cart_version.py --backfill-updated-at
-python scripts/migrate_user_is_deleted.py --backfill-delete-audit
-python scripts/migrate_user_is_verified.py --verify-email user1@example.com --verify-count 10
-python scripts/migrate_model_drift_backfill.py --drop-legacy-order-total-amount
-```
-
-### Schema Audit
-
-```powershell
-python scripts/audit_db_model_schema_alignment.py --sample-errors 5
 ```
 
 ## Testing

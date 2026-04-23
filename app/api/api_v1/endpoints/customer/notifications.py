@@ -1,7 +1,7 @@
-from fastapi import APIRouter, Depends, HTTPException, status, Query
+from fastapi import APIRouter, Depends, HTTPException, status, Query, Request
 from beanie import PydanticObjectId
 from typing import List
-
+from app.core.rate_limiter import user_limiter
 from app.core.dependencies import get_current_user, _require_user_id
 from app.models.user_model import User
 from app.schemas.notification_schema import NotificationResponse, UnreadNotificationCount
@@ -13,14 +13,16 @@ router = APIRouter()
 
 
 @router.get("/", response_model=ApiResponse[List[NotificationResponse]], status_code=status.HTTP_200_OK)
-async def get_notifications(limit: int = Query(50, ge=1, le=100), current_user: User = Depends(get_current_user)):
+@user_limiter.limit("60/minute")
+async def get_notifications(request: Request, limit: int = Query(50, ge=1, le=100), current_user: User = Depends(get_current_user)):
     user_id = _require_user_id(current_user)
     notifications = await NotificationService.get_user_notifications(user_id, limit)
     items = [NotificationResponse.model_validate(n) for n in notifications]
     return success_response("Notifications fetched successfully", items)
 
 @router.patch("/{notification_id}/read", response_model=ApiResponse[NotificationResponse], status_code=status.HTTP_200_OK)
-async def mark_notification_read(notification_id: PydanticObjectId, current_user: User = Depends(get_current_user)):
+@user_limiter.limit("30/minute")
+async def mark_notification_read(request: Request, notification_id: PydanticObjectId, current_user: User = Depends(get_current_user)):
     user_id = _require_user_id(current_user)
     try:
         notification = await NotificationService.mark_as_read(notification_id, user_id)
@@ -29,7 +31,8 @@ async def mark_notification_read(notification_id: PydanticObjectId, current_user
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
     
 @router.get("/unread-count", response_model=ApiResponse[UnreadNotificationCount], status_code=status.HTTP_200_OK)
-async def get_unread_notification_count(current_user: User = Depends(get_current_user)):
+@user_limiter.limit("60/minute")
+async def get_unread_notification_count(request: Request, current_user: User = Depends(get_current_user)):
     """
     Returns the total count of unread notifications for the authenticated customer.
     """

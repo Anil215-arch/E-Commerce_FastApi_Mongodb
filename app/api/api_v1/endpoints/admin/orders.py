@@ -1,6 +1,6 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Request
 from beanie import PydanticObjectId
-
+from app.core.rate_limiter import user_limiter
 from app.core.dependencies import get_current_user
 from app.models.user_model import User
 from app.schemas.order_schema import OrderResponse, OrderUpdateStatusRequest, OrderCancelRequest
@@ -11,7 +11,8 @@ from app.utils.responses import success_response
 router = APIRouter()
 
 @router.patch("/{order_id}/status", response_model=ApiResponse[OrderResponse], status_code=status.HTTP_200_OK)
-async def update_order_status_as_admin(order_id: PydanticObjectId, data: OrderUpdateStatusRequest, current_user: User = Depends(get_current_user)):
+@user_limiter.limit("10/minute")
+async def update_order_status_as_admin(request: Request, order_id: PydanticObjectId, data: OrderUpdateStatusRequest, current_user: User = Depends(get_current_user)):
     """
     Admin Intervention: Override fulfillment status for any order.
     """
@@ -22,7 +23,8 @@ async def update_order_status_as_admin(order_id: PydanticObjectId, data: OrderUp
     return success_response("Order status updated successfully by Admin", updated_order)
 
 @router.patch("/{order_id}/cancel", response_model=ApiResponse[OrderResponse], status_code=status.HTTP_200_OK)
-async def cancel_order_as_admin(order_id: PydanticObjectId, data: OrderCancelRequest, current_user: User = Depends(get_current_user)):
+@user_limiter.limit("10/minute")
+async def cancel_order_as_admin(request: Request, order_id: PydanticObjectId, data: OrderCancelRequest, current_user: User = Depends(get_current_user)):
     """
     Admin Intervention: Force cancel any order and process refunds.
     """
