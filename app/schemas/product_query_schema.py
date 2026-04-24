@@ -17,7 +17,7 @@ class ProductQueryParams(BaseModel):
     search: Optional[str] = Field(default=None, max_length=100, description="Full-text search query")
     page: int = Field(default=1, ge=1, description="Used only when 'search' is provided (Offset Pagination)")
     
-    cursor: Optional[str] = Field(default=None, description="Used for standard browsing")
+    cursor: Optional[str] = Field(default=None, max_length=255, description="Used for standard browsing")
     limit: int = Field(default=10, ge=1, le=50, description="Max 50 items per request")
 
     sort_by: SortField = Field(default=SortField.CREATED_AT)
@@ -29,11 +29,20 @@ class ProductQueryParams(BaseModel):
     min_price: Optional[int] = Field(default=None, ge=0)
     max_price: Optional[int] = Field(default=None, ge=0)
 
+    @field_validator("search", mode="before")
+    @classmethod
+    def normalize_search(cls, v: Optional[str]) -> Optional[str]:
+        if v is not None and isinstance(v, str):
+            v = v.strip()
+            return v or None
+        return v
+    
     @field_validator("brand", mode="before")
     @classmethod
     def normalize_brand(cls, v: Optional[str]) -> Optional[str]:
         if v is not None and isinstance(v, str):
-            return v.strip().title()
+            v = v.strip()
+            return v.title() if v else None
         return v
 
     @model_validator(mode="after")

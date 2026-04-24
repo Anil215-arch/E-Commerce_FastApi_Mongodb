@@ -3,7 +3,7 @@ from pydantic import Field, model_validator
 from pymongo import ASCENDING, IndexModel
 
 class Counter(Document):
-    key: str = Field(..., description="Unique key for the sequence, e.g., 'invoice_2026'")
+    key: str = Field(..., min_length=1, max_length=100, description="Unique key for the sequence, e.g., 'invoice_2026'")
     seq: int = Field(default=0, description="The current sequence number")
 
     @model_validator(mode="after")

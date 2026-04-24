@@ -1,22 +1,21 @@
-from ast import List
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+from typing import List
 
 class AdminDashboardSummary(BaseModel):
-    total_users: int
-    total_sellers: int
-    total_orders: int
-    total_products: int
-    total_categories: int
+    total_users: int = Field(..., ge=0)
+    total_sellers: int = Field(..., ge=0)
+    total_orders: int = Field(..., ge=0)
+    total_products: int = Field(..., ge=0)
+    total_categories: int = Field(..., ge=0)
     
     
 class SellerDashboardSummary(BaseModel):
-    total_products: int
-    total_orders: int
-    
+    total_products: int = Field(..., ge=0)
+    total_orders: int = Field(..., ge=0)
 
 class DailyRevenue(BaseModel):
     date: str
-    revenue: int
+    revenue: int = Field(..., ge=0)
 
 class RevenueChartResponse(BaseModel):
-    data: list[DailyRevenue]
+    data: List[DailyRevenue]

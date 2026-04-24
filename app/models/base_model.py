@@ -1,8 +1,7 @@
 from datetime import datetime, timezone
 from typing import Optional
-from beanie import Document, Insert, Replace, Save, SaveChanges, before_event
+from beanie import Document, Insert, Replace, Save, SaveChanges, before_event, PydanticObjectId
 from pydantic import Field
-from beanie import Document, PydanticObjectId
 
 class AuditDocument(Document):
     # Timestamps (Automated by Beanie)
@@ -37,4 +36,5 @@ class AuditDocument(Document):
         self.is_deleted = True
         self.deleted_at = datetime.now(timezone.utc)
         self.deleted_by = current_user_id
+        self.updated_by = current_user_id
         await self.save()
