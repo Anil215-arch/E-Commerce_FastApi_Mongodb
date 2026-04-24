@@ -121,6 +121,6 @@ class DashboardService:
 
         results = await Order.aggregate(pipeline).to_list()
         
-        # 3. Currency Conversion (e.g., Paise to Rupee) & Zero-Fill
-        data = [DailyRevenue(date=r["_id"], revenue=round(r["revenue"] / 100, 2)) for r in results]
+        # 3. Revenue stays in paisa (int) to avoid floating-point precision drift.
+        data = [DailyRevenue(date=r["_id"], revenue=int(r["revenue"])) for r in results]
         return cls._zero_fill(data, start_date, end_date, period)

@@ -45,6 +45,29 @@ def test_get_token_expiration_without_exp_claim_raises_value_error():
         get_token_expiration({"sub": "x"})
 
 
+def test_product_query_search_defaults_created_at_sort_to_relevance():
+    params = ProductQueryParams(search="   phone   ")
+
+    assert params.search == "phone"
+    assert params.sort_by == SortField.RELEVANCE
+
+
+def test_product_query_rejects_relevance_sort_without_search():
+    with pytest.raises(ValueError, match="Cannot sort by relevance"):
+        ProductQueryParams(sort_by=SortField.RELEVANCE)
+
+
+def test_product_query_rejects_offset_page_without_search():
+    with pytest.raises(ValueError, match="Offset pagination"):
+        ProductQueryParams(page=2)
+
+
+def test_product_query_normalizes_brand_for_database_filtering():
+    params = ProductQueryParams(brand="   acme labs   ")
+
+    assert params.brand == "Acme Labs"
+
+
 @pytest.mark.asyncio
 async def test_list_products_ignores_invalid_cursor_and_returns_first_page():
     category_id = PydanticObjectId()

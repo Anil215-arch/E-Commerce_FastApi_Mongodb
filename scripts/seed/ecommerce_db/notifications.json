@@ -1,0 +1,1890 @@
+[
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1635"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.972Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.388Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d0"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d0"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d0"
+    },
+    "title": "Order Update #01-01",
+    "message": "Your recent order moved to the next fulfillment stage.",
+    "type": "ORDER",
+    "is_read": false,
+    "metadata": {
+      "seeded": true,
+      "user_role": "customer",
+      "sequence": 1,
+      "order_id": "69e745124455d2cfc7fd140b",
+      "checkout_batch_id": "seed-checkout-completed-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1636"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.973Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.390Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d0"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d0"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d0"
+    },
+    "title": "Payment Update #01-02",
+    "message": "A payment event was recorded for one of your checkouts.",
+    "type": "PAYMENT",
+    "is_read": true,
+    "metadata": {
+      "seeded": true,
+      "user_role": "customer",
+      "sequence": 2,
+      "order_id": "69e745124455d2cfc7fd140b",
+      "checkout_batch_id": "seed-checkout-completed-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1637"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.975Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.391Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d0"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d0"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d0"
+    },
+    "title": "System Notice #01-03",
+    "message": "Inventory and account data were refreshed for demo testing.",
+    "type": "SYSTEM",
+    "is_read": false,
+    "metadata": {
+      "seeded": true,
+      "user_role": "customer",
+      "sequence": 3,
+      "order_id": "69e745124455d2cfc7fd140b",
+      "checkout_batch_id": "seed-checkout-completed-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1638"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.977Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.392Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d0"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d0"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d0"
+    },
+    "title": "Deal Alert #01-04",
+    "message": "Fresh discounts are live in multiple categories.",
+    "type": "PROMOTION",
+    "is_read": true,
+    "metadata": {
+      "seeded": true,
+      "user_role": "customer",
+      "sequence": 4,
+      "order_id": "69e745124455d2cfc7fd140b",
+      "checkout_batch_id": "seed-checkout-completed-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1639"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.979Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.394Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d2"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d2"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d2"
+    },
+    "title": "Order Update #02-01",
+    "message": "Your recent order moved to the next fulfillment stage.",
+    "type": "ORDER",
+    "is_read": false,
+    "metadata": {
+      "seeded": true,
+      "user_role": "customer",
+      "sequence": 1,
+      "order_id": "69e745124455d2cfc7fd1410",
+      "checkout_batch_id": "seed-checkout-delivered-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd163a"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.981Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.395Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d2"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d2"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d2"
+    },
+    "title": "Payment Update #02-02",
+    "message": "A payment event was recorded for one of your checkouts.",
+    "type": "PAYMENT",
+    "is_read": true,
+    "metadata": {
+      "seeded": true,
+      "user_role": "customer",
+      "sequence": 2,
+      "order_id": "69e745124455d2cfc7fd1410",
+      "checkout_batch_id": "seed-checkout-delivered-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd163b"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.983Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.397Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d2"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d2"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d2"
+    },
+    "title": "System Notice #02-03",
+    "message": "Inventory and account data were refreshed for demo testing.",
+    "type": "SYSTEM",
+    "is_read": false,
+    "metadata": {
+      "seeded": true,
+      "user_role": "customer",
+      "sequence": 3,
+      "order_id": "69e745124455d2cfc7fd1410",
+      "checkout_batch_id": "seed-checkout-delivered-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd163c"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.985Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.399Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d2"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d2"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d2"
+    },
+    "title": "Deal Alert #02-04",
+    "message": "Fresh discounts are live in multiple categories.",
+    "type": "PROMOTION",
+    "is_read": true,
+    "metadata": {
+      "seeded": true,
+      "user_role": "customer",
+      "sequence": 4,
+      "order_id": "69e745124455d2cfc7fd1410",
+      "checkout_batch_id": "seed-checkout-delivered-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd163d"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.987Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.400Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d4"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d4"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d4"
+    },
+    "title": "Order Update #03-01",
+    "message": "Your recent order moved to the next fulfillment stage.",
+    "type": "ORDER",
+    "is_read": false,
+    "metadata": {
+      "seeded": true,
+      "user_role": "customer",
+      "sequence": 1,
+      "order_id": "69e745124455d2cfc7fd1415",
+      "checkout_batch_id": "seed-checkout-shipped-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd163e"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.988Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.401Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d4"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d4"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d4"
+    },
+    "title": "Payment Update #03-02",
+    "message": "A payment event was recorded for one of your checkouts.",
+    "type": "PAYMENT",
+    "is_read": true,
+    "metadata": {
+      "seeded": true,
+      "user_role": "customer",
+      "sequence": 2,
+      "order_id": "69e745124455d2cfc7fd1415",
+      "checkout_batch_id": "seed-checkout-shipped-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd163f"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.990Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.403Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d4"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d4"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d4"
+    },
+    "title": "System Notice #03-03",
+    "message": "Inventory and account data were refreshed for demo testing.",
+    "type": "SYSTEM",
+    "is_read": false,
+    "metadata": {
+      "seeded": true,
+      "user_role": "customer",
+      "sequence": 3,
+      "order_id": "69e745124455d2cfc7fd1415",
+      "checkout_batch_id": "seed-checkout-shipped-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1640"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.992Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.404Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d4"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d4"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d4"
+    },
+    "title": "Deal Alert #03-04",
+    "message": "Fresh discounts are live in multiple categories.",
+    "type": "PROMOTION",
+    "is_read": true,
+    "metadata": {
+      "seeded": true,
+      "user_role": "customer",
+      "sequence": 4,
+      "order_id": "69e745124455d2cfc7fd1415",
+      "checkout_batch_id": "seed-checkout-shipped-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1641"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.993Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.406Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d6"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d6"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d6"
+    },
+    "title": "Order Update #04-01",
+    "message": "Your recent order moved to the next fulfillment stage.",
+    "type": "ORDER",
+    "is_read": false,
+    "metadata": {
+      "seeded": true,
+      "user_role": "customer",
+      "sequence": 1,
+      "order_id": "69e745124455d2cfc7fd141a",
+      "checkout_batch_id": "seed-checkout-confirmed-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1642"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.994Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.407Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d6"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d6"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d6"
+    },
+    "title": "Payment Update #04-02",
+    "message": "A payment event was recorded for one of your checkouts.",
+    "type": "PAYMENT",
+    "is_read": true,
+    "metadata": {
+      "seeded": true,
+      "user_role": "customer",
+      "sequence": 2,
+      "order_id": "69e745124455d2cfc7fd141a",
+      "checkout_batch_id": "seed-checkout-confirmed-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1643"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.996Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.408Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d6"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d6"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d6"
+    },
+    "title": "System Notice #04-03",
+    "message": "Inventory and account data were refreshed for demo testing.",
+    "type": "SYSTEM",
+    "is_read": false,
+    "metadata": {
+      "seeded": true,
+      "user_role": "customer",
+      "sequence": 3,
+      "order_id": "69e745124455d2cfc7fd141a",
+      "checkout_batch_id": "seed-checkout-confirmed-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1644"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.997Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.410Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d6"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d6"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d6"
+    },
+    "title": "Deal Alert #04-04",
+    "message": "Fresh discounts are live in multiple categories.",
+    "type": "PROMOTION",
+    "is_read": true,
+    "metadata": {
+      "seeded": true,
+      "user_role": "customer",
+      "sequence": 4,
+      "order_id": "69e745124455d2cfc7fd141a",
+      "checkout_batch_id": "seed-checkout-confirmed-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1645"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.999Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.412Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d8"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d8"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d8"
+    },
+    "title": "Order Update #05-01",
+    "message": "Your recent order moved to the next fulfillment stage.",
+    "type": "ORDER",
+    "is_read": false,
+    "metadata": {
+      "seeded": true,
+      "user_role": "customer",
+      "sequence": 1,
+      "order_id": "69e745124455d2cfc7fd141f",
+      "checkout_batch_id": "seed-checkout-partial-refund-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1646"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:20Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.414Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d8"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d8"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d8"
+    },
+    "title": "Payment Update #05-02",
+    "message": "A payment event was recorded for one of your checkouts.",
+    "type": "PAYMENT",
+    "is_read": true,
+    "metadata": {
+      "seeded": true,
+      "user_role": "customer",
+      "sequence": 2,
+      "order_id": "69e745124455d2cfc7fd141f",
+      "checkout_batch_id": "seed-checkout-partial-refund-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1647"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:20.002Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.415Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d8"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d8"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d8"
+    },
+    "title": "System Notice #05-03",
+    "message": "Inventory and account data were refreshed for demo testing.",
+    "type": "SYSTEM",
+    "is_read": false,
+    "metadata": {
+      "seeded": true,
+      "user_role": "customer",
+      "sequence": 3,
+      "order_id": "69e745124455d2cfc7fd141f",
+      "checkout_batch_id": "seed-checkout-partial-refund-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1648"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:20.004Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.417Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d8"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d8"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d8"
+    },
+    "title": "Deal Alert #05-04",
+    "message": "Fresh discounts are live in multiple categories.",
+    "type": "PROMOTION",
+    "is_read": true,
+    "metadata": {
+      "seeded": true,
+      "user_role": "customer",
+      "sequence": 4,
+      "order_id": "69e745124455d2cfc7fd141f",
+      "checkout_batch_id": "seed-checkout-partial-refund-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1649"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:20.005Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.418Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13da"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13da"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13da"
+    },
+    "title": "Order Update #06-01",
+    "message": "Your recent order moved to the next fulfillment stage.",
+    "type": "ORDER",
+    "is_read": false,
+    "metadata": {
+      "seeded": true,
+      "user_role": "customer",
+      "sequence": 1,
+      "order_id": "69e745124455d2cfc7fd1424",
+      "checkout_batch_id": "seed-checkout-full-refund-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd164a"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:20.007Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.420Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13da"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13da"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13da"
+    },
+    "title": "Payment Update #06-02",
+    "message": "A payment event was recorded for one of your checkouts.",
+    "type": "PAYMENT",
+    "is_read": true,
+    "metadata": {
+      "seeded": true,
+      "user_role": "customer",
+      "sequence": 2,
+      "order_id": "69e745124455d2cfc7fd1424",
+      "checkout_batch_id": "seed-checkout-full-refund-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd164b"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:20.008Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.421Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13da"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13da"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13da"
+    },
+    "title": "System Notice #06-03",
+    "message": "Inventory and account data were refreshed for demo testing.",
+    "type": "SYSTEM",
+    "is_read": false,
+    "metadata": {
+      "seeded": true,
+      "user_role": "customer",
+      "sequence": 3,
+      "order_id": "69e745124455d2cfc7fd1424",
+      "checkout_batch_id": "seed-checkout-full-refund-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd164c"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:20.010Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.422Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13da"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13da"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13da"
+    },
+    "title": "Deal Alert #06-04",
+    "message": "Fresh discounts are live in multiple categories.",
+    "type": "PROMOTION",
+    "is_read": true,
+    "metadata": {
+      "seeded": true,
+      "user_role": "customer",
+      "sequence": 4,
+      "order_id": "69e745124455d2cfc7fd1424",
+      "checkout_batch_id": "seed-checkout-full-refund-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd164d"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:20.011Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.424Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13dc"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13dc"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13dc"
+    },
+    "title": "Order Update #07-01",
+    "message": "Your recent order moved to the next fulfillment stage.",
+    "type": "ORDER",
+    "is_read": false,
+    "metadata": {
+      "seeded": true,
+      "user_role": "customer",
+      "sequence": 1,
+      "order_id": "69e745124455d2cfc7fd1427",
+      "checkout_batch_id": "seed-checkout-payment-failed-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd164e"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:20.013Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.426Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13dc"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13dc"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13dc"
+    },
+    "title": "Payment Update #07-02",
+    "message": "A payment event was recorded for one of your checkouts.",
+    "type": "PAYMENT",
+    "is_read": true,
+    "metadata": {
+      "seeded": true,
+      "user_role": "customer",
+      "sequence": 2,
+      "order_id": "69e745124455d2cfc7fd1427",
+      "checkout_batch_id": "seed-checkout-payment-failed-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd164f"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:20.014Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.428Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13dc"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13dc"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13dc"
+    },
+    "title": "System Notice #07-03",
+    "message": "Inventory and account data were refreshed for demo testing.",
+    "type": "SYSTEM",
+    "is_read": false,
+    "metadata": {
+      "seeded": true,
+      "user_role": "customer",
+      "sequence": 3,
+      "order_id": "69e745124455d2cfc7fd1427",
+      "checkout_batch_id": "seed-checkout-payment-failed-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1650"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:20.016Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.429Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13dc"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13dc"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13dc"
+    },
+    "title": "Deal Alert #07-04",
+    "message": "Fresh discounts are live in multiple categories.",
+    "type": "PROMOTION",
+    "is_read": true,
+    "metadata": {
+      "seeded": true,
+      "user_role": "customer",
+      "sequence": 4,
+      "order_id": "69e745124455d2cfc7fd1427",
+      "checkout_batch_id": "seed-checkout-payment-failed-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1651"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:20.017Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.430Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13de"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13de"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13de"
+    },
+    "title": "Order Update #08-01",
+    "message": "Your recent order moved to the next fulfillment stage.",
+    "type": "ORDER",
+    "is_read": false,
+    "metadata": {
+      "seeded": true,
+      "user_role": "customer",
+      "sequence": 1,
+      "order_id": "69e745124455d2cfc7fd1429",
+      "checkout_batch_id": "seed-checkout-pending-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1652"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:20.019Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.432Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13de"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13de"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13de"
+    },
+    "title": "Payment Update #08-02",
+    "message": "A payment event was recorded for one of your checkouts.",
+    "type": "PAYMENT",
+    "is_read": true,
+    "metadata": {
+      "seeded": true,
+      "user_role": "customer",
+      "sequence": 2,
+      "order_id": "69e745124455d2cfc7fd1429",
+      "checkout_batch_id": "seed-checkout-pending-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1653"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:20.020Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.433Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13de"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13de"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13de"
+    },
+    "title": "System Notice #08-03",
+    "message": "Inventory and account data were refreshed for demo testing.",
+    "type": "SYSTEM",
+    "is_read": false,
+    "metadata": {
+      "seeded": true,
+      "user_role": "customer",
+      "sequence": 3,
+      "order_id": "69e745124455d2cfc7fd1429",
+      "checkout_batch_id": "seed-checkout-pending-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1654"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:20.021Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.435Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13de"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13de"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13de"
+    },
+    "title": "Deal Alert #08-04",
+    "message": "Fresh discounts are live in multiple categories.",
+    "type": "PROMOTION",
+    "is_read": true,
+    "metadata": {
+      "seeded": true,
+      "user_role": "customer",
+      "sequence": 4,
+      "order_id": "69e745124455d2cfc7fd1429",
+      "checkout_batch_id": "seed-checkout-pending-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1655"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:20.023Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.436Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13e0"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13e0"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13e0"
+    },
+    "title": "Order Update #09-01",
+    "message": "Your recent order moved to the next fulfillment stage.",
+    "type": "ORDER",
+    "is_read": false,
+    "metadata": {
+      "seeded": true,
+      "user_role": "customer",
+      "sequence": 1
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1656"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:20.025Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.438Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13e0"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13e0"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13e0"
+    },
+    "title": "Payment Update #09-02",
+    "message": "A payment event was recorded for one of your checkouts.",
+    "type": "PAYMENT",
+    "is_read": true,
+    "metadata": {
+      "seeded": true,
+      "user_role": "customer",
+      "sequence": 2
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1657"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:20.026Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.439Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13e0"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13e0"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13e0"
+    },
+    "title": "System Notice #09-03",
+    "message": "Inventory and account data were refreshed for demo testing.",
+    "type": "SYSTEM",
+    "is_read": false,
+    "metadata": {
+      "seeded": true,
+      "user_role": "customer",
+      "sequence": 3
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1658"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:20.027Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.440Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13e0"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13e0"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13e0"
+    },
+    "title": "Deal Alert #09-04",
+    "message": "Fresh discounts are live in multiple categories.",
+    "type": "PROMOTION",
+    "is_read": true,
+    "metadata": {
+      "seeded": true,
+      "user_role": "customer",
+      "sequence": 4
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1659"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:20.029Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.442Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13e2"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13e2"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13e2"
+    },
+    "title": "Order Update #10-01",
+    "message": "Your recent order moved to the next fulfillment stage.",
+    "type": "ORDER",
+    "is_read": false,
+    "metadata": {
+      "seeded": true,
+      "user_role": "customer",
+      "sequence": 1
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd165a"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:20.030Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.444Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13e2"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13e2"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13e2"
+    },
+    "title": "Payment Update #10-02",
+    "message": "A payment event was recorded for one of your checkouts.",
+    "type": "PAYMENT",
+    "is_read": true,
+    "metadata": {
+      "seeded": true,
+      "user_role": "customer",
+      "sequence": 2
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd165b"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:20.032Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.445Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13e2"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13e2"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13e2"
+    },
+    "title": "System Notice #10-03",
+    "message": "Inventory and account data were refreshed for demo testing.",
+    "type": "SYSTEM",
+    "is_read": false,
+    "metadata": {
+      "seeded": true,
+      "user_role": "customer",
+      "sequence": 3
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd165c"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:20.033Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.447Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13e2"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13e2"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13e2"
+    },
+    "title": "Deal Alert #10-04",
+    "message": "Fresh discounts are live in multiple categories.",
+    "type": "PROMOTION",
+    "is_read": true,
+    "metadata": {
+      "seeded": true,
+      "user_role": "customer",
+      "sequence": 4
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd165d"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:20.035Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.448Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "title": "Order Update #11-01",
+    "message": "Your recent order moved to the next fulfillment stage.",
+    "type": "ORDER",
+    "is_read": false,
+    "metadata": {
+      "seeded": true,
+      "user_role": "seller",
+      "sequence": 1,
+      "order_id": "69e745124455d2cfc7fd140b",
+      "checkout_batch_id": "seed-checkout-completed-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd165e"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:20.036Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.450Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "title": "Payment Update #11-02",
+    "message": "A payment event was recorded for one of your checkouts.",
+    "type": "PAYMENT",
+    "is_read": true,
+    "metadata": {
+      "seeded": true,
+      "user_role": "seller",
+      "sequence": 2,
+      "order_id": "69e745124455d2cfc7fd140b",
+      "checkout_batch_id": "seed-checkout-completed-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd165f"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:20.038Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.451Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "title": "System Notice #11-03",
+    "message": "Inventory and account data were refreshed for demo testing.",
+    "type": "SYSTEM",
+    "is_read": false,
+    "metadata": {
+      "seeded": true,
+      "user_role": "seller",
+      "sequence": 3,
+      "order_id": "69e745124455d2cfc7fd140b",
+      "checkout_batch_id": "seed-checkout-completed-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1660"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:20.039Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.453Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "title": "Deal Alert #11-04",
+    "message": "Fresh discounts are live in multiple categories.",
+    "type": "PROMOTION",
+    "is_read": true,
+    "metadata": {
+      "seeded": true,
+      "user_role": "seller",
+      "sequence": 4,
+      "order_id": "69e745124455d2cfc7fd140b",
+      "checkout_batch_id": "seed-checkout-completed-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1661"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:20.040Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.454Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "title": "Order Update #12-01",
+    "message": "Your recent order moved to the next fulfillment stage.",
+    "type": "ORDER",
+    "is_read": false,
+    "metadata": {
+      "seeded": true,
+      "user_role": "seller",
+      "sequence": 1,
+      "order_id": "69e745124455d2cfc7fd140d",
+      "checkout_batch_id": "seed-checkout-completed-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1662"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:20.042Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.456Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "title": "Payment Update #12-02",
+    "message": "A payment event was recorded for one of your checkouts.",
+    "type": "PAYMENT",
+    "is_read": true,
+    "metadata": {
+      "seeded": true,
+      "user_role": "seller",
+      "sequence": 2,
+      "order_id": "69e745124455d2cfc7fd140d",
+      "checkout_batch_id": "seed-checkout-completed-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1663"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:20.043Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.457Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "title": "System Notice #12-03",
+    "message": "Inventory and account data were refreshed for demo testing.",
+    "type": "SYSTEM",
+    "is_read": false,
+    "metadata": {
+      "seeded": true,
+      "user_role": "seller",
+      "sequence": 3,
+      "order_id": "69e745124455d2cfc7fd140d",
+      "checkout_batch_id": "seed-checkout-completed-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1664"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:20.044Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.459Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "title": "Deal Alert #12-04",
+    "message": "Fresh discounts are live in multiple categories.",
+    "type": "PROMOTION",
+    "is_read": true,
+    "metadata": {
+      "seeded": true,
+      "user_role": "seller",
+      "sequence": 4,
+      "order_id": "69e745124455d2cfc7fd140d",
+      "checkout_batch_id": "seed-checkout-completed-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1665"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:20.046Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.460Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "title": "Order Update #13-01",
+    "message": "Your recent order moved to the next fulfillment stage.",
+    "type": "ORDER",
+    "is_read": false,
+    "metadata": {
+      "seeded": true,
+      "user_role": "seller",
+      "sequence": 1,
+      "order_id": "69e745124455d2cfc7fd1412",
+      "checkout_batch_id": "seed-checkout-delivered-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1666"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:20.047Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.462Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "title": "Payment Update #13-02",
+    "message": "A payment event was recorded for one of your checkouts.",
+    "type": "PAYMENT",
+    "is_read": true,
+    "metadata": {
+      "seeded": true,
+      "user_role": "seller",
+      "sequence": 2,
+      "order_id": "69e745124455d2cfc7fd1412",
+      "checkout_batch_id": "seed-checkout-delivered-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1667"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:20.049Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.463Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "title": "System Notice #13-03",
+    "message": "Inventory and account data were refreshed for demo testing.",
+    "type": "SYSTEM",
+    "is_read": false,
+    "metadata": {
+      "seeded": true,
+      "user_role": "seller",
+      "sequence": 3,
+      "order_id": "69e745124455d2cfc7fd1412",
+      "checkout_batch_id": "seed-checkout-delivered-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1668"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:20.051Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.465Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "title": "Deal Alert #13-04",
+    "message": "Fresh discounts are live in multiple categories.",
+    "type": "PROMOTION",
+    "is_read": true,
+    "metadata": {
+      "seeded": true,
+      "user_role": "seller",
+      "sequence": 4,
+      "order_id": "69e745124455d2cfc7fd1412",
+      "checkout_batch_id": "seed-checkout-delivered-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1669"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:20.052Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.466Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "title": "Order Update #14-01",
+    "message": "Your recent order moved to the next fulfillment stage.",
+    "type": "ORDER",
+    "is_read": false,
+    "metadata": {
+      "seeded": true,
+      "user_role": "seller",
+      "sequence": 1,
+      "order_id": "69e745124455d2cfc7fd1417",
+      "checkout_batch_id": "seed-checkout-shipped-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd166a"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:20.054Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.468Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "title": "Payment Update #14-02",
+    "message": "A payment event was recorded for one of your checkouts.",
+    "type": "PAYMENT",
+    "is_read": true,
+    "metadata": {
+      "seeded": true,
+      "user_role": "seller",
+      "sequence": 2,
+      "order_id": "69e745124455d2cfc7fd1417",
+      "checkout_batch_id": "seed-checkout-shipped-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd166b"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:20.056Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.469Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "title": "System Notice #14-03",
+    "message": "Inventory and account data were refreshed for demo testing.",
+    "type": "SYSTEM",
+    "is_read": false,
+    "metadata": {
+      "seeded": true,
+      "user_role": "seller",
+      "sequence": 3,
+      "order_id": "69e745124455d2cfc7fd1417",
+      "checkout_batch_id": "seed-checkout-shipped-batch"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd166c"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:20.057Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.470Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "title": "Deal Alert #14-04",
+    "message": "Fresh discounts are live in multiple categories.",
+    "type": "PROMOTION",
+    "is_read": true,
+    "metadata": {
+      "seeded": true,
+      "user_role": "seller",
+      "sequence": 4,
+      "order_id": "69e745124455d2cfc7fd1417",
+      "checkout_batch_id": "seed-checkout-shipped-batch"
+    }
+  }
+]

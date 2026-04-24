@@ -1,0 +1,22 @@
+{
+  "source_uri": "mongodb://localhost:27017",
+  "source_db": "ecommerce_db",
+  "exported_at": "2026-04-24T11:14:36.324121+00:00",
+  "collections": {
+    "carts": 24,
+    "categories": 80,
+    "counters": 1,
+    "device_tokens": 16,
+    "email_otp_verifications": 0,
+    "inventory_ledger": 36,
+    "invoices": 11,
+    "notifications": 56,
+    "orders": 13,
+    "products": 160,
+    "reviews": 411,
+    "revoked_tokens": 6,
+    "transactions": 8,
+    "users": 31,
+    "wishlists": 96
+  }
+}

@@ -1,0 +1,1428 @@
+[
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13d0"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.615Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:03.700Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d0"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d0"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_name": "customer01",
+    "email": "customer01@seedusers.com",
+    "hashed_password": "$argon2id$v=19$m=65536,t=3,p=4$ecFqZkVy8QMxz4sb8OX3WQ$AMQiUjzOSUL6QgKly39bEBqGT03Slm9IHEbrgLTJJuI",
+    "mobile": "9000000001",
+    "role": "customer",
+    "is_verified": true,
+    "addresses": [
+      {
+        "full_name": "Customer 01",
+        "phone_number": "9000000001",
+        "street_address": "41, Seed Residency, Sector 10",
+        "city": "Pune",
+        "postal_code": "411001",
+        "state": "Maharashtra",
+        "country": "India"
+      },
+      {
+        "full_name": "Customer 01",
+        "phone_number": "9000000001",
+        "street_address": "121, Demo Avenue, Block 1",
+        "city": "Bengaluru",
+        "postal_code": "560001",
+        "state": "Karnataka",
+        "country": "India"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13d2"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.618Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:03.701Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d2"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d2"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_name": "customer02",
+    "email": "customer02@seedusers.com",
+    "hashed_password": "$argon2id$v=19$m=65536,t=3,p=4$ecFqZkVy8QMxz4sb8OX3WQ$AMQiUjzOSUL6QgKly39bEBqGT03Slm9IHEbrgLTJJuI",
+    "mobile": "9000000002",
+    "role": "customer",
+    "is_verified": true,
+    "addresses": [
+      {
+        "full_name": "Customer 02",
+        "phone_number": "9000000002",
+        "street_address": "42, Seed Residency, Sector 11",
+        "city": "Ahmedabad",
+        "postal_code": "380001",
+        "state": "Gujarat",
+        "country": "India"
+      },
+      {
+        "full_name": "Customer 02",
+        "phone_number": "9000000002",
+        "street_address": "122, Demo Avenue, Block 2",
+        "city": "Mumbai",
+        "postal_code": "400001",
+        "state": "Maharashtra",
+        "country": "India"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13d4"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.621Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:03.702Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d4"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d4"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_name": "customer03",
+    "email": "customer03@seedusers.com",
+    "hashed_password": "$argon2id$v=19$m=65536,t=3,p=4$ecFqZkVy8QMxz4sb8OX3WQ$AMQiUjzOSUL6QgKly39bEBqGT03Slm9IHEbrgLTJJuI",
+    "mobile": "9000000003",
+    "role": "customer",
+    "is_verified": true,
+    "addresses": [
+      {
+        "full_name": "Customer 03",
+        "phone_number": "9000000003",
+        "street_address": "43, Seed Residency, Sector 12",
+        "city": "Kolkata",
+        "postal_code": "700001",
+        "state": "West Bengal",
+        "country": "India"
+      },
+      {
+        "full_name": "Customer 03",
+        "phone_number": "9000000003",
+        "street_address": "123, Demo Avenue, Block 3",
+        "city": "Delhi",
+        "postal_code": "110001",
+        "state": "Delhi",
+        "country": "India"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13d6"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.624Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:03.704Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d6"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d6"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_name": "customer04",
+    "email": "customer04@seedusers.com",
+    "hashed_password": "$argon2id$v=19$m=65536,t=3,p=4$ecFqZkVy8QMxz4sb8OX3WQ$AMQiUjzOSUL6QgKly39bEBqGT03Slm9IHEbrgLTJJuI",
+    "mobile": "9000000004",
+    "role": "customer",
+    "is_verified": true,
+    "addresses": [
+      {
+        "full_name": "Customer 04",
+        "phone_number": "9000000004",
+        "street_address": "44, Seed Residency, Sector 1",
+        "city": "Bengaluru",
+        "postal_code": "560001",
+        "state": "Karnataka",
+        "country": "India"
+      },
+      {
+        "full_name": "Customer 04",
+        "phone_number": "9000000004",
+        "street_address": "124, Demo Avenue, Block 4",
+        "city": "Hyderabad",
+        "postal_code": "500001",
+        "state": "Telangana",
+        "country": "India"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13d8"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.627Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:03.705Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d8"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d8"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_name": "customer05",
+    "email": "customer05@seedusers.com",
+    "hashed_password": "$argon2id$v=19$m=65536,t=3,p=4$ecFqZkVy8QMxz4sb8OX3WQ$AMQiUjzOSUL6QgKly39bEBqGT03Slm9IHEbrgLTJJuI",
+    "mobile": "9000000005",
+    "role": "customer",
+    "is_verified": true,
+    "addresses": [
+      {
+        "full_name": "Customer 05",
+        "phone_number": "9000000005",
+        "street_address": "45, Seed Residency, Sector 2",
+        "city": "Mumbai",
+        "postal_code": "400001",
+        "state": "Maharashtra",
+        "country": "India"
+      },
+      {
+        "full_name": "Customer 05",
+        "phone_number": "9000000005",
+        "street_address": "125, Demo Avenue, Block 5",
+        "city": "Chennai",
+        "postal_code": "600001",
+        "state": "Tamil Nadu",
+        "country": "India"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13da"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.630Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:03.707Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13da"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13da"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_name": "customer06",
+    "email": "customer06@seedusers.com",
+    "hashed_password": "$argon2id$v=19$m=65536,t=3,p=4$ecFqZkVy8QMxz4sb8OX3WQ$AMQiUjzOSUL6QgKly39bEBqGT03Slm9IHEbrgLTJJuI",
+    "mobile": "9000000006",
+    "role": "customer",
+    "is_verified": true,
+    "addresses": [
+      {
+        "full_name": "Customer 06",
+        "phone_number": "9000000006",
+        "street_address": "46, Seed Residency, Sector 3",
+        "city": "Delhi",
+        "postal_code": "110001",
+        "state": "Delhi",
+        "country": "India"
+      },
+      {
+        "full_name": "Customer 06",
+        "phone_number": "9000000006",
+        "street_address": "126, Demo Avenue, Block 6",
+        "city": "Pune",
+        "postal_code": "411001",
+        "state": "Maharashtra",
+        "country": "India"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13dc"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.633Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:03.708Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13dc"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13dc"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_name": "customer07",
+    "email": "customer07@seedusers.com",
+    "hashed_password": "$argon2id$v=19$m=65536,t=3,p=4$ecFqZkVy8QMxz4sb8OX3WQ$AMQiUjzOSUL6QgKly39bEBqGT03Slm9IHEbrgLTJJuI",
+    "mobile": "9000000007",
+    "role": "customer",
+    "is_verified": true,
+    "addresses": [
+      {
+        "full_name": "Customer 07",
+        "phone_number": "9000000007",
+        "street_address": "47, Seed Residency, Sector 4",
+        "city": "Hyderabad",
+        "postal_code": "500001",
+        "state": "Telangana",
+        "country": "India"
+      },
+      {
+        "full_name": "Customer 07",
+        "phone_number": "9000000007",
+        "street_address": "127, Demo Avenue, Block 7",
+        "city": "Ahmedabad",
+        "postal_code": "380001",
+        "state": "Gujarat",
+        "country": "India"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13de"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.636Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:03.709Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13de"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13de"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_name": "customer08",
+    "email": "customer08@seedusers.com",
+    "hashed_password": "$argon2id$v=19$m=65536,t=3,p=4$ecFqZkVy8QMxz4sb8OX3WQ$AMQiUjzOSUL6QgKly39bEBqGT03Slm9IHEbrgLTJJuI",
+    "mobile": "9000000008",
+    "role": "customer",
+    "is_verified": true,
+    "addresses": [
+      {
+        "full_name": "Customer 08",
+        "phone_number": "9000000008",
+        "street_address": "48, Seed Residency, Sector 5",
+        "city": "Chennai",
+        "postal_code": "600001",
+        "state": "Tamil Nadu",
+        "country": "India"
+      },
+      {
+        "full_name": "Customer 08",
+        "phone_number": "9000000008",
+        "street_address": "128, Demo Avenue, Block 1",
+        "city": "Kolkata",
+        "postal_code": "700001",
+        "state": "West Bengal",
+        "country": "India"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13e0"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.639Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:03.710Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13e0"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13e0"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_name": "customer09",
+    "email": "customer09@seedusers.com",
+    "hashed_password": "$argon2id$v=19$m=65536,t=3,p=4$ecFqZkVy8QMxz4sb8OX3WQ$AMQiUjzOSUL6QgKly39bEBqGT03Slm9IHEbrgLTJJuI",
+    "mobile": "9000000009",
+    "role": "customer",
+    "is_verified": true,
+    "addresses": [
+      {
+        "full_name": "Customer 09",
+        "phone_number": "9000000009",
+        "street_address": "49, Seed Residency, Sector 6",
+        "city": "Pune",
+        "postal_code": "411001",
+        "state": "Maharashtra",
+        "country": "India"
+      },
+      {
+        "full_name": "Customer 09",
+        "phone_number": "9000000009",
+        "street_address": "129, Demo Avenue, Block 2",
+        "city": "Bengaluru",
+        "postal_code": "560001",
+        "state": "Karnataka",
+        "country": "India"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13e2"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.642Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:03.711Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13e2"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13e2"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_name": "customer10",
+    "email": "customer10@seedusers.com",
+    "hashed_password": "$argon2id$v=19$m=65536,t=3,p=4$ecFqZkVy8QMxz4sb8OX3WQ$AMQiUjzOSUL6QgKly39bEBqGT03Slm9IHEbrgLTJJuI",
+    "mobile": "9000000010",
+    "role": "customer",
+    "is_verified": true,
+    "addresses": [
+      {
+        "full_name": "Customer 10",
+        "phone_number": "9000000010",
+        "street_address": "50, Seed Residency, Sector 7",
+        "city": "Ahmedabad",
+        "postal_code": "380001",
+        "state": "Gujarat",
+        "country": "India"
+      },
+      {
+        "full_name": "Customer 10",
+        "phone_number": "9000000010",
+        "street_address": "130, Demo Avenue, Block 3",
+        "city": "Mumbai",
+        "postal_code": "400001",
+        "state": "Maharashtra",
+        "country": "India"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13e4"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.645Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:03.712Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13e4"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13e4"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_name": "customer11",
+    "email": "customer11@seedusers.com",
+    "hashed_password": "$argon2id$v=19$m=65536,t=3,p=4$ecFqZkVy8QMxz4sb8OX3WQ$AMQiUjzOSUL6QgKly39bEBqGT03Slm9IHEbrgLTJJuI",
+    "mobile": "9000000011",
+    "role": "customer",
+    "is_verified": true,
+    "addresses": [
+      {
+        "full_name": "Customer 11",
+        "phone_number": "9000000011",
+        "street_address": "51, Seed Residency, Sector 8",
+        "city": "Kolkata",
+        "postal_code": "700001",
+        "state": "West Bengal",
+        "country": "India"
+      },
+      {
+        "full_name": "Customer 11",
+        "phone_number": "9000000011",
+        "street_address": "131, Demo Avenue, Block 4",
+        "city": "Delhi",
+        "postal_code": "110001",
+        "state": "Delhi",
+        "country": "India"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13e6"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.648Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:03.713Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13e6"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13e6"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_name": "customer12",
+    "email": "customer12@seedusers.com",
+    "hashed_password": "$argon2id$v=19$m=65536,t=3,p=4$ecFqZkVy8QMxz4sb8OX3WQ$AMQiUjzOSUL6QgKly39bEBqGT03Slm9IHEbrgLTJJuI",
+    "mobile": "9000000012",
+    "role": "customer",
+    "is_verified": true,
+    "addresses": [
+      {
+        "full_name": "Customer 12",
+        "phone_number": "9000000012",
+        "street_address": "52, Seed Residency, Sector 9",
+        "city": "Bengaluru",
+        "postal_code": "560001",
+        "state": "Karnataka",
+        "country": "India"
+      },
+      {
+        "full_name": "Customer 12",
+        "phone_number": "9000000012",
+        "street_address": "132, Demo Avenue, Block 5",
+        "city": "Hyderabad",
+        "postal_code": "500001",
+        "state": "Telangana",
+        "country": "India"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13e8"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.651Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:03.715Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13e8"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13e8"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_name": "customer13",
+    "email": "customer13@seedusers.com",
+    "hashed_password": "$argon2id$v=19$m=65536,t=3,p=4$ecFqZkVy8QMxz4sb8OX3WQ$AMQiUjzOSUL6QgKly39bEBqGT03Slm9IHEbrgLTJJuI",
+    "mobile": "9000000013",
+    "role": "customer",
+    "is_verified": true,
+    "addresses": [
+      {
+        "full_name": "Customer 13",
+        "phone_number": "9000000013",
+        "street_address": "53, Seed Residency, Sector 10",
+        "city": "Mumbai",
+        "postal_code": "400001",
+        "state": "Maharashtra",
+        "country": "India"
+      },
+      {
+        "full_name": "Customer 13",
+        "phone_number": "9000000013",
+        "street_address": "133, Demo Avenue, Block 6",
+        "city": "Chennai",
+        "postal_code": "600001",
+        "state": "Tamil Nadu",
+        "country": "India"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13ea"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.654Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:03.716Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13ea"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13ea"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_name": "customer14",
+    "email": "customer14@seedusers.com",
+    "hashed_password": "$argon2id$v=19$m=65536,t=3,p=4$ecFqZkVy8QMxz4sb8OX3WQ$AMQiUjzOSUL6QgKly39bEBqGT03Slm9IHEbrgLTJJuI",
+    "mobile": "9000000014",
+    "role": "customer",
+    "is_verified": true,
+    "addresses": [
+      {
+        "full_name": "Customer 14",
+        "phone_number": "9000000014",
+        "street_address": "54, Seed Residency, Sector 11",
+        "city": "Delhi",
+        "postal_code": "110001",
+        "state": "Delhi",
+        "country": "India"
+      },
+      {
+        "full_name": "Customer 14",
+        "phone_number": "9000000014",
+        "street_address": "134, Demo Avenue, Block 7",
+        "city": "Pune",
+        "postal_code": "411001",
+        "state": "Maharashtra",
+        "country": "India"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13ec"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.657Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:03.718Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13ec"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13ec"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_name": "customer15",
+    "email": "customer15@seedusers.com",
+    "hashed_password": "$argon2id$v=19$m=65536,t=3,p=4$ecFqZkVy8QMxz4sb8OX3WQ$AMQiUjzOSUL6QgKly39bEBqGT03Slm9IHEbrgLTJJuI",
+    "mobile": "9000000015",
+    "role": "customer",
+    "is_verified": true,
+    "addresses": [
+      {
+        "full_name": "Customer 15",
+        "phone_number": "9000000015",
+        "street_address": "55, Seed Residency, Sector 12",
+        "city": "Hyderabad",
+        "postal_code": "500001",
+        "state": "Telangana",
+        "country": "India"
+      },
+      {
+        "full_name": "Customer 15",
+        "phone_number": "9000000015",
+        "street_address": "135, Demo Avenue, Block 1",
+        "city": "Ahmedabad",
+        "postal_code": "380001",
+        "state": "Gujarat",
+        "country": "India"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13ee"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.660Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:03.720Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13ee"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13ee"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_name": "customer16",
+    "email": "customer16@seedusers.com",
+    "hashed_password": "$argon2id$v=19$m=65536,t=3,p=4$ecFqZkVy8QMxz4sb8OX3WQ$AMQiUjzOSUL6QgKly39bEBqGT03Slm9IHEbrgLTJJuI",
+    "mobile": "9000000016",
+    "role": "customer",
+    "is_verified": true,
+    "addresses": [
+      {
+        "full_name": "Customer 16",
+        "phone_number": "9000000016",
+        "street_address": "56, Seed Residency, Sector 1",
+        "city": "Chennai",
+        "postal_code": "600001",
+        "state": "Tamil Nadu",
+        "country": "India"
+      },
+      {
+        "full_name": "Customer 16",
+        "phone_number": "9000000016",
+        "street_address": "136, Demo Avenue, Block 2",
+        "city": "Kolkata",
+        "postal_code": "700001",
+        "state": "West Bengal",
+        "country": "India"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13f0"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.663Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:03.721Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13f0"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13f0"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_name": "customer17",
+    "email": "customer17@seedusers.com",
+    "hashed_password": "$argon2id$v=19$m=65536,t=3,p=4$ecFqZkVy8QMxz4sb8OX3WQ$AMQiUjzOSUL6QgKly39bEBqGT03Slm9IHEbrgLTJJuI",
+    "mobile": "9000000017",
+    "role": "customer",
+    "is_verified": true,
+    "addresses": [
+      {
+        "full_name": "Customer 17",
+        "phone_number": "9000000017",
+        "street_address": "57, Seed Residency, Sector 2",
+        "city": "Pune",
+        "postal_code": "411001",
+        "state": "Maharashtra",
+        "country": "India"
+      },
+      {
+        "full_name": "Customer 17",
+        "phone_number": "9000000017",
+        "street_address": "137, Demo Avenue, Block 3",
+        "city": "Bengaluru",
+        "postal_code": "560001",
+        "state": "Karnataka",
+        "country": "India"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13f2"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.666Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:03.723Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13f2"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13f2"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_name": "customer18",
+    "email": "customer18@seedusers.com",
+    "hashed_password": "$argon2id$v=19$m=65536,t=3,p=4$ecFqZkVy8QMxz4sb8OX3WQ$AMQiUjzOSUL6QgKly39bEBqGT03Slm9IHEbrgLTJJuI",
+    "mobile": "9000000018",
+    "role": "customer",
+    "is_verified": true,
+    "addresses": [
+      {
+        "full_name": "Customer 18",
+        "phone_number": "9000000018",
+        "street_address": "58, Seed Residency, Sector 3",
+        "city": "Ahmedabad",
+        "postal_code": "380001",
+        "state": "Gujarat",
+        "country": "India"
+      },
+      {
+        "full_name": "Customer 18",
+        "phone_number": "9000000018",
+        "street_address": "138, Demo Avenue, Block 4",
+        "city": "Mumbai",
+        "postal_code": "400001",
+        "state": "Maharashtra",
+        "country": "India"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13f4"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.669Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:03.724Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13f4"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13f4"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_name": "customer19",
+    "email": "customer19@seedusers.com",
+    "hashed_password": "$argon2id$v=19$m=65536,t=3,p=4$ecFqZkVy8QMxz4sb8OX3WQ$AMQiUjzOSUL6QgKly39bEBqGT03Slm9IHEbrgLTJJuI",
+    "mobile": "9000000019",
+    "role": "customer",
+    "is_verified": true,
+    "addresses": [
+      {
+        "full_name": "Customer 19",
+        "phone_number": "9000000019",
+        "street_address": "59, Seed Residency, Sector 4",
+        "city": "Kolkata",
+        "postal_code": "700001",
+        "state": "West Bengal",
+        "country": "India"
+      },
+      {
+        "full_name": "Customer 19",
+        "phone_number": "9000000019",
+        "street_address": "139, Demo Avenue, Block 5",
+        "city": "Delhi",
+        "postal_code": "110001",
+        "state": "Delhi",
+        "country": "India"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13f6"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.671Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:03.726Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13f6"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13f6"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_name": "customer20",
+    "email": "customer20@seedusers.com",
+    "hashed_password": "$argon2id$v=19$m=65536,t=3,p=4$ecFqZkVy8QMxz4sb8OX3WQ$AMQiUjzOSUL6QgKly39bEBqGT03Slm9IHEbrgLTJJuI",
+    "mobile": "9000000020",
+    "role": "customer",
+    "is_verified": true,
+    "addresses": [
+      {
+        "full_name": "Customer 20",
+        "phone_number": "9000000020",
+        "street_address": "60, Seed Residency, Sector 5",
+        "city": "Bengaluru",
+        "postal_code": "560001",
+        "state": "Karnataka",
+        "country": "India"
+      },
+      {
+        "full_name": "Customer 20",
+        "phone_number": "9000000020",
+        "street_address": "140, Demo Avenue, Block 6",
+        "city": "Hyderabad",
+        "postal_code": "500001",
+        "state": "Telangana",
+        "country": "India"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13f8"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.674Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:03.727Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13f8"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13f8"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_name": "customer21",
+    "email": "customer21@seedusers.com",
+    "hashed_password": "$argon2id$v=19$m=65536,t=3,p=4$ecFqZkVy8QMxz4sb8OX3WQ$AMQiUjzOSUL6QgKly39bEBqGT03Slm9IHEbrgLTJJuI",
+    "mobile": "9000000021",
+    "role": "customer",
+    "is_verified": true,
+    "addresses": [
+      {
+        "full_name": "Customer 21",
+        "phone_number": "9000000021",
+        "street_address": "61, Seed Residency, Sector 6",
+        "city": "Mumbai",
+        "postal_code": "400001",
+        "state": "Maharashtra",
+        "country": "India"
+      },
+      {
+        "full_name": "Customer 21",
+        "phone_number": "9000000021",
+        "street_address": "141, Demo Avenue, Block 7",
+        "city": "Chennai",
+        "postal_code": "600001",
+        "state": "Tamil Nadu",
+        "country": "India"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13fa"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.678Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:03.728Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13fa"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13fa"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_name": "customer22",
+    "email": "customer22@seedusers.com",
+    "hashed_password": "$argon2id$v=19$m=65536,t=3,p=4$ecFqZkVy8QMxz4sb8OX3WQ$AMQiUjzOSUL6QgKly39bEBqGT03Slm9IHEbrgLTJJuI",
+    "mobile": "9000000022",
+    "role": "customer",
+    "is_verified": true,
+    "addresses": [
+      {
+        "full_name": "Customer 22",
+        "phone_number": "9000000022",
+        "street_address": "62, Seed Residency, Sector 7",
+        "city": "Delhi",
+        "postal_code": "110001",
+        "state": "Delhi",
+        "country": "India"
+      },
+      {
+        "full_name": "Customer 22",
+        "phone_number": "9000000022",
+        "street_address": "142, Demo Avenue, Block 1",
+        "city": "Pune",
+        "postal_code": "411001",
+        "state": "Maharashtra",
+        "country": "India"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.778Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:02.924Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_name": "superadmin",
+    "email": "superadmin@seedshop.com",
+    "hashed_password": "$argon2id$v=19$m=65536,t=3,p=4$tDy+e6UqpZDjcCKZkkjeoQ$dS84oL8DSIFhJKXThn/1R0EkJ3TcBNSEJmawM6WrxUc",
+    "mobile": "9100000001",
+    "role": "super_admin",
+    "is_verified": true,
+    "addresses": [
+      {
+        "full_name": "Super Admin",
+        "phone_number": "9100000001",
+        "street_address": "110, Seed Residency, Sector 7",
+        "city": "Delhi",
+        "postal_code": "110001",
+        "state": "Delhi",
+        "country": "India"
+      },
+      {
+        "full_name": "Super Admin",
+        "phone_number": "9100000001",
+        "street_address": "190, Demo Avenue, Block 7",
+        "city": "Pune",
+        "postal_code": "411001",
+        "state": "Maharashtra",
+        "country": "India"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd1402"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.849Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:03.103Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1402"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1402"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_name": "admin01",
+    "email": "admin01@seedshop.com",
+    "hashed_password": "$argon2id$v=19$m=65536,t=3,p=4$lgMnB3h8P7kH5KTx5x3wPw$WwF39oUwCaDjq/i0swrh7OrF59PrQiRaM5lKDyXLdes",
+    "mobile": "9100000002",
+    "role": "admin",
+    "is_verified": true,
+    "addresses": [
+      {
+        "full_name": "Platform Admin",
+        "phone_number": "9100000002",
+        "street_address": "111, Seed Residency, Sector 8",
+        "city": "Hyderabad",
+        "postal_code": "500001",
+        "state": "Telangana",
+        "country": "India"
+      },
+      {
+        "full_name": "Platform Admin",
+        "phone_number": "9100000002",
+        "street_address": "191, Demo Avenue, Block 1",
+        "city": "Ahmedabad",
+        "postal_code": "380001",
+        "state": "Gujarat",
+        "country": "India"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd1403"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.925Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:03.193Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1403"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1403"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_name": "support01",
+    "email": "support01@seedshop.com",
+    "hashed_password": "$argon2id$v=19$m=65536,t=3,p=4$AbDb3HfPmt1pkOl/z+jkww$6Q4kbW42IZzqGQtReIY2RJxF4MI4vJ+x1VOYpl+hw1w",
+    "mobile": "9100000003",
+    "role": "support",
+    "is_verified": true,
+    "addresses": [
+      {
+        "full_name": "Support Desk",
+        "phone_number": "9100000003",
+        "street_address": "112, Seed Residency, Sector 9",
+        "city": "Chennai",
+        "postal_code": "600001",
+        "state": "Tamil Nadu",
+        "country": "India"
+      },
+      {
+        "full_name": "Support Desk",
+        "phone_number": "9100000003",
+        "street_address": "192, Demo Avenue, Block 2",
+        "city": "Kolkata",
+        "postal_code": "700001",
+        "state": "West Bengal",
+        "country": "India"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.993Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:03.270Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_name": "seller01",
+    "email": "seller01@seedshop.com",
+    "hashed_password": "$argon2id$v=19$m=65536,t=3,p=4$Yowm4tSUo+oko3YGs49BUw$UaPAcp4smcs9m0E6wOQxpXiEgZoxojZI6Nv9XhTWcIw",
+    "mobile": "9200000001",
+    "role": "seller",
+    "is_verified": true,
+    "addresses": [
+      {
+        "full_name": "Seller 01",
+        "phone_number": "9200000001",
+        "street_address": "21, Seed Residency, Sector 2",
+        "city": "Mumbai",
+        "postal_code": "400001",
+        "state": "Maharashtra",
+        "country": "India"
+      },
+      {
+        "full_name": "Seller 01",
+        "phone_number": "9200000001",
+        "street_address": "101, Demo Avenue, Block 2",
+        "city": "Chennai",
+        "postal_code": "600001",
+        "state": "Tamil Nadu",
+        "country": "India"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:18.059Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:03.354Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_name": "seller02",
+    "email": "seller02@seedshop.com",
+    "hashed_password": "$argon2id$v=19$m=65536,t=3,p=4$oDuNrnqmsBoQNYP58IYvUg$54enOuva0PyV4YtkcsaulZl7OMyjoqLacXm926yDoSA",
+    "mobile": "9200000002",
+    "role": "seller",
+    "is_verified": true,
+    "addresses": [
+      {
+        "full_name": "Seller 02",
+        "phone_number": "9200000002",
+        "street_address": "22, Seed Residency, Sector 3",
+        "city": "Delhi",
+        "postal_code": "110001",
+        "state": "Delhi",
+        "country": "India"
+      },
+      {
+        "full_name": "Seller 02",
+        "phone_number": "9200000002",
+        "street_address": "102, Demo Avenue, Block 3",
+        "city": "Pune",
+        "postal_code": "411001",
+        "state": "Maharashtra",
+        "country": "India"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:18.123Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:03.432Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_name": "seller03",
+    "email": "seller03@seedshop.com",
+    "hashed_password": "$argon2id$v=19$m=65536,t=3,p=4$qZ1B5ba91uS8hrYJt6kKiA$1AEDO1BamGdE+TtId3ZS/0mU5Rpf6tor/QJeWD2k+DI",
+    "mobile": "9200000003",
+    "role": "seller",
+    "is_verified": true,
+    "addresses": [
+      {
+        "full_name": "Seller 03",
+        "phone_number": "9200000003",
+        "street_address": "23, Seed Residency, Sector 4",
+        "city": "Hyderabad",
+        "postal_code": "500001",
+        "state": "Telangana",
+        "country": "India"
+      },
+      {
+        "full_name": "Seller 03",
+        "phone_number": "9200000003",
+        "street_address": "103, Demo Avenue, Block 4",
+        "city": "Ahmedabad",
+        "postal_code": "380001",
+        "state": "Gujarat",
+        "country": "India"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:18.183Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:03.512Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_name": "seller04",
+    "email": "seller04@seedshop.com",
+    "hashed_password": "$argon2id$v=19$m=65536,t=3,p=4$/9RJE0JblocjNdd9JlVOsg$v56k905my2Gc4gpoRIMnaO7HgqWq03J/67BMTuZ7xWM",
+    "mobile": "9200000004",
+    "role": "seller",
+    "is_verified": true,
+    "addresses": [
+      {
+        "full_name": "Seller 04",
+        "phone_number": "9200000004",
+        "street_address": "24, Seed Residency, Sector 5",
+        "city": "Chennai",
+        "postal_code": "600001",
+        "state": "Tamil Nadu",
+        "country": "India"
+      },
+      {
+        "full_name": "Seller 04",
+        "phone_number": "9200000004",
+        "street_address": "104, Demo Avenue, Block 5",
+        "city": "Kolkata",
+        "postal_code": "700001",
+        "state": "West Bengal",
+        "country": "India"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "69e745124455d2cfc7fd1408"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:18.244Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:03.612Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1408"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1408"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_name": "seller05",
+    "email": "seller05@seedshop.com",
+    "hashed_password": "$argon2id$v=19$m=65536,t=3,p=4$gOF6DoBgv71KyFKH1lJ5lg$B1lYjj2NEm2sBwlPKVX4SiakoHW8Fky16URm0gImWOc",
+    "mobile": "9200000005",
+    "role": "seller",
+    "is_verified": true,
+    "addresses": [
+      {
+        "full_name": "Seller 05",
+        "phone_number": "9200000005",
+        "street_address": "25, Seed Residency, Sector 6",
+        "city": "Pune",
+        "postal_code": "411001",
+        "state": "Maharashtra",
+        "country": "India"
+      },
+      {
+        "full_name": "Seller 05",
+        "phone_number": "9200000005",
+        "street_address": "105, Demo Avenue, Block 6",
+        "city": "Bengaluru",
+        "postal_code": "560001",
+        "state": "Karnataka",
+        "country": "India"
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "69e745124455d2cfc7fd1409"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:18.308Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:03.694Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1409"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1409"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_name": "seller06",
+    "email": "seller06@seedshop.com",
+    "hashed_password": "$argon2id$v=19$m=65536,t=3,p=4$0ybmSyaS79qgvpcysrdtQQ$gA4d5EXMUVP4X7po1kI10Vm/PHj8UC/mw7pw/bx2vUA",
+    "mobile": "9200000006",
+    "role": "seller",
+    "is_verified": true,
+    "addresses": [
+      {
+        "full_name": "Seller 06",
+        "phone_number": "9200000006",
+        "street_address": "26, Seed Residency, Sector 7",
+        "city": "Ahmedabad",
+        "postal_code": "380001",
+        "state": "Gujarat",
+        "country": "India"
+      },
+      {
+        "full_name": "Seller 06",
+        "phone_number": "9200000006",
+        "street_address": "106, Demo Avenue, Block 7",
+        "city": "Mumbai",
+        "postal_code": "400001",
+        "state": "Maharashtra",
+        "country": "India"
+      }
+    ]
+  }
+]

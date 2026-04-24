@@ -1,0 +1,1010 @@
+[
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13d1"
+    },
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d0"
+    },
+    "items": [
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1336"
+        },
+        "sku": "SEED-HOMEAN-FURNIT-001-P",
+        "quantity": 3
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1337"
+        },
+        "sku": "SEED-HOMEAN-HOMEDE-001-S",
+        "quantity": 3
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1338"
+        },
+        "sku": "SEED-BEAUTY-HAIRCA-001-P",
+        "quantity": 3
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1339"
+        },
+        "sku": "SEED-BEAUTY-MAKEUP-001-S",
+        "quantity": 3
+      }
+    ],
+    "version": 1,
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.617Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13d3"
+    },
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d2"
+    },
+    "items": [
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd133d"
+        },
+        "sku": "SEED-SPORTS-FITNES-001-S",
+        "quantity": 2
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd133e"
+        },
+        "sku": "SEED-BOOKS-CHILDR-001-P",
+        "quantity": 2
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd133f"
+        },
+        "sku": "SEED-BOOKS-FICTIO-001-S",
+        "quantity": 2
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1340"
+        },
+        "sku": "SEED-BOOKS-NONFIC-001-P",
+        "quantity": 2
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1341"
+        },
+        "sku": "SEED-TOYSAN-ACTION-001-S",
+        "quantity": 2
+      }
+    ],
+    "version": 1,
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.620Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13d5"
+    },
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d4"
+    },
+    "items": [
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1344"
+        },
+        "sku": "SEED-AUTOMO-CARACC-001-P",
+        "quantity": 3
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1345"
+        },
+        "sku": "SEED-AUTOMO-MOTORC-001-S",
+        "quantity": 3
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1346"
+        },
+        "sku": "SEED-AUTOMO-TOOLSA-001-P",
+        "quantity": 3
+      }
+    ],
+    "version": 1,
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.623Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13d7"
+    },
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d6"
+    },
+    "items": [
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd134b"
+        },
+        "sku": "SEED-GROCER-ORGANI-001-S",
+        "quantity": 2
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd134c"
+        },
+        "sku": "SEED-GROCER-SNACKS-001-P",
+        "quantity": 2
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd134d"
+        },
+        "sku": "SEED-PETSUP-AQUARI-001-S",
+        "quantity": 2
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd134e"
+        },
+        "sku": "SEED-PETSUP-CATSUP-001-P",
+        "quantity": 2
+      }
+    ],
+    "version": 1,
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.626Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13d9"
+    },
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d8"
+    },
+    "items": [
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1352"
+        },
+        "sku": "SEED-JEWELR-RINGS-001-P",
+        "quantity": 3
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1353"
+        },
+        "sku": "SEED-WATCHE-MENWAT-001-S",
+        "quantity": 3
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1354"
+        },
+        "sku": "SEED-WATCHE-SMARTW-001-P",
+        "quantity": 3
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1355"
+        },
+        "sku": "SEED-WATCHE-WOMENW-001-S",
+        "quantity": 3
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1356"
+        },
+        "sku": "SEED-OFFICE-OFFICE-001-P",
+        "quantity": 3
+      }
+    ],
+    "version": 1,
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.628Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13db"
+    },
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13da"
+    },
+    "items": [
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1359"
+        },
+        "sku": "SEED-BABYPR-BABYCL-001-S",
+        "quantity": 2
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd135a"
+        },
+        "sku": "SEED-BABYPR-DIAPER-001-P",
+        "quantity": 2
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd135b"
+        },
+        "sku": "SEED-BABYPR-FEEDIN-001-S",
+        "quantity": 2
+      }
+    ],
+    "version": 1,
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.631Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13dd"
+    },
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13dc"
+    },
+    "items": [
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1360"
+        },
+        "sku": "SEED-MUSIC-INSTRU-001-P",
+        "quantity": 3
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1361"
+        },
+        "sku": "SEED-MUSIC-VINYLR-001-S",
+        "quantity": 3
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1362"
+        },
+        "sku": "SEED-GAMING-CONSOL-001-P",
+        "quantity": 3
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1363"
+        },
+        "sku": "SEED-GAMING-GAMING-001-S",
+        "quantity": 3
+      }
+    ],
+    "version": 1,
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.634Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13df"
+    },
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13de"
+    },
+    "items": [
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1367"
+        },
+        "sku": "SEED-TRAVEL-TRAVEL-001-S",
+        "quantity": 2
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1368"
+        },
+        "sku": "SEED-ARTAND-CRAFTS-001-P",
+        "quantity": 2
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1369"
+        },
+        "sku": "SEED-ARTAND-DRAWIN-001-S",
+        "quantity": 2
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd136a"
+        },
+        "sku": "SEED-ARTAND-PAINTI-001-P",
+        "quantity": 2
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd136b"
+        },
+        "sku": "SEED-ELECTR-CAMERA-002-S",
+        "quantity": 2
+      }
+    ],
+    "version": 1,
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.638Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13e1"
+    },
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13e0"
+    },
+    "items": [
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd136e"
+        },
+        "sku": "SEED-FASHIO-FOOTWE-002-P",
+        "quantity": 3
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd136f"
+        },
+        "sku": "SEED-FASHIO-MENCLO-002-S",
+        "quantity": 3
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1370"
+        },
+        "sku": "SEED-FASHIO-WOMENC-002-P",
+        "quantity": 3
+      }
+    ],
+    "version": 1,
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.641Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13e3"
+    },
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13e2"
+    },
+    "items": [
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1375"
+        },
+        "sku": "SEED-BEAUTY-MAKEUP-002-S",
+        "quantity": 2
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1376"
+        },
+        "sku": "SEED-BEAUTY-SKINCA-002-P",
+        "quantity": 2
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1377"
+        },
+        "sku": "SEED-SPORTS-CAMPIN-002-S",
+        "quantity": 2
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1378"
+        },
+        "sku": "SEED-SPORTS-CYCLIN-002-P",
+        "quantity": 2
+      }
+    ],
+    "version": 1,
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.644Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13e5"
+    },
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13e4"
+    },
+    "items": [
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd137c"
+        },
+        "sku": "SEED-BOOKS-NONFIC-002-P",
+        "quantity": 3
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd137d"
+        },
+        "sku": "SEED-TOYSAN-ACTION-002-S",
+        "quantity": 3
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd137e"
+        },
+        "sku": "SEED-TOYSAN-BOARDG-002-P",
+        "quantity": 3
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd137f"
+        },
+        "sku": "SEED-TOYSAN-EDUCAT-002-S",
+        "quantity": 3
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1380"
+        },
+        "sku": "SEED-AUTOMO-CARACC-002-P",
+        "quantity": 3
+      }
+    ],
+    "version": 1,
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.646Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13e7"
+    },
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13e6"
+    },
+    "items": [
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1383"
+        },
+        "sku": "SEED-HEALTH-MEDICA-002-S",
+        "quantity": 2
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1384"
+        },
+        "sku": "SEED-HEALTH-SUPPLE-002-P",
+        "quantity": 2
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1385"
+        },
+        "sku": "SEED-HEALTH-WELLNE-002-S",
+        "quantity": 2
+      }
+    ],
+    "version": 1,
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.650Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13e9"
+    },
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13e8"
+    },
+    "items": [
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd138a"
+        },
+        "sku": "SEED-PETSUP-CATSUP-002-P",
+        "quantity": 3
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd138b"
+        },
+        "sku": "SEED-PETSUP-DOGSUP-002-S",
+        "quantity": 3
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd138c"
+        },
+        "sku": "SEED-JEWELR-BRACEL-002-P",
+        "quantity": 3
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd138d"
+        },
+        "sku": "SEED-JEWELR-NECKLA-002-S",
+        "quantity": 3
+      }
+    ],
+    "version": 1,
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.653Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13eb"
+    },
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13ea"
+    },
+    "items": [
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1391"
+        },
+        "sku": "SEED-WATCHE-WOMENW-002-S",
+        "quantity": 2
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1392"
+        },
+        "sku": "SEED-OFFICE-OFFICE-002-P",
+        "quantity": 2
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1393"
+        },
+        "sku": "SEED-OFFICE-PRINTE-002-S",
+        "quantity": 2
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1394"
+        },
+        "sku": "SEED-OFFICE-STATIO-002-P",
+        "quantity": 2
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1395"
+        },
+        "sku": "SEED-BABYPR-BABYCL-002-S",
+        "quantity": 2
+      }
+    ],
+    "version": 1,
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.655Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13ed"
+    },
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13ec"
+    },
+    "items": [
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1398"
+        },
+        "sku": "SEED-GARDEN-GARDEN-002-P",
+        "quantity": 3
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1399"
+        },
+        "sku": "SEED-GARDEN-OUTDOO-002-S",
+        "quantity": 3
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd139a"
+        },
+        "sku": "SEED-GARDEN-PLANTS-002-P",
+        "quantity": 3
+      }
+    ],
+    "version": 1,
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.658Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13ef"
+    },
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13ee"
+    },
+    "items": [
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd139f"
+        },
+        "sku": "SEED-GAMING-GAMING-002-S",
+        "quantity": 2
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd13a0"
+        },
+        "sku": "SEED-GAMING-PCGAMI-002-P",
+        "quantity": 2
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd13a1"
+        },
+        "sku": "SEED-TRAVEL-BACKPA-002-S",
+        "quantity": 2
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd13a2"
+        },
+        "sku": "SEED-TRAVEL-LUGGAG-002-P",
+        "quantity": 2
+      }
+    ],
+    "version": 1,
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.661Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13f1"
+    },
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13f0"
+    },
+    "items": [
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd13a6"
+        },
+        "sku": "SEED-ARTAND-PAINTI-002-P",
+        "quantity": 3
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd13a7"
+        },
+        "sku": "SEED-ELECTR-CAMERA-003-S",
+        "quantity": 3
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd13a8"
+        },
+        "sku": "SEED-ELECTR-LAPTOP-003-P",
+        "quantity": 3
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd13a9"
+        },
+        "sku": "SEED-ELECTR-SMARTP-003-S",
+        "quantity": 3
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd13aa"
+        },
+        "sku": "SEED-FASHIO-FOOTWE-003-P",
+        "quantity": 3
+      }
+    ],
+    "version": 1,
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.664Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13f3"
+    },
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13f2"
+    },
+    "items": [
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd13ad"
+        },
+        "sku": "SEED-HOMEAN-COOKWA-003-S",
+        "quantity": 2
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd13ae"
+        },
+        "sku": "SEED-HOMEAN-FURNIT-003-P",
+        "quantity": 2
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd13af"
+        },
+        "sku": "SEED-HOMEAN-HOMEDE-003-S",
+        "quantity": 2
+      }
+    ],
+    "version": 1,
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.667Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13f5"
+    },
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13f4"
+    },
+    "items": [
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd13b4"
+        },
+        "sku": "SEED-SPORTS-CYCLIN-003-P",
+        "quantity": 3
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd13b5"
+        },
+        "sku": "SEED-SPORTS-FITNES-003-S",
+        "quantity": 3
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd13b6"
+        },
+        "sku": "SEED-BOOKS-CHILDR-003-P",
+        "quantity": 3
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd13b7"
+        },
+        "sku": "SEED-BOOKS-FICTIO-003-S",
+        "quantity": 3
+      }
+    ],
+    "version": 1,
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.670Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13f7"
+    },
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13f6"
+    },
+    "items": [
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd13bb"
+        },
+        "sku": "SEED-TOYSAN-EDUCAT-003-S",
+        "quantity": 2
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd13bc"
+        },
+        "sku": "SEED-AUTOMO-CARACC-003-P",
+        "quantity": 2
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd13bd"
+        },
+        "sku": "SEED-AUTOMO-MOTORC-003-S",
+        "quantity": 2
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd13be"
+        },
+        "sku": "SEED-AUTOMO-TOOLSA-003-P",
+        "quantity": 2
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd13bf"
+        },
+        "sku": "SEED-HEALTH-MEDICA-003-S",
+        "quantity": 2
+      }
+    ],
+    "version": 1,
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.673Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13f9"
+    },
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13f8"
+    },
+    "items": [
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd13c2"
+        },
+        "sku": "SEED-GROCER-BEVERA-003-P",
+        "quantity": 3
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd13c3"
+        },
+        "sku": "SEED-GROCER-ORGANI-003-S",
+        "quantity": 3
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd13c4"
+        },
+        "sku": "SEED-GROCER-SNACKS-003-P",
+        "quantity": 3
+      }
+    ],
+    "version": 1,
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.676Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13fb"
+    },
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13fa"
+    },
+    "items": [
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd13c9"
+        },
+        "sku": "SEED-JEWELR-NECKLA-003-S",
+        "quantity": 2
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd13ca"
+        },
+        "sku": "SEED-JEWELR-RINGS-003-P",
+        "quantity": 2
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd13cb"
+        },
+        "sku": "SEED-WATCHE-MENWAT-003-S",
+        "quantity": 2
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd13cc"
+        },
+        "sku": "SEED-WATCHE-SMARTW-003-P",
+        "quantity": 2
+      }
+    ],
+    "version": 1,
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.680Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13fd"
+    },
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13fc"
+    },
+    "items": [
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1330"
+        },
+        "sku": "SEED-ELECTR-LAPTOP-001-P",
+        "quantity": 3
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1331"
+        },
+        "sku": "SEED-ELECTR-SMARTP-001-S",
+        "quantity": 3
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1332"
+        },
+        "sku": "SEED-FASHIO-FOOTWE-001-P",
+        "quantity": 3
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1333"
+        },
+        "sku": "SEED-FASHIO-MENCLO-001-S",
+        "quantity": 3
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1334"
+        },
+        "sku": "SEED-FASHIO-WOMENC-001-P",
+        "quantity": 3
+      }
+    ],
+    "version": 1,
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.682Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd13ff"
+    },
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13fe"
+    },
+    "items": [
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1337"
+        },
+        "sku": "SEED-HOMEAN-HOMEDE-001-S",
+        "quantity": 2
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1338"
+        },
+        "sku": "SEED-BEAUTY-HAIRCA-001-P",
+        "quantity": 2
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1339"
+        },
+        "sku": "SEED-BEAUTY-MAKEUP-001-S",
+        "quantity": 2
+      }
+    ],
+    "version": 1,
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.686Z"
+    }
+  }
+]

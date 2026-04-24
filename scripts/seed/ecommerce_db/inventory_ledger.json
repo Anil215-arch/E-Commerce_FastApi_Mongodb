@@ -1,0 +1,1370 @@
+[
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd166d"
+    },
+    "created_at": {
+      "$date": "2026-04-19T09:40:05.537Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-19T09:40:05.537Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1341"
+    },
+    "sku": "SEED-TOYSAN-ACTION-001-S",
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "actor_user_id": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "owner_seller_id": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "request_id": "seed-ledger-001-01",
+    "delta": 10,
+    "previous_stock": 6,
+    "new_stock": 16,
+    "reason": "Seeded inventory movement for dashboard and audit testing."
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd166e"
+    },
+    "created_at": {
+      "$date": "2026-04-18T09:37:05.537Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-18T09:37:05.537Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1341"
+    },
+    "sku": "SEED-TOYSAN-ACTION-001-P",
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "actor_user_id": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "owner_seller_id": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "request_id": "seed-ledger-001-02",
+    "delta": -3,
+    "previous_stock": 12,
+    "new_stock": 9,
+    "reason": "Seeded inventory movement for dashboard and audit testing."
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd166f"
+    },
+    "created_at": {
+      "$date": "2026-04-17T09:34:05.538Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-17T09:34:05.538Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd137d"
+    },
+    "sku": "SEED-TOYSAN-ACTION-002-S",
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "actor_user_id": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "owner_seller_id": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "request_id": "seed-ledger-002-01",
+    "delta": -3,
+    "previous_stock": 20,
+    "new_stock": 17,
+    "reason": "Seeded inventory movement for dashboard and audit testing."
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1670"
+    },
+    "created_at": {
+      "$date": "2026-04-16T09:31:05.538Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-16T09:31:05.538Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd137d"
+    },
+    "sku": "SEED-TOYSAN-ACTION-002-P",
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "actor_user_id": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "owner_seller_id": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "request_id": "seed-ledger-002-02",
+    "delta": 10,
+    "previous_stock": 0,
+    "new_stock": 10,
+    "reason": "Seeded inventory movement for dashboard and audit testing."
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1671"
+    },
+    "created_at": {
+      "$date": "2026-04-15T09:28:05.539Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-15T09:28:05.539Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd13b9"
+    },
+    "sku": "SEED-TOYSAN-ACTION-003-S",
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "actor_user_id": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "owner_seller_id": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "request_id": "seed-ledger-003-01",
+    "delta": 10,
+    "previous_stock": 8,
+    "new_stock": 18,
+    "reason": "Seeded inventory movement for dashboard and audit testing."
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1672"
+    },
+    "created_at": {
+      "$date": "2026-04-14T09:25:05.539Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-14T09:25:05.539Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd13b9"
+    },
+    "sku": "SEED-TOYSAN-ACTION-003-P",
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "actor_user_id": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "owner_seller_id": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "request_id": "seed-ledger-003-02",
+    "delta": -3,
+    "previous_stock": 14,
+    "new_stock": 11,
+    "reason": "Seeded inventory movement for dashboard and audit testing."
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1673"
+    },
+    "created_at": {
+      "$date": "2026-04-13T09:22:05.540Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-13T09:22:05.540Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd134d"
+    },
+    "sku": "SEED-PETSUP-AQUARI-001-S",
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "actor_user_id": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "owner_seller_id": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "request_id": "seed-ledger-004-01",
+    "delta": -3,
+    "previous_stock": 19,
+    "new_stock": 16,
+    "reason": "Seeded inventory movement for dashboard and audit testing."
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1674"
+    },
+    "created_at": {
+      "$date": "2026-04-12T09:19:05.540Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-12T09:19:05.540Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd134d"
+    },
+    "sku": "SEED-PETSUP-AQUARI-001-P",
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "actor_user_id": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "owner_seller_id": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "request_id": "seed-ledger-004-02",
+    "delta": 10,
+    "previous_stock": 0,
+    "new_stock": 10,
+    "reason": "Seeded inventory movement for dashboard and audit testing."
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1675"
+    },
+    "created_at": {
+      "$date": "2026-04-11T09:16:05.541Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-11T09:16:05.541Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1408"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1408"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1389"
+    },
+    "sku": "SEED-PETSUP-AQUARI-002-S",
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1408"
+    },
+    "actor_user_id": {
+      "$oid": "69e745124455d2cfc7fd1408"
+    },
+    "owner_seller_id": {
+      "$oid": "69e745124455d2cfc7fd1408"
+    },
+    "request_id": "seed-ledger-005-01",
+    "delta": 10,
+    "previous_stock": 7,
+    "new_stock": 17,
+    "reason": "Seeded inventory movement for dashboard and audit testing."
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1676"
+    },
+    "created_at": {
+      "$date": "2026-04-10T09:13:05.541Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-10T09:13:05.541Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1408"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1408"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1389"
+    },
+    "sku": "SEED-PETSUP-AQUARI-002-P",
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1408"
+    },
+    "actor_user_id": {
+      "$oid": "69e745124455d2cfc7fd1408"
+    },
+    "owner_seller_id": {
+      "$oid": "69e745124455d2cfc7fd1408"
+    },
+    "request_id": "seed-ledger-005-02",
+    "delta": -3,
+    "previous_stock": 13,
+    "new_stock": 10,
+    "reason": "Seeded inventory movement for dashboard and audit testing."
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1677"
+    },
+    "created_at": {
+      "$date": "2026-04-09T09:10:05.541Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-09T09:10:05.541Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1409"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1409"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd13c5"
+    },
+    "sku": "SEED-PETSUP-AQUARI-003-S",
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1409"
+    },
+    "actor_user_id": {
+      "$oid": "69e745124455d2cfc7fd1409"
+    },
+    "owner_seller_id": {
+      "$oid": "69e745124455d2cfc7fd1409"
+    },
+    "request_id": "seed-ledger-006-01",
+    "delta": -3,
+    "previous_stock": 21,
+    "new_stock": 18,
+    "reason": "Seeded inventory movement for dashboard and audit testing."
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1678"
+    },
+    "created_at": {
+      "$date": "2026-04-08T09:07:05.542Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-08T09:07:05.542Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1409"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1409"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd13c5"
+    },
+    "sku": "SEED-PETSUP-AQUARI-003-P",
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1409"
+    },
+    "actor_user_id": {
+      "$oid": "69e745124455d2cfc7fd1409"
+    },
+    "owner_seller_id": {
+      "$oid": "69e745124455d2cfc7fd1409"
+    },
+    "request_id": "seed-ledger-006-02",
+    "delta": 10,
+    "previous_stock": 1,
+    "new_stock": 11,
+    "reason": "Seeded inventory movement for dashboard and audit testing."
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1679"
+    },
+    "created_at": {
+      "$date": "2026-04-07T09:04:05.542Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-07T09:04:05.542Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd135f"
+    },
+    "sku": "SEED-MUSIC-AUDIOA-001-S",
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "actor_user_id": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "owner_seller_id": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "request_id": "seed-ledger-007-01",
+    "delta": 10,
+    "previous_stock": 6,
+    "new_stock": 16,
+    "reason": "Seeded inventory movement for dashboard and audit testing."
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd167a"
+    },
+    "created_at": {
+      "$date": "2026-04-06T09:01:05.543Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-06T09:01:05.543Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd135f"
+    },
+    "sku": "SEED-MUSIC-AUDIOA-001-P",
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "actor_user_id": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "owner_seller_id": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "request_id": "seed-ledger-007-02",
+    "delta": -3,
+    "previous_stock": 12,
+    "new_stock": 9,
+    "reason": "Seeded inventory movement for dashboard and audit testing."
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd167b"
+    },
+    "created_at": {
+      "$date": "2026-04-05T08:58:05.544Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-05T08:58:05.544Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd139b"
+    },
+    "sku": "SEED-MUSIC-AUDIOA-002-S",
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "actor_user_id": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "owner_seller_id": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "request_id": "seed-ledger-008-01",
+    "delta": -3,
+    "previous_stock": 20,
+    "new_stock": 17,
+    "reason": "Seeded inventory movement for dashboard and audit testing."
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd167c"
+    },
+    "created_at": {
+      "$date": "2026-04-04T08:55:05.544Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-04T08:55:05.544Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd139b"
+    },
+    "sku": "SEED-MUSIC-AUDIOA-002-P",
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "actor_user_id": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "owner_seller_id": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "request_id": "seed-ledger-008-02",
+    "delta": 10,
+    "previous_stock": 0,
+    "new_stock": 10,
+    "reason": "Seeded inventory movement for dashboard and audit testing."
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd167d"
+    },
+    "created_at": {
+      "$date": "2026-04-03T08:52:05.544Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-03T08:52:05.544Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1359"
+    },
+    "sku": "SEED-BABYPR-BABYCL-001-S",
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "actor_user_id": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "owner_seller_id": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "request_id": "seed-ledger-009-01",
+    "delta": 10,
+    "previous_stock": 6,
+    "new_stock": 16,
+    "reason": "Seeded inventory movement for dashboard and audit testing."
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd167e"
+    },
+    "created_at": {
+      "$date": "2026-04-02T08:49:05.545Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-02T08:49:05.545Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1359"
+    },
+    "sku": "SEED-BABYPR-BABYCL-001-P",
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "actor_user_id": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "owner_seller_id": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "request_id": "seed-ledger-009-02",
+    "delta": -3,
+    "previous_stock": 12,
+    "new_stock": 9,
+    "reason": "Seeded inventory movement for dashboard and audit testing."
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd167f"
+    },
+    "created_at": {
+      "$date": "2026-04-01T08:46:05.545Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-01T08:46:05.545Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1395"
+    },
+    "sku": "SEED-BABYPR-BABYCL-002-S",
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "actor_user_id": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "owner_seller_id": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "request_id": "seed-ledger-010-01",
+    "delta": -3,
+    "previous_stock": 20,
+    "new_stock": 17,
+    "reason": "Seeded inventory movement for dashboard and audit testing."
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1680"
+    },
+    "created_at": {
+      "$date": "2026-04-20T08:43:05.546Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-20T08:43:05.546Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1395"
+    },
+    "sku": "SEED-BABYPR-BABYCL-002-P",
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "actor_user_id": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "owner_seller_id": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "request_id": "seed-ledger-010-02",
+    "delta": 10,
+    "previous_stock": 0,
+    "new_stock": 10,
+    "reason": "Seeded inventory movement for dashboard and audit testing."
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1681"
+    },
+    "created_at": {
+      "$date": "2026-04-19T08:40:05.546Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-19T08:40:05.546Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1408"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1408"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1365"
+    },
+    "sku": "SEED-TRAVEL-BACKPA-001-S",
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1408"
+    },
+    "actor_user_id": {
+      "$oid": "69e745124455d2cfc7fd1408"
+    },
+    "owner_seller_id": {
+      "$oid": "69e745124455d2cfc7fd1408"
+    },
+    "request_id": "seed-ledger-011-01",
+    "delta": 10,
+    "previous_stock": 6,
+    "new_stock": 16,
+    "reason": "Seeded inventory movement for dashboard and audit testing."
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1682"
+    },
+    "created_at": {
+      "$date": "2026-04-18T08:37:05.547Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-18T08:37:05.547Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1408"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1408"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1365"
+    },
+    "sku": "SEED-TRAVEL-BACKPA-001-P",
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1408"
+    },
+    "actor_user_id": {
+      "$oid": "69e745124455d2cfc7fd1408"
+    },
+    "owner_seller_id": {
+      "$oid": "69e745124455d2cfc7fd1408"
+    },
+    "request_id": "seed-ledger-011-02",
+    "delta": -3,
+    "previous_stock": 12,
+    "new_stock": 9,
+    "reason": "Seeded inventory movement for dashboard and audit testing."
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1683"
+    },
+    "created_at": {
+      "$date": "2026-04-17T08:34:05.547Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-17T08:34:05.547Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1409"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1409"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd13a1"
+    },
+    "sku": "SEED-TRAVEL-BACKPA-002-S",
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1409"
+    },
+    "actor_user_id": {
+      "$oid": "69e745124455d2cfc7fd1409"
+    },
+    "owner_seller_id": {
+      "$oid": "69e745124455d2cfc7fd1409"
+    },
+    "request_id": "seed-ledger-012-01",
+    "delta": -3,
+    "previous_stock": 20,
+    "new_stock": 17,
+    "reason": "Seeded inventory movement for dashboard and audit testing."
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1684"
+    },
+    "created_at": {
+      "$date": "2026-04-16T08:31:05.548Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-16T08:31:05.548Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1409"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1409"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd13a1"
+    },
+    "sku": "SEED-TRAVEL-BACKPA-002-P",
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1409"
+    },
+    "actor_user_id": {
+      "$oid": "69e745124455d2cfc7fd1409"
+    },
+    "owner_seller_id": {
+      "$oid": "69e745124455d2cfc7fd1409"
+    },
+    "request_id": "seed-ledger-012-02",
+    "delta": 10,
+    "previous_stock": 0,
+    "new_stock": 10,
+    "reason": "Seeded inventory movement for dashboard and audit testing."
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1685"
+    },
+    "created_at": {
+      "$date": "2026-04-15T08:28:05.548Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-15T08:28:05.548Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd134a"
+    },
+    "sku": "SEED-GROCER-BEVERA-001-S",
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "actor_user_id": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "owner_seller_id": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "request_id": "seed-ledger-013-01",
+    "delta": 10,
+    "previous_stock": 6,
+    "new_stock": 16,
+    "reason": "Seeded inventory movement for dashboard and audit testing."
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1686"
+    },
+    "created_at": {
+      "$date": "2026-04-14T08:25:05.549Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-14T08:25:05.549Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd134a"
+    },
+    "sku": "SEED-GROCER-BEVERA-001-P",
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "actor_user_id": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "owner_seller_id": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "request_id": "seed-ledger-013-02",
+    "delta": -3,
+    "previous_stock": 12,
+    "new_stock": 9,
+    "reason": "Seeded inventory movement for dashboard and audit testing."
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1687"
+    },
+    "created_at": {
+      "$date": "2026-04-13T08:22:05.549Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-13T08:22:05.549Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1386"
+    },
+    "sku": "SEED-GROCER-BEVERA-002-S",
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "actor_user_id": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "owner_seller_id": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "request_id": "seed-ledger-014-01",
+    "delta": -3,
+    "previous_stock": 20,
+    "new_stock": 17,
+    "reason": "Seeded inventory movement for dashboard and audit testing."
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1688"
+    },
+    "created_at": {
+      "$date": "2026-04-12T08:19:05.550Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-12T08:19:05.550Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1386"
+    },
+    "sku": "SEED-GROCER-BEVERA-002-P",
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "actor_user_id": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "owner_seller_id": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "request_id": "seed-ledger-014-02",
+    "delta": 10,
+    "previous_stock": 0,
+    "new_stock": 10,
+    "reason": "Seeded inventory movement for dashboard and audit testing."
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1689"
+    },
+    "created_at": {
+      "$date": "2026-04-11T08:16:05.550Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-11T08:16:05.550Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd13c2"
+    },
+    "sku": "SEED-GROCER-BEVERA-003-S",
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "actor_user_id": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "owner_seller_id": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "request_id": "seed-ledger-015-01",
+    "delta": 10,
+    "previous_stock": 8,
+    "new_stock": 18,
+    "reason": "Seeded inventory movement for dashboard and audit testing."
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd168a"
+    },
+    "created_at": {
+      "$date": "2026-04-10T08:13:05.551Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-10T08:13:05.551Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd13c2"
+    },
+    "sku": "SEED-GROCER-BEVERA-003-P",
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "actor_user_id": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "owner_seller_id": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "request_id": "seed-ledger-015-02",
+    "delta": -3,
+    "previous_stock": 14,
+    "new_stock": 11,
+    "reason": "Seeded inventory movement for dashboard and audit testing."
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd168b"
+    },
+    "created_at": {
+      "$date": "2026-04-09T08:10:05.551Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-09T08:10:05.551Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1342"
+    },
+    "sku": "SEED-TOYSAN-BOARDG-001-S",
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "actor_user_id": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "owner_seller_id": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "request_id": "seed-ledger-016-01",
+    "delta": -3,
+    "previous_stock": 19,
+    "new_stock": 16,
+    "reason": "Seeded inventory movement for dashboard and audit testing."
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd168c"
+    },
+    "created_at": {
+      "$date": "2026-04-08T08:07:05.552Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-08T08:07:05.552Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1342"
+    },
+    "sku": "SEED-TOYSAN-BOARDG-001-P",
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "actor_user_id": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "owner_seller_id": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "request_id": "seed-ledger-016-02",
+    "delta": 10,
+    "previous_stock": 0,
+    "new_stock": 10,
+    "reason": "Seeded inventory movement for dashboard and audit testing."
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd168d"
+    },
+    "created_at": {
+      "$date": "2026-04-07T08:04:05.552Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-07T08:04:05.552Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1408"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1408"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd137e"
+    },
+    "sku": "SEED-TOYSAN-BOARDG-002-S",
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1408"
+    },
+    "actor_user_id": {
+      "$oid": "69e745124455d2cfc7fd1408"
+    },
+    "owner_seller_id": {
+      "$oid": "69e745124455d2cfc7fd1408"
+    },
+    "request_id": "seed-ledger-017-01",
+    "delta": 10,
+    "previous_stock": 7,
+    "new_stock": 17,
+    "reason": "Seeded inventory movement for dashboard and audit testing."
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd168e"
+    },
+    "created_at": {
+      "$date": "2026-04-06T08:01:05.552Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-06T08:01:05.552Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1408"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1408"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd137e"
+    },
+    "sku": "SEED-TOYSAN-BOARDG-002-P",
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1408"
+    },
+    "actor_user_id": {
+      "$oid": "69e745124455d2cfc7fd1408"
+    },
+    "owner_seller_id": {
+      "$oid": "69e745124455d2cfc7fd1408"
+    },
+    "request_id": "seed-ledger-017-02",
+    "delta": -3,
+    "previous_stock": 13,
+    "new_stock": 10,
+    "reason": "Seeded inventory movement for dashboard and audit testing."
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd168f"
+    },
+    "created_at": {
+      "$date": "2026-04-05T07:58:05.553Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-05T07:58:05.553Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1409"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1409"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd13ba"
+    },
+    "sku": "SEED-TOYSAN-BOARDG-003-S",
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1409"
+    },
+    "actor_user_id": {
+      "$oid": "69e745124455d2cfc7fd1409"
+    },
+    "owner_seller_id": {
+      "$oid": "69e745124455d2cfc7fd1409"
+    },
+    "request_id": "seed-ledger-018-01",
+    "delta": -3,
+    "previous_stock": 21,
+    "new_stock": 18,
+    "reason": "Seeded inventory movement for dashboard and audit testing."
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1690"
+    },
+    "created_at": {
+      "$date": "2026-04-04T07:55:05.553Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-04T07:55:05.553Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1409"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1409"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd13ba"
+    },
+    "sku": "SEED-TOYSAN-BOARDG-003-P",
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1409"
+    },
+    "actor_user_id": {
+      "$oid": "69e745124455d2cfc7fd1409"
+    },
+    "owner_seller_id": {
+      "$oid": "69e745124455d2cfc7fd1409"
+    },
+    "request_id": "seed-ledger-018-02",
+    "delta": 10,
+    "previous_stock": 1,
+    "new_stock": 11,
+    "reason": "Seeded inventory movement for dashboard and audit testing."
+  }
+]

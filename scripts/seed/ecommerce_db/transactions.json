@@ -1,0 +1,380 @@
+[
+  {
+    "_id": {
+      "$oid": "69e745124455d2cfc7fd140a"
+    },
+    "created_at": {
+      "$date": "2026-03-07T09:43:04.032Z"
+    },
+    "updated_at": {
+      "$date": "2026-03-07T09:48:04.032Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d0"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d0"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d0"
+    },
+    "checkout_batch_id": "seed-checkout-completed-batch",
+    "amount": 8082,
+    "refunded_amount": 0,
+    "status": "SUCCESS",
+    "payment_method": "UPI",
+    "gateway_transaction_id": "seed-gateway-cmp-001",
+    "allocations": [
+      {
+        "order_id": {
+          "$oid": "69e745124455d2cfc7fd140b"
+        },
+        "seller_id": {
+          "$oid": "69e745114455d2cfc7fd1404"
+        },
+        "amount": 5540,
+        "refunded_amount": 0
+      },
+      {
+        "order_id": {
+          "$oid": "69e745124455d2cfc7fd140d"
+        },
+        "seller_id": {
+          "$oid": "69e745124455d2cfc7fd1405"
+        },
+        "amount": 2542,
+        "refunded_amount": 0
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "69e745124455d2cfc7fd140f"
+    },
+    "created_at": {
+      "$date": "2026-03-31T09:43:04.046Z"
+    },
+    "updated_at": {
+      "$date": "2026-03-31T09:48:04.046Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d2"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d2"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d2"
+    },
+    "checkout_batch_id": "seed-checkout-delivered-batch",
+    "amount": 14690,
+    "refunded_amount": 0,
+    "status": "SUCCESS",
+    "payment_method": "CARD",
+    "gateway_transaction_id": "seed-gateway-dlv-002",
+    "allocations": [
+      {
+        "order_id": {
+          "$oid": "69e745124455d2cfc7fd1410"
+        },
+        "seller_id": {
+          "$oid": "69e745124455d2cfc7fd1405"
+        },
+        "amount": 2542,
+        "refunded_amount": 0
+      },
+      {
+        "order_id": {
+          "$oid": "69e745124455d2cfc7fd1412"
+        },
+        "seller_id": {
+          "$oid": "69e745124455d2cfc7fd1406"
+        },
+        "amount": 12148,
+        "refunded_amount": 0
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "69e745124455d2cfc7fd1414"
+    },
+    "created_at": {
+      "$date": "2026-04-09T09:43:04.059Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-09T09:48:04.059Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d4"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d4"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d4"
+    },
+    "checkout_batch_id": "seed-checkout-shipped-batch",
+    "amount": 17747,
+    "refunded_amount": 0,
+    "status": "SUCCESS",
+    "payment_method": "UPI",
+    "gateway_transaction_id": "seed-gateway-shp-003",
+    "allocations": [
+      {
+        "order_id": {
+          "$oid": "69e745124455d2cfc7fd1415"
+        },
+        "seller_id": {
+          "$oid": "69e745124455d2cfc7fd1406"
+        },
+        "amount": 12148,
+        "refunded_amount": 0
+      },
+      {
+        "order_id": {
+          "$oid": "69e745124455d2cfc7fd1417"
+        },
+        "seller_id": {
+          "$oid": "69e745124455d2cfc7fd1407"
+        },
+        "amount": 5599,
+        "refunded_amount": 0
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "69e745124455d2cfc7fd1419"
+    },
+    "created_at": {
+      "$date": "2026-04-15T09:43:04.071Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-15T09:48:04.071Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d6"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d6"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d6"
+    },
+    "checkout_batch_id": "seed-checkout-confirmed-batch",
+    "amount": 9929,
+    "refunded_amount": 0,
+    "status": "SUCCESS",
+    "payment_method": "CARD",
+    "gateway_transaction_id": "seed-gateway-cnf-004",
+    "allocations": [
+      {
+        "order_id": {
+          "$oid": "69e745124455d2cfc7fd141a"
+        },
+        "seller_id": {
+          "$oid": "69e745124455d2cfc7fd1407"
+        },
+        "amount": 5599,
+        "refunded_amount": 0
+      },
+      {
+        "order_id": {
+          "$oid": "69e745124455d2cfc7fd141c"
+        },
+        "seller_id": {
+          "$oid": "69e745124455d2cfc7fd1408"
+        },
+        "amount": 4330,
+        "refunded_amount": 0
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "69e745124455d2cfc7fd141e"
+    },
+    "created_at": {
+      "$date": "2026-04-06T09:43:04.082Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-06T09:48:04.082Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d8"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d8"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d8"
+    },
+    "checkout_batch_id": "seed-checkout-partial-refund-batch",
+    "amount": 17569,
+    "refunded_amount": 4330,
+    "status": "PARTIALLY_REFUNDED",
+    "payment_method": "UPI",
+    "gateway_transaction_id": "seed-gateway-prf-005",
+    "allocations": [
+      {
+        "order_id": {
+          "$oid": "69e745124455d2cfc7fd141f"
+        },
+        "seller_id": {
+          "$oid": "69e745124455d2cfc7fd1408"
+        },
+        "amount": 4330,
+        "refunded_amount": 4330
+      },
+      {
+        "order_id": {
+          "$oid": "69e745124455d2cfc7fd1421"
+        },
+        "seller_id": {
+          "$oid": "69e745124455d2cfc7fd1409"
+        },
+        "amount": 13239,
+        "refunded_amount": 0
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "69e745124455d2cfc7fd1423"
+    },
+    "created_at": {
+      "$date": "2026-04-12T09:43:04.094Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-12T09:48:04.094Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13da"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13da"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13da"
+    },
+    "checkout_batch_id": "seed-checkout-full-refund-batch",
+    "amount": 24449,
+    "refunded_amount": 24449,
+    "status": "REFUNDED",
+    "payment_method": "CARD",
+    "gateway_transaction_id": "seed-gateway-frf-006",
+    "allocations": [
+      {
+        "order_id": {
+          "$oid": "69e745124455d2cfc7fd1424"
+        },
+        "seller_id": {
+          "$oid": "69e745114455d2cfc7fd1404"
+        },
+        "amount": 24449,
+        "refunded_amount": 24449
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "69e745124455d2cfc7fd1426"
+    },
+    "created_at": {
+      "$date": "2026-04-18T09:43:04.102Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-18T09:48:04.102Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13dc"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13dc"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13dc"
+    },
+    "checkout_batch_id": "seed-checkout-payment-failed-batch",
+    "amount": 5540,
+    "refunded_amount": 0,
+    "status": "FAILED",
+    "payment_method": "UPI",
+    "gateway_transaction_id": null,
+    "allocations": [
+      {
+        "order_id": {
+          "$oid": "69e745124455d2cfc7fd1427"
+        },
+        "seller_id": {
+          "$oid": "69e745124455d2cfc7fd1405"
+        },
+        "amount": 5540,
+        "refunded_amount": 0
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "69e745124455d2cfc7fd1428"
+    },
+    "created_at": {
+      "$date": "2026-04-21T07:43:04.108Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-23T09:25:27.820Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13de"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13de"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13de"
+    },
+    "checkout_batch_id": "seed-checkout-pending-batch",
+    "amount": 5717,
+    "refunded_amount": 0,
+    "status": "FAILED",
+    "payment_method": "CARD",
+    "gateway_transaction_id": null,
+    "allocations": [
+      {
+        "order_id": {
+          "$oid": "69e745124455d2cfc7fd1429"
+        },
+        "seller_id": {
+          "$oid": "69e745124455d2cfc7fd1406"
+        },
+        "amount": 5717,
+        "refunded_amount": 0
+      }
+    ]
+  }
+]

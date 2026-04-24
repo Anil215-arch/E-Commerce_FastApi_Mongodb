@@ -1,0 +1,402 @@
+[
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1625"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.949Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.366Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d0"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d0"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d0"
+    },
+    "token": "seed-device-customer-01-00-token",
+    "platform": "IOS"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1626"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.950Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.367Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d2"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d2"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d2"
+    },
+    "token": "seed-device-customer-02-00-token",
+    "platform": "WEB"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1627"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.951Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.368Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d4"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d4"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d4"
+    },
+    "token": "seed-device-customer-03-00-token",
+    "platform": "ANDROID"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1628"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.953Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.370Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d4"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d4"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d4"
+    },
+    "token": "seed-device-customer-03-01-token",
+    "platform": "IOS"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1629"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.954Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.372Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d6"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d6"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d6"
+    },
+    "token": "seed-device-customer-04-00-token",
+    "platform": "IOS"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd162a"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.956Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.373Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d8"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d8"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d8"
+    },
+    "token": "seed-device-customer-05-00-token",
+    "platform": "WEB"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd162b"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.957Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.374Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13da"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13da"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13da"
+    },
+    "token": "seed-device-customer-06-00-token",
+    "platform": "ANDROID"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd162c"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.959Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.376Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13da"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13da"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13da"
+    },
+    "token": "seed-device-customer-06-01-token",
+    "platform": "IOS"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd162d"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.960Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.377Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13dc"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13dc"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13dc"
+    },
+    "token": "seed-device-customer-07-00-token",
+    "platform": "IOS"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd162e"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.961Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.378Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13de"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13de"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13de"
+    },
+    "token": "seed-device-customer-08-00-token",
+    "platform": "WEB"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd162f"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.963Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.380Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "token": "seed-device-seller-09-00-token",
+    "platform": "ANDROID"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1630"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.964Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.381Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "token": "seed-device-seller-09-01-token",
+    "platform": "IOS"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1631"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.965Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.382Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "token": "seed-device-seller-10-00-token",
+    "platform": "IOS"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1632"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.967Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.384Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "token": "seed-device-seller-11-00-token",
+    "platform": "WEB"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1633"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.968Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.385Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "token": "seed-device-seller-12-00-token",
+    "platform": "ANDROID"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1634"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.970Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.387Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "updated_by": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "token": "seed-device-seller-12-01-token",
+    "platform": "IOS"
+  }
+]

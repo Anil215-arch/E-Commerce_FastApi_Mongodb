@@ -1,0 +1,1882 @@
+[
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd12de"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.087Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.087Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Electronics",
+    "parent_id": null
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd12df"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.092Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.092Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Smartphones",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd12de"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd12e0"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.094Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.094Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Laptops",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd12de"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd12e1"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.096Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.096Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Cameras",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd12de"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd12e2"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.097Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.097Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Fashion",
+    "parent_id": null
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd12e3"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.098Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.098Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Men Clothing",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd12e2"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd12e4"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.100Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.100Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Women Clothing",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd12e2"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd12e5"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.101Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.101Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Footwear",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd12e2"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd12e6"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.103Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.103Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Home and Kitchen",
+    "parent_id": null
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd12e7"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.104Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.104Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Cookware",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd12e6"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd12e8"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.106Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.106Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Furniture",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd12e6"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd12e9"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.107Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.107Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Home Decor",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd12e6"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd12ea"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.108Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.108Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Beauty and Personal Care",
+    "parent_id": null
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd12eb"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.110Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.110Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Skincare",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd12ea"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd12ec"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.111Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.111Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Haircare",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd12ea"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd12ed"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.112Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.112Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Makeup",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd12ea"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd12ee"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.114Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.114Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Sports and Outdoors",
+    "parent_id": null
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd12ef"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.115Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.115Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Fitness Equipment",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd12ee"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd12f0"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.117Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.117Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Camping Gear",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd12ee"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd12f1"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.118Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.118Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Cycling",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd12ee"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd12f2"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.119Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.119Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Books",
+    "parent_id": null
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd12f3"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.121Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.121Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Fiction",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd12f2"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd12f4"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.122Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.122Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Non Fiction",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd12f2"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd12f5"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.123Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.123Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Children Books",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd12f2"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd12f6"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.125Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.125Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Toys and Games",
+    "parent_id": null
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd12f7"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.126Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.126Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Board Games",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd12f6"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd12f8"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.128Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.128Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Action Figures",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd12f6"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd12f9"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.129Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.129Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Educational Toys",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd12f6"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd12fa"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.131Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.131Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Automotive",
+    "parent_id": null
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd12fb"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.132Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.132Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Car Accessories",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd12fa"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd12fc"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.133Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.133Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Motorcycle Parts",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd12fa"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd12fd"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.135Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.135Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Tools and Equipment",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd12fa"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd12fe"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.136Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.136Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Health",
+    "parent_id": null
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd12ff"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.137Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.137Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Supplements",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd12fe"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd1300"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.139Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.139Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Medical Supplies",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd12fe"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd1301"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.140Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.140Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Wellness",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd12fe"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd1302"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.141Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.141Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Grocery",
+    "parent_id": null
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd1303"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.143Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.143Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Beverages",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd1302"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd1304"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.145Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.145Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Snacks",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd1302"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd1305"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.146Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.146Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Organic Food",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd1302"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd1306"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.148Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.148Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Pet Supplies",
+    "parent_id": null
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd1307"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.149Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.149Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Dog Supplies",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd1306"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd1308"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.150Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.150Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Cat Supplies",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd1306"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd1309"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.152Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.152Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Aquarium",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd1306"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd130a"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.153Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.153Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Jewelry",
+    "parent_id": null
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd130b"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.155Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.155Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Necklaces",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd130a"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd130c"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.156Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.156Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Rings",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd130a"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd130d"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.158Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.158Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Bracelets",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd130a"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd130e"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.159Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.159Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Watches",
+    "parent_id": null
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd130f"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.160Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.160Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Men Watches",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd130e"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd1310"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.162Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.162Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Women Watches",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd130e"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd1311"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.163Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.163Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Smart Watches",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd130e"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd1312"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.165Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.165Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Office Supplies",
+    "parent_id": null
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd1313"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.166Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.166Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Stationery",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd1312"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd1314"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.167Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.167Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Office Furniture",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd1312"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd1315"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.169Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.169Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Printers",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd1312"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd1316"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.171Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.171Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Baby Products",
+    "parent_id": null
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd1317"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.172Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.172Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Diapers",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd1316"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd1318"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.173Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.173Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Baby Clothing",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd1316"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd1319"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.175Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.175Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Feeding",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd1316"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd131a"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.176Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.176Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Garden",
+    "parent_id": null
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd131b"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.177Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.177Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Plants",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd131a"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd131c"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.179Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.179Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Garden Tools",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd131a"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd131d"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.180Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.180Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Outdoor Decor",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd131a"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd131e"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.181Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.181Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Music",
+    "parent_id": null
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd131f"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.183Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.183Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Instruments",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd131e"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd1320"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.185Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.185Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Audio Accessories",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd131e"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd1321"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.187Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.187Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Vinyl Records",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd131e"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd1322"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.188Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.188Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Gaming",
+    "parent_id": null
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd1323"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.189Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.189Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Consoles",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd1322"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd1324"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.191Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.191Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "PC Gaming",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd1322"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd1325"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.192Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.192Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Gaming Accessories",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd1322"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd1326"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.193Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.193Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Travel",
+    "parent_id": null
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd1327"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.195Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.195Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Luggage",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd1326"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd1328"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.197Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.197Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Travel Accessories",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd1326"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd1329"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.199Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.199Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Backpacks",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd1326"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd132a"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.200Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.200Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Art and Craft",
+    "parent_id": null
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd132b"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.202Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.202Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Painting",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd132a"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd132c"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.203Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.203Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Craft Supplies",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd132a"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745114455d2cfc7fd132d"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:17.204Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:36:17.204Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd1401"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "name": "Drawing",
+    "parent_id": {
+      "$oid": "69e745114455d2cfc7fd132a"
+    }
+  }
+]

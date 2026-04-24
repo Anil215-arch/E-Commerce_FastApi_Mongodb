@@ -1,6 +1,8 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 from app.core.dependencies import RoleChecker
 from app.core.user_role import UserRole
+from app.schemas.common_schema import ApiResponse
+from app.schemas.user_schema import UserResponse
 
 # Import nested modules
 from app.api.api_v1.endpoints.public import auth, products as public_products, categories as public_categories, reviews as public_reviews
@@ -18,6 +20,15 @@ api_router = APIRouter()
 # 1. PUBLIC NAMESPACE (No role lock)
 # ==========================================
 api_router.include_router(auth.router, prefix="/auth", tags=["Auth"])
+api_router.add_api_route(
+    "/users/me",
+    profile.get_current_logged_in_user,
+    methods=["GET"],
+    response_model=ApiResponse[UserResponse],
+    response_model_by_alias=False,
+    status_code=status.HTTP_200_OK,
+    tags=["Users"],
+)
 api_router.include_router(public_products.router, prefix="/products", tags=["Products (Public)"])
 api_router.include_router(public_categories.router, prefix="/categories", tags=["Categories (Public)"])
 api_router.include_router(public_reviews.router, tags=["Reviews (Public)"])

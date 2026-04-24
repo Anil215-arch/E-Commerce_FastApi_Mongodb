@@ -5,7 +5,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     # Core App Settings
     PROJECT_NAME: str = "E-Commerce Platform"
-    MONGODB_URL: str = "mongodb://localhost:27017"
+    MONGODB_URL: str = "mongodb://mongodb:27017"
     DATABASE_NAME: str = "e_commerce"
     SECRET_KEY: str = ""
     ALGORITHM: str = "HS256"
