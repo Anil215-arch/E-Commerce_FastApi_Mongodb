@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field, ConfigDict, field_serializer, model_validator
 from typing import Optional, List, Dict
 from beanie import PydanticObjectId
-from app.core.i18n import SUPPORTED_LANGUAGES
+from app.core.i18n import CONTENT_TRANSLATION_LANGUAGES
 
 
 class CategoryTranslationSchema(BaseModel):
@@ -31,7 +31,7 @@ class CategoryCreate(BaseModel):
     @model_validator(mode="after")
     def validate_translations(self):
         if self.translations is not None:
-            invalid_langs = [lang for lang in self.translations.keys() if lang not in SUPPORTED_LANGUAGES]
+            invalid_langs = [lang for lang in self.translations.keys() if lang not in CONTENT_TRANSLATION_LANGUAGES]
             if invalid_langs:
                 raise ValueError("Invalid translation language key.")
         return self
@@ -51,7 +51,7 @@ class CategoryUpdate(BaseModel):
     @model_validator(mode="after")
     def validate_translations(self):
         if self.translations is not None:
-            invalid_langs = [lang for lang in self.translations.keys() if lang not in SUPPORTED_LANGUAGES]
+            invalid_langs = [lang for lang in self.translations.keys() if lang not in CONTENT_TRANSLATION_LANGUAGES]
             if invalid_langs:
                 raise ValueError("Invalid translation language key.")
         return self

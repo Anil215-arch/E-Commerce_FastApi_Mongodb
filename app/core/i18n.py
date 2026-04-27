@@ -4,6 +4,7 @@ from fastapi import Request
 
 DEFAULT_LANGUAGE = "en"
 SUPPORTED_LANGUAGES = {"en", "hi", "ja"}
+CONTENT_TRANSLATION_LANGUAGES = SUPPORTED_LANGUAGES - {DEFAULT_LANGUAGE}
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 LOCALES_DIR = BASE_DIR / "locales"

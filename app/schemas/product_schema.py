@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field, ConfigDict, field_serializer, model_validator
 from typing import Optional, List, Dict
 from beanie import PydanticObjectId
-from app.core.i18n import SUPPORTED_LANGUAGES
+from app.core.i18n import CONTENT_TRANSLATION_LANGUAGES
 from app.schemas.category_schema import CategorySummaryResponse
 from app.schemas.product_variant_schema import ProductVariantCreate, ProductVariantUpdate, ProductVariantResponse
 
@@ -59,7 +59,7 @@ class ProductCreate(BaseModel):
             raise ValueError("Variant SKUs must be unique within a product.")
 
         if self.translations is not None:
-            invalid_langs = [lang for lang in self.translations.keys() if lang not in SUPPORTED_LANGUAGES]
+            invalid_langs = [lang for lang in self.translations.keys() if lang not in CONTENT_TRANSLATION_LANGUAGES]
             if invalid_langs:
                 raise ValueError("Invalid translation language key.")
 
@@ -132,7 +132,7 @@ class ProductUpdate(BaseModel):
             raise ValueError("Variant SKUs must be unique within a product.")
 
         if self.translations is not None:
-            invalid_langs = [lang for lang in self.translations.keys() if lang not in SUPPORTED_LANGUAGES]
+            invalid_langs = [lang for lang in self.translations.keys() if lang not in CONTENT_TRANSLATION_LANGUAGES]
             if invalid_langs:
                 raise ValueError("Invalid translation language key.")
 
