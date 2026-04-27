@@ -12,7 +12,7 @@ from app.utils.product_mapper import ProductMapper
 class ProductQueryService:
 
     @staticmethod
-    async def list_products(params: ProductQueryParams) -> Tuple[List[ProductResponse], Optional[str], bool]:
+    async def list_products(params: ProductQueryParams, language: Optional[str] = None) -> Tuple[List[ProductResponse], Optional[str], bool]:
         query: Dict[str, Any] = {"is_deleted": {"$ne": True}}
         
         if params.category_id: query["category_id"] = params.category_id
@@ -107,15 +107,15 @@ class ProductQueryService:
         serialized_products = []
         for product in products:
             category = category_map.get(str(product.category_id))
-            serialized_products.append(ProductMapper.serialize_product(product, category))
+            serialized_products.append(ProductMapper.serialize_product(product, category, language=language))
 
         return serialized_products, next_cursor, has_next_page
 
     @staticmethod
-    async def get_product(product_id: PydanticObjectId) -> Optional[ProductResponse]:
+    async def get_product(product_id: PydanticObjectId, language: Optional[str] = None) -> Optional[ProductResponse]:
         product = await Product.get(product_id)
         if not product or getattr(product, "is_deleted", False):
             return None
         
         category = await Category.get(product.category_id)
-        return ProductMapper.serialize_product(product, category)
+        return ProductMapper.serialize_product(product, category, language=language)

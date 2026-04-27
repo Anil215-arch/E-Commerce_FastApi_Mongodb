@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import Any, List, Optional, Tuple
 from beanie import PydanticObjectId
 from app.core.message_keys import Msg
 from app.models.category_model import Category
@@ -8,12 +8,36 @@ from app.validators.category_validator import CategoryDomainValidator
 
 class CategoryService:
     @staticmethod
-    async def get_all_categories() -> List[Category]:
-        return await Category.find(Category.is_deleted == False).to_list()
+    def _localized_name(category: Category, language: Optional[str]) -> str:
+        if language and language in category.translations:
+            translated_name = category.translations[language].name
+            if translated_name:
+                return translated_name
+        return category.name
+
+    @staticmethod
+    def _serialize_category(category: Category, language: Optional[str]) -> dict[str, Any]:
+        return {
+            "_id": category.id,
+            "name": CategoryService._localized_name(category, language),
+            "parent_id": category.parent_id,
+        }
+
+    @staticmethod
+    async def get_all_categories(language: Optional[str] = None) -> List[Category] | List[dict[str, Any]]:
+        categories = await Category.find(Category.is_deleted == False).to_list()
+        if language is None:
+            return categories
+        return [CategoryService._serialize_category(category, language) for category in categories]
     
     @staticmethod
-    async def get_category_by_id(category_id: PydanticObjectId) -> Category | None:
-        return await Category.get(category_id)
+    async def get_category_by_id(category_id: PydanticObjectId, language: Optional[str] = None) -> Category | dict[str, Any] | None:
+        category = await Category.get(category_id)
+        if not category:
+            return None
+        if language is None:
+            return category
+        return CategoryService._serialize_category(category, language)
 
     @staticmethod
     async def _validate_parent(parent_id: PydanticObjectId | None) -> Tuple[PydanticObjectId | None, str | None]:
@@ -62,6 +86,7 @@ class CategoryService:
         new_category = Category(
             name=clean_name,
             parent_id=parent_id,
+            translations=data.translations or {},
             created_by=current_user_id,
             updated_by=current_user_id
         )
@@ -69,7 +94,7 @@ class CategoryService:
         return created, None
 
     @staticmethod
-    async def get_category_tree() -> List[dict]:
+    async def get_category_tree(language: Optional[str] = None) -> List[dict]:
         categories = await Category.find(Category.is_deleted == False).to_list()
 
         category_map = {}
@@ -79,7 +104,7 @@ class CategoryService:
             cat_id_str = str(cat.id)
             category_map[cat_id_str] = {
                 "_id": cat.id,
-                "name": cat.name,
+                "name": CategoryService._localized_name(cat, language),
                 "parent_id": cat.parent_id,
                 "children": []
             }
@@ -112,6 +137,9 @@ class CategoryService:
 
         if "name" in update_data:
             category.name = CategoryDomainValidator.validate_name(update_data["name"])
+
+        if "translations" in update_data and update_data["translations"] is not None:
+            category.translations = update_data["translations"]
 
         if "parent_id" in update_data:
             new_parent_id = update_data["parent_id"]

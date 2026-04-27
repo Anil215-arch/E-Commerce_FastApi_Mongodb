@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from beanie import PydanticObjectId
-from app.core.i18n import t
+from app.core.i18n import get_language, t
 from app.core.message_keys import Msg
 from app.core.rate_limiter import ip_key_func, limiter
 from app.services.product_query_services import ProductQueryService
@@ -17,7 +17,7 @@ async def list_products(request: Request, query_params: ProductQueryParams = Dep
     """
     Public endpoint to fetch a paginated list of available products.
     """
-    products, next_cursor, has_next_page = await ProductQueryService.list_products(query_params)
+    products, next_cursor, has_next_page = await ProductQueryService.list_products(query_params, language=get_language(request))
     
     paginated_data = PaginatedResponse(
         items=products,
@@ -34,7 +34,7 @@ async def read_one(request: Request, id: PydanticObjectId):
     """
     Public endpoint to fetch the specific details of a single product.
     """
-    product = await ProductQueryService.get_product(id)
+    product = await ProductQueryService.get_product(id, language=get_language(request))
     if not product:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

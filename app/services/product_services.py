@@ -1,16 +1,17 @@
 import os
 import shutil
 import uuid
+from typing import cast
 from typing import List
 from app.validators.product_validator import ProductDomainValidator
 from beanie import PydanticObjectId
 from fastapi import HTTPException, UploadFile
 from app.utils.product_mapper import ProductMapper
 from app.models.category_model import Category
-from app.models.product_model import Product
+from app.models.product_model import Product, ProductTranslation
 from app.models.product_variant_model import ProductVariant
 from app.schemas.category_schema import CategorySummaryResponse
-from app.schemas.product_schema import ProductCreate, ProductResponse, ProductUpdate
+from app.schemas.product_schema import ProductCreate, ProductManageResponse, ProductResponse, ProductUpdate
 from app.schemas.product_variant_schema import (
     ProductVariantCreate,
     ProductVariantResponse,
@@ -64,7 +65,7 @@ class ProductService:
         return ProductVariant(**merged_payload)
 
     @staticmethod
-    async def create_product(data: ProductCreate, current_user_id: PydanticObjectId) -> ProductResponse:
+    async def create_product(data: ProductCreate, current_user_id: PydanticObjectId) -> ProductManageResponse:
         category = await ProductService._get_category_or_raise(data.category_id)
         
         ProductDomainValidator.validate_specifications(data.specifications)
@@ -78,12 +79,17 @@ class ProductService:
             )
             
         variants = [ProductService._build_variant(variant) for variant in data.variants]
+        translations = {
+            lang: ProductTranslation(**translated.model_dump())
+            for lang, translated in (data.translations or {}).items()
+        }
 
         new_product = Product(
             name=data.name,
             description=data.description,
             brand=data.brand,
             category_id=data.category_id,
+            translations=translations,
             variants=variants,
             specifications=data.specifications,
             is_available=data.is_available,
@@ -92,10 +98,10 @@ class ProductService:
             updated_by=current_user_id
         )
         created_product = await new_product.insert()
-        return ProductMapper.serialize_product(created_product, category)
+        return cast(ProductManageResponse, ProductMapper.serialize_product(created_product, category, include_translations=True))
 
     @staticmethod
-    async def add_variant(product_id: PydanticObjectId, data: ProductVariantCreate, current_user_id: PydanticObjectId) -> ProductResponse:
+    async def add_variant(product_id: PydanticObjectId, data: ProductVariantCreate, current_user_id: PydanticObjectId) -> ProductManageResponse:
         ProductDomainValidator.validate_variant_data(
             price=data.price, 
             discount_price=data.discount_price, 
@@ -112,7 +118,7 @@ class ProductService:
         product.variants.append(ProductService._build_variant(data))
         product.updated_by = current_user_id
         await product.save()
-        return ProductMapper.serialize_product(product, category)
+        return cast(ProductManageResponse, ProductMapper.serialize_product(product, category, include_translations=True))
 
     @staticmethod
     async def update_variant(
@@ -120,7 +126,7 @@ class ProductService:
         sku: str,
         data: ProductVariantUpdate,
         current_user_id: PydanticObjectId
-    ) -> ProductResponse:
+    ) -> ProductManageResponse:
         product = await ProductService._get_product_or_raise(product_id)
         category = await ProductService._get_category_or_raise(product.category_id)
 
@@ -138,10 +144,10 @@ class ProductService:
         )
         product.updated_by = current_user_id
         await product.save()
-        return ProductMapper.serialize_product(product, category)
+        return cast(ProductManageResponse, ProductMapper.serialize_product(product, category, include_translations=True))
 
     @staticmethod
-    async def delete_variant(product_id: PydanticObjectId, sku: str, current_user_id: PydanticObjectId) -> ProductResponse:
+    async def delete_variant(product_id: PydanticObjectId, sku: str, current_user_id: PydanticObjectId) -> ProductManageResponse:
         product = await ProductService._get_product_or_raise(product_id)
         category = await ProductService._get_category_or_raise(product.category_id)
 
@@ -154,7 +160,7 @@ class ProductService:
 
         await product.save()
         await WishlistService.remove_ghost_product_references(product_id, sku)
-        return ProductMapper.serialize_product(product, category)
+        return cast(ProductManageResponse, ProductMapper.serialize_product(product, category, include_translations=True))
 
     @staticmethod
     async def upload_product_images(product_id: PydanticObjectId, images: List[UploadFile], current_user_id: PydanticObjectId):
@@ -201,7 +207,7 @@ class ProductService:
         product.updated_by = current_user_id
         await product.save()
         category = await ProductService._get_category_or_raise(product.category_id)
-        return ProductMapper.serialize_product(product, category)
+        return ProductMapper.serialize_product(product, category, include_translations=True)
 
     @staticmethod
     async def update_product(product_id: PydanticObjectId, data: ProductUpdate, current_user_id: PydanticObjectId):
@@ -213,7 +219,7 @@ class ProductService:
         category = await ProductService._get_category_or_raise(product.category_id)
 
         if not update_data:
-            return ProductMapper.serialize_product(product, category)
+            return ProductMapper.serialize_product(product, category, include_translations=True)
         
         if "specifications" in update_data:
             ProductDomainValidator.validate_specifications(update_data["specifications"])
@@ -241,7 +247,7 @@ class ProductService:
         if update_data.get("is_available") is False:
             await WishlistService.remove_ghost_product_references(product_id)
             
-        return ProductMapper.serialize_product(updated_product, category)
+        return ProductMapper.serialize_product(updated_product, category, include_translations=True)
 
     @staticmethod
     async def delete_product(product_id: PydanticObjectId, current_user_id: PydanticObjectId):
