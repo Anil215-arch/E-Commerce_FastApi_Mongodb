@@ -30,8 +30,8 @@ class UserRegister(BaseModel):
     @classmethod
     def validate_password_complexity(cls, value: str) -> str:
         # Requires 1 Upper, 1 Lower, 1 Digit, 1 Special Char
-        if not re.match(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$", value):
-            raise ValueError("Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character")
+        if not re.match(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$", value):
+            raise ValueError("Password must contain at least one uppercase letter, one lowercase letter, one number, and one allowed special character (@$!%*?&#)")
         return value
     
     model_config = ConfigDict(
@@ -122,15 +122,15 @@ class UserUpdatePassword(BaseModel):
     @field_validator("new_password")
     @classmethod
     def validate_password_complexity(cls, value: str) -> str:
-        if not re.match(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$", value):
-            raise ValueError("New password must contain at least one uppercase letter, one lowercase letter, one number, and one special character")
+        if not re.match(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$", value):
+            raise ValueError("New password must contain at least one uppercase letter, one lowercase letter, one number, and one allowed special character (@$!%*?&#)")
         return value
     
     model_config = ConfigDict(
         json_schema_extra={
             "example": {
                 "old_password": "OldPass123!",
-                "new_password": "NewPass456@",
+                "new_password": "NewPass456@#%Star562",
                 "refresh_token": "your_current_refresh_token"
             }
         }

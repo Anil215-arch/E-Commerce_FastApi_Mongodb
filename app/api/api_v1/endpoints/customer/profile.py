@@ -15,6 +15,11 @@ async def get_my_profile(request: Request, current_user: User = Depends(get_curr
     user_profile = await UserServices.get_my_profile(current_user)
     return success_response("Current user fetched successfully", user_profile)
 
+@user_limiter.limit("30/minute")
+async def get_current_logged_in_user(request: Request, current_user: User = Depends(get_current_user)):
+    user_profile = await UserServices.get_my_profile(current_user)
+    return success_response("Current user fetched successfully", user_profile)
+
 @router.patch("/", response_model=ApiResponse[UserResponse], response_model_by_alias=False, status_code=status.HTTP_200_OK)
 @user_limiter.limit("10/minute")
 async def update_my_profile(request: Request, profile_in: UserUpdateProfile, current_user: User = Depends(get_current_user)):

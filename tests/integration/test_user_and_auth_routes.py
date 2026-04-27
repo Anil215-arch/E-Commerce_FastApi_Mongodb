@@ -91,6 +91,33 @@ def test_logout_route_success_with_dependency_overrides(client):
     mock_logout.assert_awaited_once()
 
 
+def test_legacy_users_me_route_returns_current_user(client):
+    user_id = PydanticObjectId()
+    current_user = SimpleNamespace(
+        id=user_id,
+        user_name="john",
+        email="john@example.com",
+        mobile="9876543210",
+        role="customer",
+        is_verified=True,
+        addresses=[],
+        created_at=datetime.now(timezone.utc),
+    )
+
+    async def _current_user():
+        return current_user
+
+    main.app.dependency_overrides[get_current_user] = _current_user
+
+    response = client.get("/api/v1/users/me")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["status"] == "success"
+    assert body["data"]["id"] == str(user_id)
+    assert body["data"]["email"] == "john@example.com"
+
+
 def test_forgot_password_route_returns_generic_message(client):
     with patch("app.api.api_v1.endpoints.public.auth.UserServices.forgot_password_request", new=AsyncMock()) as mock_forgot:
         response = client.post("/api/v1/auth/forgot-password", json={"email": "john@example.com"})

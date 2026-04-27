@@ -308,6 +308,26 @@ Run all scripts from the project root.
 python scripts/seed_super_admin.py --user-name admin --email admin@shop.com --mobile 9999999999 --password StrongPass@123
 ```
 
+### Full Database Seed For Docker Dev
+
+Export every collection from a source MongoDB database into seed files:
+
+```powershell
+python scripts/seed_database.py export --source-uri mongodb://localhost:27017 --source-db ecommerce_db --out-dir scripts/seed/ecommerce_db
+```
+
+Import every exported collection into Docker MongoDB:
+
+```powershell
+docker exec ecommerce_app python scripts/seed_database.py import --target-uri mongodb://mongodb:27017 --target-db ecommerce_db --in-dir scripts/seed/ecommerce_db --drop
+```
+
+Use MongoDB Compass with Docker MongoDB:
+
+```text
+mongodb://localhost:27017
+```
+
 ## Testing
 
 Run all tests:

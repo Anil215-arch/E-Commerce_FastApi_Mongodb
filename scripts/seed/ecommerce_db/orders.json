@@ -1,0 +1,1094 @@
+[
+  {
+    "_id": {
+      "$oid": "69e745124455d2cfc7fd140b"
+    },
+    "created_at": {
+      "$date": "2026-04-19T08:43:04.112Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-19T11:43:04.112Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d0"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d0"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d0"
+    },
+    "seller_id": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "checkout_batch_id": "seed-checkout-completed-batch",
+    "transaction_id": {
+      "$oid": "69e745124455d2cfc7fd140a"
+    },
+    "items": [
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd135f"
+        },
+        "seller_id": {
+          "$oid": "69e745114455d2cfc7fd1404"
+        },
+        "sku": "SEED-MUSIC-AUDIOA-001-S",
+        "product_name": "Audio Accessories Product 1",
+        "quantity": 1,
+        "purchase_price": 1445
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd134f"
+        },
+        "seller_id": {
+          "$oid": "69e745114455d2cfc7fd1404"
+        },
+        "sku": "SEED-PETSUP-DOGSUP-001-P",
+        "product_name": "Dog Supplies Product 1",
+        "quantity": 2,
+        "purchase_price": 1625
+      }
+    ],
+    "shipping_address": {
+      "full_name": "Customer 01",
+      "phone_number": "9000000001",
+      "street_address": "41, Seed Residency, Sector 10",
+      "city": "Pune",
+      "postal_code": "411001",
+      "state": "Maharashtra",
+      "country": "India"
+    },
+    "billing_address": {
+      "full_name": "Customer 01",
+      "phone_number": "9000000001",
+      "street_address": "121, Demo Avenue, Block 1",
+      "city": "Bengaluru",
+      "postal_code": "560001",
+      "state": "Karnataka",
+      "country": "India"
+    },
+    "subtotal": 4695,
+    "tax_amount": 845,
+    "shipping_fee": 0,
+    "grand_total": 5540,
+    "status": "COMPLETED",
+    "payment_status": "PAID",
+    "refunded_amount": 0,
+    "expires_at": null,
+    "cleanup_processed": false,
+    "cancellation_reason": null
+  },
+  {
+    "_id": {
+      "$oid": "69e745124455d2cfc7fd140d"
+    },
+    "created_at": {
+      "$date": "2026-04-18T07:43:04.114Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-18T10:43:04.114Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d0"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d0"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d0"
+    },
+    "seller_id": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "checkout_batch_id": "seed-checkout-completed-batch",
+    "transaction_id": {
+      "$oid": "69e745124455d2cfc7fd140a"
+    },
+    "items": [
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1386"
+        },
+        "seller_id": {
+          "$oid": "69e745124455d2cfc7fd1405"
+        },
+        "sku": "SEED-GROCER-BEVERA-002-P",
+        "product_name": "Beverages Product 2",
+        "quantity": 2,
+        "purchase_price": 330
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd13bb"
+        },
+        "seller_id": {
+          "$oid": "69e745124455d2cfc7fd1405"
+        },
+        "sku": "SEED-TOYSAN-EDUCAT-003-S",
+        "product_name": "Educational Toys Product 3",
+        "quantity": 1,
+        "purchase_price": 1495
+      }
+    ],
+    "shipping_address": {
+      "full_name": "Customer 01",
+      "phone_number": "9000000001",
+      "street_address": "41, Seed Residency, Sector 10",
+      "city": "Pune",
+      "postal_code": "411001",
+      "state": "Maharashtra",
+      "country": "India"
+    },
+    "billing_address": {
+      "full_name": "Customer 01",
+      "phone_number": "9000000001",
+      "street_address": "121, Demo Avenue, Block 1",
+      "city": "Bengaluru",
+      "postal_code": "560001",
+      "state": "Karnataka",
+      "country": "India"
+    },
+    "subtotal": 2155,
+    "tax_amount": 387,
+    "shipping_fee": 0,
+    "grand_total": 2542,
+    "status": "COMPLETED",
+    "payment_status": "PAID",
+    "refunded_amount": 0,
+    "expires_at": null,
+    "cleanup_processed": false,
+    "cancellation_reason": null
+  },
+  {
+    "_id": {
+      "$oid": "69e745124455d2cfc7fd1410"
+    },
+    "created_at": {
+      "$date": "2026-04-17T06:43:04.116Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-17T09:43:04.116Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d2"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d2"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d2"
+    },
+    "seller_id": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "checkout_batch_id": "seed-checkout-delivered-batch",
+    "transaction_id": {
+      "$oid": "69e745124455d2cfc7fd140f"
+    },
+    "items": [
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1386"
+        },
+        "seller_id": {
+          "$oid": "69e745124455d2cfc7fd1405"
+        },
+        "sku": "SEED-GROCER-BEVERA-002-P",
+        "product_name": "Beverages Product 2",
+        "quantity": 2,
+        "purchase_price": 330
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd13bb"
+        },
+        "seller_id": {
+          "$oid": "69e745124455d2cfc7fd1405"
+        },
+        "sku": "SEED-TOYSAN-EDUCAT-003-S",
+        "product_name": "Educational Toys Product 3",
+        "quantity": 1,
+        "purchase_price": 1495
+      }
+    ],
+    "shipping_address": {
+      "full_name": "Customer 02",
+      "phone_number": "9000000002",
+      "street_address": "42, Seed Residency, Sector 11",
+      "city": "Ahmedabad",
+      "postal_code": "380001",
+      "state": "Gujarat",
+      "country": "India"
+    },
+    "billing_address": {
+      "full_name": "Customer 02",
+      "phone_number": "9000000002",
+      "street_address": "122, Demo Avenue, Block 2",
+      "city": "Mumbai",
+      "postal_code": "400001",
+      "state": "Maharashtra",
+      "country": "India"
+    },
+    "subtotal": 2155,
+    "tax_amount": 387,
+    "shipping_fee": 0,
+    "grand_total": 2542,
+    "status": "DELIVERED",
+    "payment_status": "PAID",
+    "refunded_amount": 0,
+    "expires_at": null,
+    "cleanup_processed": false,
+    "cancellation_reason": null
+  },
+  {
+    "_id": {
+      "$oid": "69e745124455d2cfc7fd1412"
+    },
+    "created_at": {
+      "$date": "2026-04-16T05:43:04.117Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-16T08:43:04.117Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d2"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d2"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d2"
+    },
+    "seller_id": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "checkout_batch_id": "seed-checkout-delivered-batch",
+    "transaction_id": {
+      "$oid": "69e745124455d2cfc7fd140f"
+    },
+    "items": [
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd13c8"
+        },
+        "seller_id": {
+          "$oid": "69e745124455d2cfc7fd1406"
+        },
+        "sku": "SEED-JEWELR-BRACEL-003-S",
+        "product_name": "Bracelets Product 3",
+        "quantity": 1,
+        "purchase_price": 6995
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1379"
+        },
+        "seller_id": {
+          "$oid": "69e745124455d2cfc7fd1406"
+        },
+        "sku": "SEED-SPORTS-FITNES-002-P",
+        "product_name": "Fitness Equipment Product 2",
+        "quantity": 2,
+        "purchase_price": 1650
+      }
+    ],
+    "shipping_address": {
+      "full_name": "Customer 02",
+      "phone_number": "9000000002",
+      "street_address": "42, Seed Residency, Sector 11",
+      "city": "Ahmedabad",
+      "postal_code": "380001",
+      "state": "Gujarat",
+      "country": "India"
+    },
+    "billing_address": {
+      "full_name": "Customer 02",
+      "phone_number": "9000000002",
+      "street_address": "122, Demo Avenue, Block 2",
+      "city": "Mumbai",
+      "postal_code": "400001",
+      "state": "Maharashtra",
+      "country": "India"
+    },
+    "subtotal": 10295,
+    "tax_amount": 1853,
+    "shipping_fee": 0,
+    "grand_total": 12148,
+    "status": "DELIVERED",
+    "payment_status": "PAID",
+    "refunded_amount": 0,
+    "expires_at": null,
+    "cleanup_processed": false,
+    "cancellation_reason": null
+  },
+  {
+    "_id": {
+      "$oid": "69e745124455d2cfc7fd1415"
+    },
+    "created_at": {
+      "$date": "2026-04-15T04:43:04.119Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-15T07:43:04.119Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d4"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d4"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d4"
+    },
+    "seller_id": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "checkout_batch_id": "seed-checkout-shipped-batch",
+    "transaction_id": {
+      "$oid": "69e745124455d2cfc7fd1414"
+    },
+    "items": [
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd13c8"
+        },
+        "seller_id": {
+          "$oid": "69e745124455d2cfc7fd1406"
+        },
+        "sku": "SEED-JEWELR-BRACEL-003-S",
+        "product_name": "Bracelets Product 3",
+        "quantity": 1,
+        "purchase_price": 6995
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1379"
+        },
+        "seller_id": {
+          "$oid": "69e745124455d2cfc7fd1406"
+        },
+        "sku": "SEED-SPORTS-FITNES-002-P",
+        "product_name": "Fitness Equipment Product 2",
+        "quantity": 2,
+        "purchase_price": 1650
+      }
+    ],
+    "shipping_address": {
+      "full_name": "Customer 03",
+      "phone_number": "9000000003",
+      "street_address": "43, Seed Residency, Sector 12",
+      "city": "Kolkata",
+      "postal_code": "700001",
+      "state": "West Bengal",
+      "country": "India"
+    },
+    "billing_address": {
+      "full_name": "Customer 03",
+      "phone_number": "9000000003",
+      "street_address": "123, Demo Avenue, Block 3",
+      "city": "Delhi",
+      "postal_code": "110001",
+      "state": "Delhi",
+      "country": "India"
+    },
+    "subtotal": 10295,
+    "tax_amount": 1853,
+    "shipping_fee": 0,
+    "grand_total": 12148,
+    "status": "SHIPPED",
+    "payment_status": "PAID",
+    "refunded_amount": 0,
+    "expires_at": null,
+    "cleanup_processed": false,
+    "cancellation_reason": null
+  },
+  {
+    "_id": {
+      "$oid": "69e745124455d2cfc7fd1417"
+    },
+    "created_at": {
+      "$date": "2026-04-14T03:43:04.121Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-14T06:43:04.121Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d4"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d4"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d4"
+    },
+    "seller_id": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "checkout_batch_id": "seed-checkout-shipped-batch",
+    "transaction_id": {
+      "$oid": "69e745124455d2cfc7fd1414"
+    },
+    "items": [
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1344"
+        },
+        "seller_id": {
+          "$oid": "69e745124455d2cfc7fd1407"
+        },
+        "sku": "SEED-AUTOMO-CARACC-001-P",
+        "product_name": "Car Accessories Product 1",
+        "quantity": 2,
+        "purchase_price": 1625
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd13ae"
+        },
+        "seller_id": {
+          "$oid": "69e745124455d2cfc7fd1407"
+        },
+        "sku": "SEED-HOMEAN-FURNIT-003-S",
+        "product_name": "Furniture Product 3",
+        "quantity": 1,
+        "purchase_price": 1495
+      }
+    ],
+    "shipping_address": {
+      "full_name": "Customer 03",
+      "phone_number": "9000000003",
+      "street_address": "43, Seed Residency, Sector 12",
+      "city": "Kolkata",
+      "postal_code": "700001",
+      "state": "West Bengal",
+      "country": "India"
+    },
+    "billing_address": {
+      "full_name": "Customer 03",
+      "phone_number": "9000000003",
+      "street_address": "123, Demo Avenue, Block 3",
+      "city": "Delhi",
+      "postal_code": "110001",
+      "state": "Delhi",
+      "country": "India"
+    },
+    "subtotal": 4745,
+    "tax_amount": 854,
+    "shipping_fee": 0,
+    "grand_total": 5599,
+    "status": "SHIPPED",
+    "payment_status": "PAID",
+    "refunded_amount": 0,
+    "expires_at": null,
+    "cleanup_processed": false,
+    "cancellation_reason": null
+  },
+  {
+    "_id": {
+      "$oid": "69e745124455d2cfc7fd141a"
+    },
+    "created_at": {
+      "$date": "2026-04-13T02:43:04.122Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-13T05:43:04.122Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d6"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d6"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d6"
+    },
+    "seller_id": {
+      "$oid": "69e745124455d2cfc7fd1407"
+    },
+    "checkout_batch_id": "seed-checkout-confirmed-batch",
+    "transaction_id": {
+      "$oid": "69e745124455d2cfc7fd1419"
+    },
+    "items": [
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1344"
+        },
+        "seller_id": {
+          "$oid": "69e745124455d2cfc7fd1407"
+        },
+        "sku": "SEED-AUTOMO-CARACC-001-P",
+        "product_name": "Car Accessories Product 1",
+        "quantity": 2,
+        "purchase_price": 1625
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd13ae"
+        },
+        "seller_id": {
+          "$oid": "69e745124455d2cfc7fd1407"
+        },
+        "sku": "SEED-HOMEAN-FURNIT-003-S",
+        "product_name": "Furniture Product 3",
+        "quantity": 1,
+        "purchase_price": 1495
+      }
+    ],
+    "shipping_address": {
+      "full_name": "Customer 04",
+      "phone_number": "9000000004",
+      "street_address": "44, Seed Residency, Sector 1",
+      "city": "Bengaluru",
+      "postal_code": "560001",
+      "state": "Karnataka",
+      "country": "India"
+    },
+    "billing_address": {
+      "full_name": "Customer 04",
+      "phone_number": "9000000004",
+      "street_address": "124, Demo Avenue, Block 4",
+      "city": "Hyderabad",
+      "postal_code": "500001",
+      "state": "Telangana",
+      "country": "India"
+    },
+    "subtotal": 4745,
+    "tax_amount": 854,
+    "shipping_fee": 0,
+    "grand_total": 5599,
+    "status": "CONFIRMED",
+    "payment_status": "PAID",
+    "refunded_amount": 0,
+    "expires_at": null,
+    "cleanup_processed": false,
+    "cancellation_reason": null
+  },
+  {
+    "_id": {
+      "$oid": "69e745124455d2cfc7fd141c"
+    },
+    "created_at": {
+      "$date": "2026-04-12T01:43:04.124Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-12T04:43:04.124Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d6"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d6"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d6"
+    },
+    "seller_id": {
+      "$oid": "69e745124455d2cfc7fd1408"
+    },
+    "checkout_batch_id": "seed-checkout-confirmed-batch",
+    "transaction_id": {
+      "$oid": "69e745124455d2cfc7fd1419"
+    },
+    "items": [
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd137a"
+        },
+        "seller_id": {
+          "$oid": "69e745124455d2cfc7fd1408"
+        },
+        "sku": "SEED-BOOKS-CHILDR-002-S",
+        "product_name": "Children Books Product 2",
+        "quantity": 1,
+        "purchase_price": 320
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd13b0"
+        },
+        "seller_id": {
+          "$oid": "69e745124455d2cfc7fd1408"
+        },
+        "sku": "SEED-BEAUTY-HAIRCA-003-P",
+        "product_name": "Haircare Product 3",
+        "quantity": 2,
+        "purchase_price": 1675
+      }
+    ],
+    "shipping_address": {
+      "full_name": "Customer 04",
+      "phone_number": "9000000004",
+      "street_address": "44, Seed Residency, Sector 1",
+      "city": "Bengaluru",
+      "postal_code": "560001",
+      "state": "Karnataka",
+      "country": "India"
+    },
+    "billing_address": {
+      "full_name": "Customer 04",
+      "phone_number": "9000000004",
+      "street_address": "124, Demo Avenue, Block 4",
+      "city": "Hyderabad",
+      "postal_code": "500001",
+      "state": "Telangana",
+      "country": "India"
+    },
+    "subtotal": 3670,
+    "tax_amount": 660,
+    "shipping_fee": 0,
+    "grand_total": 4330,
+    "status": "CONFIRMED",
+    "payment_status": "PAID",
+    "refunded_amount": 0,
+    "expires_at": null,
+    "cleanup_processed": false,
+    "cancellation_reason": null
+  },
+  {
+    "_id": {
+      "$oid": "69e745124455d2cfc7fd141f"
+    },
+    "created_at": {
+      "$date": "2026-04-11T09:43:04.125Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-11T12:43:04.125Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d8"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d8"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d8"
+    },
+    "seller_id": {
+      "$oid": "69e745124455d2cfc7fd1408"
+    },
+    "checkout_batch_id": "seed-checkout-partial-refund-batch",
+    "transaction_id": {
+      "$oid": "69e745124455d2cfc7fd141e"
+    },
+    "items": [
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd137a"
+        },
+        "seller_id": {
+          "$oid": "69e745124455d2cfc7fd1408"
+        },
+        "sku": "SEED-BOOKS-CHILDR-002-S",
+        "product_name": "Children Books Product 2",
+        "quantity": 1,
+        "purchase_price": 320
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd13b0"
+        },
+        "seller_id": {
+          "$oid": "69e745124455d2cfc7fd1408"
+        },
+        "sku": "SEED-BEAUTY-HAIRCA-003-P",
+        "product_name": "Haircare Product 3",
+        "quantity": 2,
+        "purchase_price": 1675
+      }
+    ],
+    "shipping_address": {
+      "full_name": "Customer 05",
+      "phone_number": "9000000005",
+      "street_address": "45, Seed Residency, Sector 2",
+      "city": "Mumbai",
+      "postal_code": "400001",
+      "state": "Maharashtra",
+      "country": "India"
+    },
+    "billing_address": {
+      "full_name": "Customer 05",
+      "phone_number": "9000000005",
+      "street_address": "125, Demo Avenue, Block 5",
+      "city": "Chennai",
+      "postal_code": "600001",
+      "state": "Tamil Nadu",
+      "country": "India"
+    },
+    "subtotal": 3670,
+    "tax_amount": 660,
+    "shipping_fee": 0,
+    "grand_total": 4330,
+    "status": "CANCELLED",
+    "payment_status": "REFUNDED",
+    "refunded_amount": 4330,
+    "expires_at": null,
+    "cleanup_processed": false,
+    "cancellation_reason": "Customer requested cancellation after order placement."
+  },
+  {
+    "_id": {
+      "$oid": "69e745124455d2cfc7fd1421"
+    },
+    "created_at": {
+      "$date": "2026-04-10T08:43:04.127Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-10T11:43:04.127Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d8"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d8"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d8"
+    },
+    "seller_id": {
+      "$oid": "69e745124455d2cfc7fd1409"
+    },
+    "checkout_batch_id": "seed-checkout-partial-refund-batch",
+    "transaction_id": {
+      "$oid": "69e745124455d2cfc7fd141e"
+    },
+    "items": [
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1368"
+        },
+        "seller_id": {
+          "$oid": "69e745124455d2cfc7fd1409"
+        },
+        "sku": "SEED-ARTAND-CRAFTS-001-P",
+        "product_name": "Craft Supplies Product 1",
+        "quantity": 2,
+        "purchase_price": 1625
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd136c"
+        },
+        "seller_id": {
+          "$oid": "69e745124455d2cfc7fd1409"
+        },
+        "sku": "SEED-ELECTR-LAPTOP-002-S",
+        "product_name": "Laptops Product 2",
+        "quantity": 1,
+        "purchase_price": 7970
+      }
+    ],
+    "shipping_address": {
+      "full_name": "Customer 05",
+      "phone_number": "9000000005",
+      "street_address": "45, Seed Residency, Sector 2",
+      "city": "Mumbai",
+      "postal_code": "400001",
+      "state": "Maharashtra",
+      "country": "India"
+    },
+    "billing_address": {
+      "full_name": "Customer 05",
+      "phone_number": "9000000005",
+      "street_address": "125, Demo Avenue, Block 5",
+      "city": "Chennai",
+      "postal_code": "600001",
+      "state": "Tamil Nadu",
+      "country": "India"
+    },
+    "subtotal": 11220,
+    "tax_amount": 2019,
+    "shipping_fee": 0,
+    "grand_total": 13239,
+    "status": "DELIVERED",
+    "payment_status": "PAID",
+    "refunded_amount": 0,
+    "expires_at": null,
+    "cleanup_processed": false,
+    "cancellation_reason": null
+  },
+  {
+    "_id": {
+      "$oid": "69e745124455d2cfc7fd1424"
+    },
+    "created_at": {
+      "$date": "2026-04-09T07:43:04.129Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-09T10:43:04.129Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13da"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13da"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13da"
+    },
+    "seller_id": {
+      "$oid": "69e745114455d2cfc7fd1404"
+    },
+    "checkout_batch_id": "seed-checkout-full-refund-batch",
+    "transaction_id": {
+      "$oid": "69e745124455d2cfc7fd1423"
+    },
+    "items": [
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1362"
+        },
+        "seller_id": {
+          "$oid": "69e745114455d2cfc7fd1404"
+        },
+        "sku": "SEED-GAMING-CONSOL-001-P",
+        "product_name": "Consoles Product 1",
+        "quantity": 2,
+        "purchase_price": 9625
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1373"
+        },
+        "seller_id": {
+          "$oid": "69e745114455d2cfc7fd1404"
+        },
+        "sku": "SEED-HOMEAN-HOMEDE-002-S",
+        "product_name": "Home Decor Product 2",
+        "quantity": 1,
+        "purchase_price": 1470
+      }
+    ],
+    "shipping_address": {
+      "full_name": "Customer 06",
+      "phone_number": "9000000006",
+      "street_address": "46, Seed Residency, Sector 3",
+      "city": "Delhi",
+      "postal_code": "110001",
+      "state": "Delhi",
+      "country": "India"
+    },
+    "billing_address": {
+      "full_name": "Customer 06",
+      "phone_number": "9000000006",
+      "street_address": "126, Demo Avenue, Block 6",
+      "city": "Pune",
+      "postal_code": "411001",
+      "state": "Maharashtra",
+      "country": "India"
+    },
+    "subtotal": 20720,
+    "tax_amount": 3729,
+    "shipping_fee": 0,
+    "grand_total": 24449,
+    "status": "CANCELLED",
+    "payment_status": "REFUNDED",
+    "refunded_amount": 24449,
+    "expires_at": null,
+    "cleanup_processed": false,
+    "cancellation_reason": "Customer requested cancellation after order placement."
+  },
+  {
+    "_id": {
+      "$oid": "69e745124455d2cfc7fd1427"
+    },
+    "created_at": {
+      "$date": "2026-04-08T06:43:04.131Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-08T09:43:04.131Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13dc"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13dc"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13dc"
+    },
+    "seller_id": {
+      "$oid": "69e745124455d2cfc7fd1405"
+    },
+    "checkout_batch_id": "seed-checkout-payment-failed-batch",
+    "transaction_id": {
+      "$oid": "69e745124455d2cfc7fd1426"
+    },
+    "items": [
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd133c"
+        },
+        "seller_id": {
+          "$oid": "69e745124455d2cfc7fd1405"
+        },
+        "sku": "SEED-SPORTS-CYCLIN-001-S",
+        "product_name": "Cycling Product 1",
+        "quantity": 1,
+        "purchase_price": 1445
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd1366"
+        },
+        "seller_id": {
+          "$oid": "69e745124455d2cfc7fd1405"
+        },
+        "sku": "SEED-TRAVEL-LUGGAG-001-P",
+        "product_name": "Luggage Product 1",
+        "quantity": 2,
+        "purchase_price": 1625
+      }
+    ],
+    "shipping_address": {
+      "full_name": "Customer 07",
+      "phone_number": "9000000007",
+      "street_address": "47, Seed Residency, Sector 4",
+      "city": "Hyderabad",
+      "postal_code": "500001",
+      "state": "Telangana",
+      "country": "India"
+    },
+    "billing_address": {
+      "full_name": "Customer 07",
+      "phone_number": "9000000007",
+      "street_address": "127, Demo Avenue, Block 7",
+      "city": "Ahmedabad",
+      "postal_code": "380001",
+      "state": "Gujarat",
+      "country": "India"
+    },
+    "subtotal": 4695,
+    "tax_amount": 845,
+    "shipping_fee": 0,
+    "grand_total": 5540,
+    "status": "CANCELLED",
+    "payment_status": "FAILED",
+    "refunded_amount": 0,
+    "expires_at": null,
+    "cleanup_processed": false,
+    "cancellation_reason": "Customer requested cancellation after order placement."
+  },
+  {
+    "_id": {
+      "$oid": "69e745124455d2cfc7fd1429"
+    },
+    "created_at": {
+      "$date": "2026-04-07T05:43:04.132Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-23T09:25:27.820Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13de"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13de"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13de"
+    },
+    "seller_id": {
+      "$oid": "69e745124455d2cfc7fd1406"
+    },
+    "checkout_batch_id": "seed-checkout-pending-batch",
+    "transaction_id": {
+      "$oid": "69e745124455d2cfc7fd1428"
+    },
+    "items": [
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd13c7"
+        },
+        "seller_id": {
+          "$oid": "69e745124455d2cfc7fd1406"
+        },
+        "sku": "SEED-PETSUP-DOGSUP-003-P",
+        "product_name": "Dog Supplies Product 3",
+        "quantity": 2,
+        "purchase_price": 1675
+      },
+      {
+        "product_id": {
+          "$oid": "69e745114455d2cfc7fd13bf"
+        },
+        "seller_id": {
+          "$oid": "69e745124455d2cfc7fd1406"
+        },
+        "sku": "SEED-HEALTH-MEDICA-003-S",
+        "product_name": "Medical Supplies Product 3",
+        "quantity": 1,
+        "purchase_price": 1495
+      }
+    ],
+    "shipping_address": {
+      "full_name": "Customer 08",
+      "phone_number": "9000000008",
+      "street_address": "48, Seed Residency, Sector 5",
+      "city": "Chennai",
+      "postal_code": "600001",
+      "state": "Tamil Nadu",
+      "country": "India"
+    },
+    "billing_address": {
+      "full_name": "Customer 08",
+      "phone_number": "9000000008",
+      "street_address": "128, Demo Avenue, Block 1",
+      "city": "Kolkata",
+      "postal_code": "700001",
+      "state": "West Bengal",
+      "country": "India"
+    },
+    "subtotal": 4845,
+    "tax_amount": 872,
+    "shipping_fee": 0,
+    "grand_total": 5717,
+    "status": "CANCELLED",
+    "payment_status": "FAILED",
+    "refunded_amount": 0,
+    "expires_at": null,
+    "cleanup_processed": true,
+    "cancellation_reason": "Checkout session expired."
+  }
+]

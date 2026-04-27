@@ -28,12 +28,12 @@ class _AggregateCursor:
 def test_zero_fill_daily_inserts_missing_dates():
     start_date = datetime(2026, 1, 1, tzinfo=timezone.utc)
     end_date = datetime(2026, 1, 3, tzinfo=timezone.utc)
-    input_rows = [SimpleNamespace(date="2026-01-02", revenue=50)]
+    input_rows = [SimpleNamespace(date="2026-01-02", revenue=5000)]
 
     filled = DashboardService._zero_fill(input_rows, start_date, end_date, "daily")
 
     assert [row.date for row in filled] == ["2026-01-01", "2026-01-02", "2026-01-03"]
-    assert [row.revenue for row in filled] == [0, 50, 0]
+    assert [row.revenue for row in filled] == [0, 5000, 0]
 
 
 def test_zero_fill_rejects_invalid_period():
@@ -93,7 +93,7 @@ async def test_get_revenue_chart_builds_pipeline_and_returns_series():
     start_date = datetime(2026, 4, 1, tzinfo=timezone.utc)
     end_date = datetime(2026, 4, 1, tzinfo=timezone.utc)
 
-    aggregate_rows = [{"_id": "2026-04-01", "revenue": 12300}]
+    aggregate_rows = [{"_id": "2026-04-01", "revenue": 12345}]
 
     with patch(
         "app.services.dashboard_services.Order.aggregate",
@@ -114,4 +114,4 @@ async def test_get_revenue_chart_builds_pipeline_and_returns_series():
 
     assert len(data) == 1
     assert data[0].date == "2026-04-01"
-    assert data[0].revenue == 123
+    assert data[0].revenue == 12345

@@ -1,0 +1,2594 @@
+[
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15c5"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.794Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.223Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d0"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d0"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d0"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd13c5"
+    },
+    "sku": "SEED-PETSUP-AQUARI-003-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15c6"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.796Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.226Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d0"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d0"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d0"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd135f"
+    },
+    "sku": "SEED-MUSIC-AUDIOA-001-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15c7"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.798Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.227Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d0"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d0"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d0"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd139b"
+    },
+    "sku": "SEED-MUSIC-AUDIOA-002-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15c8"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.799Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.228Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d0"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d0"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d0"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1359"
+    },
+    "sku": "SEED-BABYPR-BABYCL-001-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15c9"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.801Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.230Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d2"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d2"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d2"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1365"
+    },
+    "sku": "SEED-TRAVEL-BACKPA-001-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15ca"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.803Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.231Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d2"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d2"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d2"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd13a1"
+    },
+    "sku": "SEED-TRAVEL-BACKPA-002-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15cb"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.804Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.232Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d2"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d2"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d2"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd134a"
+    },
+    "sku": "SEED-GROCER-BEVERA-001-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15cc"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.806Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.234Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d2"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d2"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d2"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1386"
+    },
+    "sku": "SEED-GROCER-BEVERA-002-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15cd"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.807Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.235Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d4"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d4"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d4"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1342"
+    },
+    "sku": "SEED-TOYSAN-BOARDG-001-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15ce"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.810Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.237Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d4"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d4"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d4"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd137e"
+    },
+    "sku": "SEED-TOYSAN-BOARDG-002-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15cf"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.813Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.239Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d4"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d4"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d4"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd13ba"
+    },
+    "sku": "SEED-TOYSAN-BOARDG-003-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15d0"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.815Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.240Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d4"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d4"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d4"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1350"
+    },
+    "sku": "SEED-JEWELR-BRACEL-001-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15d1"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.817Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.241Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d6"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d6"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d6"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd13c8"
+    },
+    "sku": "SEED-JEWELR-BRACEL-003-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15d2"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.818Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.243Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d6"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d6"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d6"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd132f"
+    },
+    "sku": "SEED-ELECTR-CAMERA-001-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15d3"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.820Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.244Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d6"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d6"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d6"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd136b"
+    },
+    "sku": "SEED-ELECTR-CAMERA-002-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15d4"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.822Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.245Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d6"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d6"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d6"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd13a7"
+    },
+    "sku": "SEED-ELECTR-CAMERA-003-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15d5"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.824Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.247Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d8"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d8"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d8"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1377"
+    },
+    "sku": "SEED-SPORTS-CAMPIN-002-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15d6"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.826Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.248Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d8"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d8"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d8"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd13b3"
+    },
+    "sku": "SEED-SPORTS-CAMPIN-003-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15d7"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.827Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.249Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d8"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d8"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d8"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1344"
+    },
+    "sku": "SEED-AUTOMO-CARACC-001-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15d8"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.829Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.251Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13d8"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13d8"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13d8"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1380"
+    },
+    "sku": "SEED-AUTOMO-CARACC-002-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15d9"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.831Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.253Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13da"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13da"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13da"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd134e"
+    },
+    "sku": "SEED-PETSUP-CATSUP-001-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15da"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.833Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.254Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13da"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13da"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13da"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd138a"
+    },
+    "sku": "SEED-PETSUP-CATSUP-002-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15db"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.834Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.255Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13da"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13da"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13da"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd13c6"
+    },
+    "sku": "SEED-PETSUP-CATSUP-003-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15dc"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.837Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.257Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13da"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13da"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13da"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd133e"
+    },
+    "sku": "SEED-BOOKS-CHILDR-001-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15dd"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.838Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.258Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13dc"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13dc"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13dc"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd13b6"
+    },
+    "sku": "SEED-BOOKS-CHILDR-003-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15de"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.840Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.259Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13dc"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13dc"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13dc"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1362"
+    },
+    "sku": "SEED-GAMING-CONSOL-001-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15df"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.842Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.261Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13dc"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13dc"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13dc"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd139e"
+    },
+    "sku": "SEED-GAMING-CONSOL-002-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15e0"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.844Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.262Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13dc"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13dc"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13dc"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1335"
+    },
+    "sku": "SEED-HOMEAN-COOKWA-001-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15e1"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.846Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.264Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13de"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13de"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13de"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd13ad"
+    },
+    "sku": "SEED-HOMEAN-COOKWA-003-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15e2"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.848Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.265Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13de"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13de"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13de"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1368"
+    },
+    "sku": "SEED-ARTAND-CRAFTS-001-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15e3"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.850Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.266Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13de"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13de"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13de"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd13a4"
+    },
+    "sku": "SEED-ARTAND-CRAFTS-002-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15e4"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.853Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.268Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13de"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13de"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13de"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd133c"
+    },
+    "sku": "SEED-SPORTS-CYCLIN-001-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15e5"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.854Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.269Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13e0"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13e0"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13e0"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd13b4"
+    },
+    "sku": "SEED-SPORTS-CYCLIN-003-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15e6"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.856Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.271Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13e0"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13e0"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13e0"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd135a"
+    },
+    "sku": "SEED-BABYPR-DIAPER-001-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15e7"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.858Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.272Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13e0"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13e0"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13e0"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1396"
+    },
+    "sku": "SEED-BABYPR-DIAPER-002-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15e8"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.859Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.273Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13e0"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13e0"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13e0"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd134f"
+    },
+    "sku": "SEED-PETSUP-DOGSUP-001-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15e9"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.861Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.275Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13e2"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13e2"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13e2"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd13c7"
+    },
+    "sku": "SEED-PETSUP-DOGSUP-003-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15ea"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.863Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.276Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13e2"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13e2"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13e2"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1369"
+    },
+    "sku": "SEED-ARTAND-DRAWIN-001-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15eb"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.865Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.277Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13e2"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13e2"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13e2"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd13a5"
+    },
+    "sku": "SEED-ARTAND-DRAWIN-002-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15ec"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.867Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.279Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13e2"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13e2"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13e2"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1343"
+    },
+    "sku": "SEED-TOYSAN-EDUCAT-001-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15ed"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.868Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.280Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13e4"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13e4"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13e4"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd13bb"
+    },
+    "sku": "SEED-TOYSAN-EDUCAT-003-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15ee"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.869Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.281Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13e4"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13e4"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13e4"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd135b"
+    },
+    "sku": "SEED-BABYPR-FEEDIN-001-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15ef"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.871Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.283Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13e4"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13e4"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13e4"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1397"
+    },
+    "sku": "SEED-BABYPR-FEEDIN-002-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15f0"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.872Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.284Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13e4"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13e4"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13e4"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd133f"
+    },
+    "sku": "SEED-BOOKS-FICTIO-001-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15f1"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.874Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.286Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13e6"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13e6"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13e6"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd13b7"
+    },
+    "sku": "SEED-BOOKS-FICTIO-003-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15f2"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.875Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.287Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13e6"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13e6"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13e6"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd133d"
+    },
+    "sku": "SEED-SPORTS-FITNES-001-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15f3"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.876Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.289Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13e6"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13e6"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13e6"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1379"
+    },
+    "sku": "SEED-SPORTS-FITNES-002-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15f4"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.878Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.292Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13e6"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13e6"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13e6"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd13b5"
+    },
+    "sku": "SEED-SPORTS-FITNES-003-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15f5"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.879Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.293Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13e8"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13e8"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13e8"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd136e"
+    },
+    "sku": "SEED-FASHIO-FOOTWE-002-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15f6"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.881Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.295Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13e8"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13e8"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13e8"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd13aa"
+    },
+    "sku": "SEED-FASHIO-FOOTWE-003-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15f7"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.882Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.296Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13e8"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13e8"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13e8"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1336"
+    },
+    "sku": "SEED-HOMEAN-FURNIT-001-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15f8"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.883Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.298Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13e8"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13e8"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13e8"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1372"
+    },
+    "sku": "SEED-HOMEAN-FURNIT-002-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15f9"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.885Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.300Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13ea"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13ea"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13ea"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1363"
+    },
+    "sku": "SEED-GAMING-GAMING-001-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15fa"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.886Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.301Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13ea"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13ea"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13ea"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd139f"
+    },
+    "sku": "SEED-GAMING-GAMING-002-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15fb"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.887Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.302Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13ea"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13ea"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13ea"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd135c"
+    },
+    "sku": "SEED-GARDEN-GARDEN-001-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15fc"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.889Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.304Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13ea"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13ea"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13ea"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1398"
+    },
+    "sku": "SEED-GARDEN-GARDEN-002-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15fd"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.891Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.305Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13ec"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13ec"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13ec"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1374"
+    },
+    "sku": "SEED-BEAUTY-HAIRCA-002-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15fe"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.892Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.307Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13ec"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13ec"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13ec"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd13b0"
+    },
+    "sku": "SEED-BEAUTY-HAIRCA-003-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd15ff"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.894Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.308Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13ec"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13ec"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13ec"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1337"
+    },
+    "sku": "SEED-HOMEAN-HOMEDE-001-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1600"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.895Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.309Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13ec"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13ec"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13ec"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1373"
+    },
+    "sku": "SEED-HOMEAN-HOMEDE-002-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1601"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.897Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.311Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13ee"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13ee"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13ee"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1360"
+    },
+    "sku": "SEED-MUSIC-INSTRU-001-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1602"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.898Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.312Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13ee"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13ee"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13ee"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd139c"
+    },
+    "sku": "SEED-MUSIC-INSTRU-002-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1603"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.899Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.313Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13ee"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13ee"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13ee"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1330"
+    },
+    "sku": "SEED-ELECTR-LAPTOP-001-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1604"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.901Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.315Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13ee"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13ee"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13ee"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd136c"
+    },
+    "sku": "SEED-ELECTR-LAPTOP-002-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1605"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.902Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.316Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13f0"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13f0"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13f0"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1366"
+    },
+    "sku": "SEED-TRAVEL-LUGGAG-001-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1606"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.904Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.318Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13f0"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13f0"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13f0"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd13a2"
+    },
+    "sku": "SEED-TRAVEL-LUGGAG-002-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1607"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.905Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.319Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13f0"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13f0"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13f0"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1339"
+    },
+    "sku": "SEED-BEAUTY-MAKEUP-001-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1608"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.907Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.321Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13f0"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13f0"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13f0"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1375"
+    },
+    "sku": "SEED-BEAUTY-MAKEUP-002-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1609"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.908Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.322Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13f2"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13f2"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13f2"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1347"
+    },
+    "sku": "SEED-HEALTH-MEDICA-001-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd160a"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.910Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.323Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13f2"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13f2"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13f2"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1383"
+    },
+    "sku": "SEED-HEALTH-MEDICA-002-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd160b"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.911Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.325Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13f2"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13f2"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13f2"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd13bf"
+    },
+    "sku": "SEED-HEALTH-MEDICA-003-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd160c"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.912Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.326Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13f2"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13f2"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13f2"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1333"
+    },
+    "sku": "SEED-FASHIO-MENCLO-001-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd160d"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.914Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.327Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13f4"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13f4"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13f4"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd13ab"
+    },
+    "sku": "SEED-FASHIO-MENCLO-003-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd160e"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.915Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.329Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13f4"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13f4"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13f4"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1353"
+    },
+    "sku": "SEED-WATCHE-MENWAT-001-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd160f"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.917Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.330Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13f4"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13f4"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13f4"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd138f"
+    },
+    "sku": "SEED-WATCHE-MENWAT-002-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1610"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.918Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.332Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13f4"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13f4"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13f4"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd13cb"
+    },
+    "sku": "SEED-WATCHE-MENWAT-003-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1611"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.919Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.334Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13f6"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13f6"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13f6"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1381"
+    },
+    "sku": "SEED-AUTOMO-MOTORC-002-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1612"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.921Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.335Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13f6"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13f6"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13f6"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd13bd"
+    },
+    "sku": "SEED-AUTOMO-MOTORC-003-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1613"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.922Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.336Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13f6"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13f6"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13f6"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1351"
+    },
+    "sku": "SEED-JEWELR-NECKLA-001-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1614"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.924Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.337Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13f6"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13f6"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13f6"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd138d"
+    },
+    "sku": "SEED-JEWELR-NECKLA-002-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1615"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.925Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.339Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13f8"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13f8"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13f8"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1340"
+    },
+    "sku": "SEED-BOOKS-NONFIC-001-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1616"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.926Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.340Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13f8"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13f8"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13f8"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd137c"
+    },
+    "sku": "SEED-BOOKS-NONFIC-002-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1617"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.928Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.341Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13f8"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13f8"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13f8"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd13b8"
+    },
+    "sku": "SEED-BOOKS-NONFIC-003-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1618"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.929Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.343Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13f8"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13f8"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13f8"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1356"
+    },
+    "sku": "SEED-OFFICE-OFFICE-001-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1619"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.931Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.345Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13fa"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13fa"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13fa"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd13ce"
+    },
+    "sku": "SEED-OFFICE-OFFICE-003-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd161a"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.933Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.347Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13fa"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13fa"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13fa"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd134b"
+    },
+    "sku": "SEED-GROCER-ORGANI-001-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd161b"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.934Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.349Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13fa"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13fa"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13fa"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1387"
+    },
+    "sku": "SEED-GROCER-ORGANI-002-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd161c"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.935Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.351Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13fa"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13fa"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13fa"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd13c3"
+    },
+    "sku": "SEED-GROCER-ORGANI-003-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd161d"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.937Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.352Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13fc"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13fc"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13fc"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1399"
+    },
+    "sku": "SEED-GARDEN-OUTDOO-002-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd161e"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.938Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.354Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13fc"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13fc"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13fc"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1364"
+    },
+    "sku": "SEED-GAMING-PCGAMI-001-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd161f"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.940Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.355Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13fc"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13fc"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13fc"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd13a0"
+    },
+    "sku": "SEED-GAMING-PCGAMI-002-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1620"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.941Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.357Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13fc"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13fc"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13fc"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd136a"
+    },
+    "sku": "SEED-ARTAND-PAINTI-001-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1621"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.942Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.360Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13fe"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13fe"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13fe"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd135e"
+    },
+    "sku": "SEED-GARDEN-PLANTS-001-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1622"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.944Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.361Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13fe"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13fe"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13fe"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd139a"
+    },
+    "sku": "SEED-GARDEN-PLANTS-002-P"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1623"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.945Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.362Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13fe"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13fe"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13fe"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1357"
+    },
+    "sku": "SEED-OFFICE-PRINTE-001-S"
+  },
+  {
+    "_id": {
+      "$oid": "69e745134455d2cfc7fd1624"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:19.947Z"
+    },
+    "updated_at": {
+      "$date": "2026-04-21T09:43:05.364Z"
+    },
+    "deleted_at": null,
+    "created_by": {
+      "$oid": "69e745114455d2cfc7fd13fe"
+    },
+    "updated_by": {
+      "$oid": "69e745114455d2cfc7fd13fe"
+    },
+    "deleted_by": null,
+    "is_deleted": false,
+    "user_id": {
+      "$oid": "69e745114455d2cfc7fd13fe"
+    },
+    "product_id": {
+      "$oid": "69e745114455d2cfc7fd1393"
+    },
+    "sku": "SEED-OFFICE-PRINTE-002-P"
+  }
+]

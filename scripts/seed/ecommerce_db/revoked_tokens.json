@@ -1,0 +1,86 @@
+[
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd1699"
+    },
+    "jti": "seed-jti-01-access",
+    "token_type": "access",
+    "user_id": "69e745114455d2cfc7fd13d0",
+    "expires_at": {
+      "$date": "2026-04-29T09:43:05.554Z"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:20.156Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd169a"
+    },
+    "jti": "seed-jti-01-refresh",
+    "token_type": "refresh",
+    "user_id": "69e745114455d2cfc7fd13d0",
+    "expires_at": {
+      "$date": "2026-04-29T09:43:05.554Z"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:20.158Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd169b"
+    },
+    "jti": "seed-jti-02-access",
+    "token_type": "access",
+    "user_id": "69e745114455d2cfc7fd13d2",
+    "expires_at": {
+      "$date": "2026-04-30T09:43:05.554Z"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:20.159Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd169c"
+    },
+    "jti": "seed-jti-02-refresh",
+    "token_type": "refresh",
+    "user_id": "69e745114455d2cfc7fd13d2",
+    "expires_at": {
+      "$date": "2026-04-30T09:43:05.554Z"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:20.160Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd169d"
+    },
+    "jti": "seed-jti-03-access",
+    "token_type": "access",
+    "user_id": "69e745114455d2cfc7fd13d4",
+    "expires_at": {
+      "$date": "2026-05-01T09:43:05.554Z"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:20.162Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "69e745144455d2cfc7fd169e"
+    },
+    "jti": "seed-jti-03-refresh",
+    "token_type": "refresh",
+    "user_id": "69e745114455d2cfc7fd13d4",
+    "expires_at": {
+      "$date": "2026-05-01T09:43:05.554Z"
+    },
+    "created_at": {
+      "$date": "2026-04-21T09:36:20.163Z"
+    }
+  }
+]

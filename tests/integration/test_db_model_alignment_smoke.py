@@ -65,3 +65,54 @@ def test_products_rating_breakdown_shape_is_valid(mongo_db):
     assert isinstance(breakdown, dict)
     assert set(breakdown.keys()) == {"1", "2", "3", "4", "5"}
     assert all(isinstance(v, int) and v >= 0 for v in breakdown.values())
+
+
+def test_audit_document_collections_have_current_base_fields(mongo_db):
+    audit_collections = [
+        "products",
+        "categories",
+        "users",
+        "orders",
+        "transactions",
+        "inventory_ledger",
+        "wishlists",
+        "reviews",
+        "device_tokens",
+        "notifications",
+    ]
+    audit_fields = [
+        "created_at",
+        "updated_at",
+        "deleted_at",
+        "created_by",
+        "updated_by",
+        "deleted_by",
+        "is_deleted",
+    ]
+
+    missing_by_collection = {}
+    for collection_name in audit_collections:
+        collection = mongo_db[collection_name]
+        if collection.count_documents({}) == 0:
+            continue
+
+        missing_fields = {
+            field: collection.count_documents({field: {"$exists": False}})
+            for field in audit_fields
+        }
+        missing_fields = {
+            field: count for field, count in missing_fields.items() if count > 0
+        }
+        if missing_fields:
+            missing_by_collection[collection_name] = missing_fields
+
+    assert missing_by_collection == {}
+
+
+def test_counters_collection_matches_current_model_contract(mongo_db):
+    counters = mongo_db["counters"]
+
+    assert counters.count_documents({"key": {"$exists": False}}) == 0
+    assert counters.count_documents({"seq": {"$exists": False}}) == 0
+    assert counters.count_documents({"key": {"$type": "string", "$regex": r"^\s*$"}}) == 0
+    assert counters.count_documents({"seq": {"$lt": 0}}) == 0
