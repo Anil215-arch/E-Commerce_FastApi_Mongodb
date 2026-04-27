@@ -59,8 +59,20 @@ async def rate_limit_exception_handler(request: Request, exc: RateLimitExceeded)
     
 @app.exception_handler(HTTPException)
 async def http_exception_handler(request: Request, exc: HTTPException):
-    message = t(request, exc.detail) if isinstance(exc.detail, str) else t(request, Msg.REQUEST_FAILED)
-    data = None if isinstance(exc.detail, str) else exc.detail
+    if isinstance(exc.detail, dict) and "key" in exc.detail:
+        key = exc.detail.get("key")
+        safe_key = key if isinstance(key, str) else Msg.REQUEST_FAILED
+        params = exc.detail.get("params", {})
+        safe_params = params if isinstance(params, dict) else {}
+        message = t(request, safe_key, **safe_params)
+        data = exc.detail.get("data")
+    elif isinstance(exc.detail, str):
+        message = t(request, exc.detail)
+        data = None
+    else:
+        message = t(request, Msg.REQUEST_FAILED)
+        data = exc.detail
+
     return JSONResponse(
         status_code=exc.status_code,
         content=error_response(message, data),

@@ -8,6 +8,7 @@ from app.models.product_model import Product
 from app.schemas.cart_schema import CartItemAdd, CartItemUpdate, CartResponse, CartItemDetailed
 from app.schemas.product_variant_schema import ProductVariantResponse
 from app.core.exceptions import DomainValidationError
+from app.core.message_keys import Msg
 from app.validators.cart_validator import CartDomainValidator
 
 # Domain Exceptions
@@ -37,7 +38,7 @@ class CartService:
         )
         cart = await Cart.find_one(Cart.user_id == user_id)
         if not cart:
-            raise CartError("Failed to initialize cart.")
+            raise CartError(Msg.CART_INITIALIZATION_FAILED)
         return cart
 
     @staticmethod
@@ -48,16 +49,16 @@ class CartService:
             
             product = await Product.get(data.product_id)
             if not product or getattr(product, "is_deleted", False) or not getattr(product, "is_available", True):
-                raise ProductUnavailable("Product is currently unavailable or deleted.")
+                raise ProductUnavailable(Msg.PRODUCT_NOT_FOUND_OR_UNAVAILABLE)
             
             variant = next((v for v in product.variants if v.sku == data.sku), None)
             if not variant:
-                raise VariantNotFound("Variant no longer exists.")
+                raise VariantNotFound(Msg.VARIANT_NOT_FOUND)
 
             existing_item = next((i for i in cart.items if i.product_id == data.product_id and i.sku == data.sku), None)
 
             if not existing_item and len(cart.items) >= CartService.MAX_CART_ITEMS:
-                raise CartLimitExceeded(f"Cart limit reached (max {CartService.MAX_CART_ITEMS} items).")
+                raise CartLimitExceeded(Msg.CART_LIMIT_REACHED)
 
             new_items = [i.model_copy() for i in cart.items]
             
@@ -66,12 +67,12 @@ class CartService:
                     if item.product_id == data.product_id and item.sku == data.sku:
                         new_qty = item.quantity + data.quantity
                         if new_qty > variant.available_stock:
-                            raise StockExceeded(f"Insufficient stock. Available: {variant.available_stock}")
+                            raise StockExceeded(Msg.INSUFFICIENT_STOCK)
                         item.quantity = new_qty
                         break
             else:
                 if data.quantity > variant.available_stock:
-                    raise StockExceeded(f"Insufficient stock. Available: {variant.available_stock}")
+                    raise StockExceeded(Msg.INSUFFICIENT_STOCK)
                 new_items.append(CartItem(**data.model_dump()))
 
             collection = Cart.get_pymongo_collection() # type: ignore
@@ -90,7 +91,7 @@ class CartService:
                 
             await asyncio.sleep(0.01 * (attempt + 1))
 
-        raise CartConflictError("Cart was modified concurrently. Please retry.")
+        raise CartConflictError(Msg.CART_CONCURRENT_MODIFICATION)
 
     @staticmethod
     async def update_item_quantity(user_id: PydanticObjectId, product_id: PydanticObjectId, sku: str, data: CartItemUpdate) -> Cart:
@@ -98,15 +99,15 @@ class CartService:
         for attempt in range(CartService.MAX_RETRIES):
             cart = await Cart.find_one(Cart.user_id == user_id)
             if not cart:
-                raise CartError("Cart not found")
+                raise CartError(Msg.CART_NOT_FOUND)
 
             product = await Product.get(product_id)
             variant = next((v for v in product.variants if v.sku == sku), None) if product else None
             
             if not variant:
-                raise VariantNotFound("Variant no longer exists.")
+                raise VariantNotFound(Msg.VARIANT_NOT_FOUND)
             if data.quantity > variant.available_stock:
-                raise StockExceeded(f"Only {variant.available_stock} in stock.")
+                raise StockExceeded(Msg.ONLY_STOCK_AVAILABLE)
 
             new_items = []
             found = False
@@ -120,7 +121,7 @@ class CartService:
                     new_items.append(item.model_copy())
 
             if not found:
-                raise CartError("Item not found in cart.")
+                raise CartError(Msg.CART_ITEM_NOT_FOUND)
 
             collection = Cart.get_pymongo_collection() # type: ignore
             update_result = await collection.update_one(
@@ -138,19 +139,19 @@ class CartService:
                 
             await asyncio.sleep(0.01 * (attempt + 1))
 
-        raise CartConflictError("Cart was modified concurrently. Please retry.")
+        raise CartConflictError(Msg.CART_CONCURRENT_MODIFICATION)
 
     @staticmethod
     async def remove_from_cart(user_id: PydanticObjectId, product_id: PydanticObjectId, sku: str) -> Cart:
         for attempt in range(CartService.MAX_RETRIES):
             cart = await Cart.find_one(Cart.user_id == user_id)
             if not cart:
-                raise CartError("Cart not found")
+                raise CartError(Msg.CART_NOT_FOUND)
 
             new_items = [i for i in cart.items if not (i.product_id == product_id and i.sku == sku)]
             
             if len(new_items) == len(cart.items):
-                raise CartError("Item not found in cart.")
+                raise CartError(Msg.CART_ITEM_NOT_FOUND)
 
             collection = Cart.get_pymongo_collection() # type: ignore
             update_result = await collection.update_one(
@@ -168,7 +169,7 @@ class CartService:
                 
             await asyncio.sleep(0.01 * (attempt + 1))
 
-        raise CartConflictError("Cart was modified concurrently. Please retry.")
+        raise CartConflictError(Msg.CART_CONCURRENT_MODIFICATION)
 
     @staticmethod
     async def get_cart(user_id: PydanticObjectId) -> CartResponse:

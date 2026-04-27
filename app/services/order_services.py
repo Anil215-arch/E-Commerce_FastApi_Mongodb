@@ -93,29 +93,43 @@ class OrderService:
             if not product or not product.is_available:
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
-                    detail=f"Product for SKU {cart_item.sku} is unavailable or deleted.",
+                    detail={
+                        "key": Msg.PRODUCT_FOR_SKU_UNAVAILABLE_OR_DELETED,
+                        "params": {"sku": cart_item.sku},
+                    },
                 )
 
             if product.created_by is None:
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
-                    detail=f"Product {product.name} is missing seller ownership.",
+                    detail={
+                        "key": Msg.PRODUCT_MISSING_SELLER_OWNERSHIP,
+                        "params": {"product_name": product.name},
+                    },
                 )
 
             variant = next((variant for variant in product.variants if variant.sku == cart_item.sku), None)
             if not variant:
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
-                    detail=f"Variant {cart_item.sku} for {product.name} no longer exists.",
+                    detail={
+                        "key": Msg.VARIANT_FOR_PRODUCT_NO_LONGER_EXISTS,
+                        "params": {"sku": cart_item.sku, "product_name": product.name},
+                    },
                 )
 
             if variant.available_stock < cart_item.quantity:
                 raise HTTPException(
                     status_code=status.HTTP_409_CONFLICT,
-                    detail=(
-                        f"Insufficient stock for {product.name} ({cart_item.sku}). "
-                        f"Requested {cart_item.quantity}, available {variant.available_stock}."
-                    ),
+                    detail={
+                        "key": Msg.INSUFFICIENT_STOCK_FOR_PRODUCT_SKU,
+                        "params": {
+                            "product_name": product.name,
+                            "sku": cart_item.sku,
+                            "requested": cart_item.quantity,
+                            "available": variant.available_stock,
+                        },
+                    },
                 )
 
             checkout_items.append(
@@ -498,7 +512,13 @@ class OrderService:
         if next_status not in allowed_statuses:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Cannot change order status from {current_status.value} to {next_status.value}.",
+                detail={
+                    "key": Msg.INVALID_ORDER_STATUS_TRANSITION,
+                    "params": {
+                        "current_status": current_status.value,
+                        "next_status": next_status.value,
+                    },
+                },
             )
 
     @staticmethod
@@ -520,7 +540,10 @@ class OrderService:
         if order.status in {OrderStatus.CANCELLED, OrderStatus.COMPLETED}:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Cannot change status of an order that is already {order.status.value}.",
+                detail={
+                    "key": Msg.ORDER_STATUS_ALREADY_FINAL,
+                    "params": {"current_status": order.status.value},
+                },
             )
 
         OrderService._validate_status_transition(order.status, data.status)

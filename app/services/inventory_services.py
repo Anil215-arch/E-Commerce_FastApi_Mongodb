@@ -202,7 +202,10 @@ class InventoryService:
         if result.modified_count == 0:
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
-                detail=f"Stock reservation failed for SKU {sku}"
+                detail={
+                    "key": Msg.STOCK_RESERVATION_FAILED,
+                    "params": {"sku": sku},
+                }
             )
 
     @staticmethod

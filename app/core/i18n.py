@@ -26,12 +26,14 @@ def load_translations() -> None:
 def get_language(request: Request) -> str:
     accept_language = request.headers.get("accept-language", DEFAULT_LANGUAGE)
 
-    lang = accept_language.split(",")[0].split("-")[0].strip().lower()
+    for part in accept_language.split(","):
+        lang = part.split(";")[0].strip().lower()
+        base_lang = lang.split("-")[0]
 
-    if lang not in SUPPORTED_LANGUAGES:
-        return DEFAULT_LANGUAGE
+        if base_lang in SUPPORTED_LANGUAGES:
+            return base_lang
 
-    return lang
+    return DEFAULT_LANGUAGE
 
 
 def t(request: Request, key: str, **kwargs) -> str:
@@ -47,6 +49,9 @@ def t(request: Request, key: str, **kwargs) -> str:
     )
 
     if kwargs:
-        return message.format(**kwargs)
+        try:
+            return message.format(**kwargs)
+        except (KeyError, ValueError):
+            return message
 
     return message
