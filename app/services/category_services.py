@@ -1,5 +1,6 @@
 from typing import List, Tuple
 from beanie import PydanticObjectId
+from app.core.message_keys import Msg
 from app.models.category_model import Category
 from app.models.product_model import Product
 from app.schemas.category_schema import CategoryCreate, CategoryUpdate
@@ -21,7 +22,7 @@ class CategoryService:
 
         parent = await Category.get(parent_id)
         if not parent or parent.is_deleted:
-            return None, "Parent category not found or has been deleted."
+            return None, Msg.PARENT_CATEGORY_NOT_FOUND_OR_DELETED
 
         return parent.id, None
 
@@ -100,11 +101,11 @@ class CategoryService:
     async def update_category(category_id: PydanticObjectId, data: CategoryUpdate, current_user_id: PydanticObjectId) -> Tuple[Category | None, str | None]:
         category = await Category.get(category_id)
         if not category or category.is_deleted:
-            return None, "Category not found."
+            return None, Msg.CATEGORY_NOT_FOUND
         
         if category.id is None:
-            return None, "Category ID is missing."
-        
+            return None, Msg.CATEGORY_ID_MISSING
+
         update_data = data.model_dump(exclude_unset=True)
         if not update_data:
             return category, None
@@ -115,14 +116,14 @@ class CategoryService:
         if "parent_id" in update_data:
             new_parent_id = update_data["parent_id"]
             if new_parent_id == category.id:
-                return None, "A category cannot be its own parent."
+                return None, Msg.CATEGORY_CANNOT_BE_OWN_PARENT
 
             if new_parent_id is not None:
                 new_parent = await Category.get(new_parent_id)
                 if not new_parent or new_parent.is_deleted:
-                    return None, "New parent category not found."
+                    return None, Msg.NEW_PARENT_CATEGORY_NOT_FOUND
                 if await CategoryService._creates_cycle(category.id, new_parent_id):
-                    return None, "Invalid parent category: circular hierarchy detected."
+                    return None, Msg.CATEGORY_CIRCULAR_HIERARCHY
 
                 depth = 1
                 current_parent = new_parent
@@ -145,15 +146,15 @@ class CategoryService:
     async def delete_category(category_id: PydanticObjectId, current_user_id: PydanticObjectId) -> str | None:
         category = await Category.get(category_id)
         if not category or category.is_deleted:
-            return "Category not found."
+            return Msg.CATEGORY_NOT_FOUND
 
         child_exists = await Category.find_one({"parent_id": category.id, "is_deleted": False})
         if child_exists:
-            return "Cannot delete category because it has child categories. Reassign or delete them first."
+            return Msg.CATEGORY_HAS_CHILDREN
 
         product_exists = await Product.find_one({"category_id": category.id, "is_deleted": False})
         if product_exists:
-            return "Cannot delete category because products are assigned to it. Reassign or delete those products first."
+            return Msg.CATEGORY_HAS_PRODUCTS
 
         await category.soft_delete(current_user_id)
         return None

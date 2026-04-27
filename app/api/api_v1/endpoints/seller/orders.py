@@ -7,6 +7,8 @@ from app.schemas.order_schema import OrderResponse, OrderUpdateStatusRequest
 from app.schemas.common_schema import ApiResponse
 from app.services.order_services import OrderService
 from app.utils.responses import success_response
+from app.core.i18n import t
+from app.core.message_keys import Msg
 
 router = APIRouter()
 
@@ -18,7 +20,7 @@ async def update_order_status(request: Request, order_id: PydanticObjectId, data
     The Service layer must ensure the seller owns the products in this order.
     """
     if current_user.id is None:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Authenticated user id is missing")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=t(request, Msg.AUTHENTICATED_USER_ID_MISSING))
     
     updated_order = await OrderService.update_order_status(order_id, data, current_user)
-    return success_response("Order status updated successfully", updated_order)
+    return success_response(t(request, Msg.ORDER_STATUS_UPDATED_SUCCESSFULLY), updated_order)

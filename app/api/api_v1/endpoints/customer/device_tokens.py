@@ -6,6 +6,8 @@ from app.schemas.device_token_schema import DeviceTokenRegister
 from app.services.device_token_services import DeviceTokenService
 from app.schemas.common_schema import ApiResponse
 from app.utils.responses import success_response
+from app.core.i18n import t
+from app.core.message_keys import Msg
 
 router = APIRouter()
 
@@ -15,4 +17,4 @@ router = APIRouter()
 async def register_device_token(request: Request,data: DeviceTokenRegister, current_user: User = Depends(get_current_user)):
     user_id = _require_user_id(current_user)
     await DeviceTokenService.register_token(user_id, data)
-    return success_response("Device token registered successfully")
+    return success_response(t(request, Msg.DEVICE_TOKEN_REGISTERED_SUCCESSFULLY))

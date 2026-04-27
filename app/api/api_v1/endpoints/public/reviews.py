@@ -7,6 +7,8 @@ from app.schemas.review_rating_schema import ReviewResponse
 from app.services.review_rating_services import ReviewService
 from app.schemas.common_schema import ApiResponse, PaginatedResponse, PaginationMeta
 from app.utils.responses import success_response
+from app.core.i18n import t
+from app.core.message_keys import Msg
 
 router = APIRouter()
 
@@ -30,4 +32,4 @@ async def get_product_reviews(
             next_cursor=next_cursor,
         ),
     )
-    return success_response("Reviews fetched successfully", paginated_data)
+    return success_response(t(request, Msg.REVIEWS_FETCHED_SUCCESSFULLY), paginated_data)

@@ -10,6 +10,8 @@ from app.services.cart_services import (
 )
 from app.utils.responses import success_response
 from app.core.rate_limiter import user_limiter
+from app.core.i18n import t
+from app.core.message_keys import Msg
 
 router = APIRouter()
 
@@ -18,7 +20,7 @@ router = APIRouter()
 async def get_cart(request: Request, current_user: User = Depends(get_current_user)):
     user_id = _require_user_id(current_user)
     cart_data = await CartService.get_cart(user_id)
-    return success_response("Cart fetched successfully", cart_data)
+    return success_response(t(request, Msg.CART_FETCHED_SUCCESSFULLY), cart_data)
 
 @router.post("/items", response_model=ApiResponse)
 @user_limiter.limit("30/minute")
@@ -26,7 +28,7 @@ async def add_item(request: Request, data: CartItemAdd, current_user: User = Dep
     user_id = _require_user_id(current_user)
     try:
         await CartService.add_to_cart(user_id, data)
-        return success_response("Item added to cart")
+        return success_response(t(request, Msg.ITEM_ADDED_TO_CART))
     except CartConflictError as e:
         raise HTTPException(status_code=409, detail=str(e))
     except (CartLimitExceeded, StockExceeded, ProductUnavailable, VariantNotFound) as e:
@@ -38,7 +40,7 @@ async def update_quantity(request: Request, product_id: PydanticObjectId, sku: s
     user_id = _require_user_id(current_user)
     try:
         await CartService.update_item_quantity(user_id, product_id, sku, data)
-        return success_response("Cart updated")
+        return success_response(t(request, Msg.CART_UPDATED))
     except CartConflictError as e: 
         raise HTTPException(status_code=409, detail=str(e))
     except (StockExceeded, VariantNotFound) as e:
@@ -52,7 +54,7 @@ async def remove_item(request: Request, product_id: PydanticObjectId, sku: str, 
     user_id = _require_user_id(current_user)
     try:
         await CartService.remove_from_cart(user_id, product_id, sku)
-        return success_response("Item removed")
+        return success_response(t(request, Msg.ITEM_REMOVED))
     except CartConflictError as e: 
         raise HTTPException(status_code=409, detail=str(e))
     except CartError as e:         

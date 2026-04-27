@@ -6,6 +6,8 @@ from app.models.user_model import User
 from app.schemas.common_schema import ApiResponse
 from app.services.product_services import ProductService
 from app.utils.responses import success_response
+from app.core.i18n import t
+from app.core.message_keys import Msg
 
 router = APIRouter()
 
@@ -18,5 +20,5 @@ async def delete_product_as_admin(request: Request, id: PydanticObjectId, curren
     user_id = _require_user_id(current_user)
     success = await ProductService.delete_product(id, user_id)
     if not success:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Product not found")
-    return success_response("Product deleted successfully by Admin")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=t(request, Msg.PRODUCT_NOT_FOUND))
+    return success_response(t(request, Msg.PRODUCT_DELETED_SUCCESSFULLY_BY_ADMIN))

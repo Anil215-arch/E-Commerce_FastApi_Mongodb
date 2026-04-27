@@ -8,7 +8,8 @@ from fastapi.responses import JSONResponse
 from pydantic import ValidationError
 from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
-
+from app.core.i18n import t
+from app.core.message_keys import Msg
 from app.core.database import init_db
 from app.api.api_v1.router import api_router
 from app.core.config import settings
@@ -53,12 +54,12 @@ async def rate_limit_exception_handler(request: Request, exc: RateLimitExceeded)
     # exc.detail contains the string explaining the limit (e.g., "5 per 1 minute")
     return JSONResponse(
         status_code=status.HTTP_429_TOO_MANY_REQUESTS,
-        content=error_response("Rate limit exceeded", exc.detail),
+        content=error_response(t(request, Msg.RATE_LIMIT_EXCEEDED), exc.detail),
     )
     
 @app.exception_handler(HTTPException)
 async def http_exception_handler(request: Request, exc: HTTPException):
-    message = exc.detail if isinstance(exc.detail, str) else "Request failed"
+    message = t(request, exc.detail) if isinstance(exc.detail, str) else t(request, Msg.REQUEST_FAILED)
     data = None if isinstance(exc.detail, str) else exc.detail
     return JSONResponse(
         status_code=exc.status_code,
@@ -69,7 +70,7 @@ async def http_exception_handler(request: Request, exc: HTTPException):
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
     return JSONResponse(
         status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
-        content=error_response("Validation failed", jsonable_encoder(exc.errors())),
+        content=error_response(t(request, Msg.VALIDATION_FAILED), jsonable_encoder(exc.errors())),
     )
 
 @app.exception_handler(ValidationError)
@@ -81,7 +82,7 @@ async def pydantic_validation_exception_handler(request: Request, exc: Validatio
 
     return JSONResponse(
         status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
-        content=error_response("Validation failed", jsonable_encoder(errors)),
+        content=error_response(t(request, Msg.VALIDATION_FAILED), jsonable_encoder(errors)),
     )
 
     
@@ -89,7 +90,7 @@ async def pydantic_validation_exception_handler(request: Request, exc: Validatio
 async def domain_validation_exception_handler(request: Request, exc: DomainValidationError):
     return JSONResponse(
         status_code=status.HTTP_400_BAD_REQUEST,
-        content=error_response("Domain validation failed", exc.detail),
+        content=error_response(t(request, Msg.DOMAIN_VALIDATION_FAILED), exc.detail),
     )
 
 @app.exception_handler(Exception)
@@ -97,13 +98,13 @@ async def unhandled_exception_handler(request: Request, exc: Exception):
     print(f"CRITICAL ERROR: {exc}")
     return JSONResponse(
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-        content=error_response("Internal server error"),
+        content=error_response(t(request, Msg.INTERNAL_SERVER_ERROR)),
     )
 
 @app.get("/", response_model=ApiResponse[None])
 @limiter.limit("5/minute", key_func=ip_key_func)
 async def root(request: Request):
-    return success_response(f"Welcome to {settings.PROJECT_NAME}")
+    return success_response(t(request, Msg.WELCOME, project_name=settings.PROJECT_NAME))
 
 if __name__ == "__main__":
     uvicorn.run(
