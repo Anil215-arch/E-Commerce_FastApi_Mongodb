@@ -9,7 +9,7 @@ from fastapi import HTTPException, UploadFile
 from app.utils.product_mapper import ProductMapper
 from app.models.category_model import Category
 from app.models.product_model import Product, ProductTranslation
-from app.models.product_variant_model import ProductVariant
+from app.models.product_variant_model import ProductVariant, ProductVariantTranslation
 from app.schemas.category_schema import CategorySummaryResponse
 from app.schemas.product_schema import ProductCreate, ProductManageResponse, ProductResponse, ProductUpdate
 from app.schemas.product_variant_schema import (
@@ -48,7 +48,12 @@ class ProductService:
 
     @staticmethod
     def _build_variant(data: ProductVariantCreate) -> ProductVariant:
-        return ProductVariant(**data.model_dump())
+        payload = data.model_dump(exclude_none=True, exclude={"translations"})
+        payload["translations"] = {
+            lang: ProductVariantTranslation(**translated.model_dump())
+            for lang, translated in (data.translations or {}).items()
+        }
+        return ProductVariant(**payload)
 
     @staticmethod
     def _find_variant_index_or_raise(product: Product, sku: str) -> int:

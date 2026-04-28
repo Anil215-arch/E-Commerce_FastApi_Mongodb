@@ -1,3 +1,4 @@
+import re
 from typing import Dict, Any, Tuple, List, Optional
 from bson import ObjectId
 from bson.errors import InvalidId
@@ -30,12 +31,39 @@ class ProductQueryService:
         # PATH A: REGEX SEARCH (Offset Pagination)
         # ==========================================
         if params.search:
-            search_regex = {"$regex": params.search, "$options": "i"}
+            safe_search = re.escape(params.search)
+            search_regex = {"$regex": safe_search, "$options": "i"}
+            variant_attribute_exprs: List[Dict[str, Any]] = [
+                {
+                    "$anyElementTrue": {
+                        "$map": {
+                            "input": {"$ifNull": ["$variants", []]},
+                            "as": "variant",
+                            "in": {
+                                "$anyElementTrue": {
+                                    "$map": {
+                                        "input": {"$objectToArray": {"$ifNull": ["$$variant.attributes", {}]}},
+                                        "as": "attr",
+                                        "in": {
+                                            "$regexMatch": {
+                                                "input": {"$toString": "$$attr.v"},
+                                                "regex": safe_search,
+                                                "options": "i",
+                                            }
+                                        },
+                                    }
+                                }
+                            },
+                        }
+                    }
+                }
+            ]
 
             search_conditions = [
                 {"name": search_regex},
                 {"description": search_regex},
                 {"brand": search_regex},
+                {"variants.sku": search_regex},
             ]
 
             if language:
@@ -43,6 +71,40 @@ class ProductQueryService:
                     {f"translations.{language}.name": search_regex},
                     {f"translations.{language}.description": search_regex},
                 ])
+                variant_attribute_exprs.append(
+                    {
+                        "$anyElementTrue": {
+                            "$map": {
+                                "input": {"$ifNull": ["$variants", []]},
+                                "as": "variant",
+                                "in": {
+                                    "$anyElementTrue": {
+                                        "$map": {
+                                            "input": {
+                                                "$objectToArray": {
+                                                    "$ifNull": [
+                                                        f"$$variant.translations.{language}.attributes",
+                                                        {},
+                                                    ]
+                                                }
+                                            },
+                                            "as": "attr",
+                                            "in": {
+                                                "$regexMatch": {
+                                                    "input": {"$toString": "$$attr.v"},
+                                                    "regex": safe_search,
+                                                    "options": "i",
+                                                }
+                                            },
+                                        }
+                                    }
+                                },
+                            }
+                        }
+                    }
+                )
+
+            search_conditions.append({"$expr": {"$or": variant_attribute_exprs}})
 
             query = {
                 "$and": [

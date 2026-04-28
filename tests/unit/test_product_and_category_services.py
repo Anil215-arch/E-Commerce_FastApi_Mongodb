@@ -8,6 +8,7 @@ from beanie import PydanticObjectId
 from fastapi import HTTPException
 
 from app.core.exceptions import DomainValidationError
+from app.core.message_keys import Msg
 from app.models.product_variant_model import ProductVariant
 from app.schemas.category_schema import CategoryUpdate
 from app.schemas.product_schema import ProductCreate, ProductUpdate
@@ -28,10 +29,10 @@ async def test_product_update_variant_rejects_path_body_sku_mismatch():
                     "SKU-PATH",
                     ProductVariantUpdate(sku="SKU-BODY", price=100, available_stock=3),
                     PydanticObjectId(),
-                )
+    )
 
     assert exc.value.status_code == 400
-    assert "path and body must match" in str(exc.value.detail).lower()
+    assert exc.value.detail == Msg.VARIANT_SKU_PATH_BODY_MISMATCH
 
 
 @pytest.mark.asyncio
@@ -48,7 +49,7 @@ async def test_delete_variant_rejects_when_product_would_have_no_variants_left()
                 await ProductService.delete_variant(PydanticObjectId(), "ONLY", PydanticObjectId())
 
     assert exc.value.status_code == 400
-    assert "at least one variant" in str(exc.value.detail).lower()
+    assert exc.value.detail == Msg.PRODUCT_REQUIRES_AT_LEAST_ONE_VARIANT
 
 
 @pytest.mark.asyncio
@@ -96,7 +97,7 @@ async def test_upload_product_images_rejects_file_above_size_limit():
             await ProductService.upload_product_images(PydanticObjectId(), [image], PydanticObjectId())
 
     assert exc.value.status_code == 400
-    assert "file too large" in str(exc.value.detail).lower()
+    assert exc.value.detail == Msg.FILE_TOO_LARGE_MAX_5MB
 
 
 @pytest.mark.asyncio
@@ -117,7 +118,7 @@ async def test_update_product_rejects_variants_payload_in_general_update():
                 )
 
     assert exc.value.status_code == 400
-    assert "dedicated variant endpoints" in str(exc.value.detail).lower()
+    assert exc.value.detail == Msg.PRODUCT_VARIANTS_UPDATE_USE_DEDICATED_ENDPOINTS
 
 
 @pytest.mark.asyncio
@@ -336,7 +337,7 @@ async def test_category_update_rejects_self_parent_assignment():
         )
 
     assert updated is None
-    assert error == "A category cannot be its own parent."
+    assert error == Msg.CATEGORY_CANNOT_BE_OWN_PARENT
 
 
 @pytest.mark.asyncio
@@ -361,7 +362,7 @@ async def test_category_update_rejects_cycle_in_hierarchy():
             )
 
     assert updated is None
-    assert "circular hierarchy" in error.lower()
+    assert error == Msg.CATEGORY_CIRCULAR_HIERARCHY
 
 
 @pytest.mark.asyncio
@@ -373,7 +374,7 @@ async def test_delete_category_rejects_when_products_are_assigned():
             with patch("app.services.category_services.Product.find_one", new=AsyncMock(return_value=object())):
                 error = await CategoryService.delete_category(category.id, PydanticObjectId())
 
-    assert "products are assigned" in error.lower()
+    assert error == Msg.CATEGORY_HAS_PRODUCTS
 
 
 @pytest.mark.asyncio
@@ -398,6 +399,67 @@ async def test_get_category_tree_builds_nested_children():
     assert tree[0]["name"] == "Root"
     assert len(tree[0]["children"]) == 1
     assert tree[0]["children"][0]["name"] == "Child"
+
+
+@pytest.mark.asyncio
+async def test_get_all_categories_search_escapes_input_and_searches_translation_field():
+    category = SimpleNamespace(
+        id=PydanticObjectId(),
+        name="Car Accessories",
+        parent_id=None,
+        translations={"hi": SimpleNamespace(name="कार एक्सेसरीज़")},
+    )
+
+    captured_query = {}
+
+    class _FindCursor:
+        async def to_list(self):
+            return [category]
+
+    def _find(query):
+        captured_query.update(query)
+        return _FindCursor()
+
+    with patch("app.services.category_services.Category.find", side_effect=_find):
+        categories = await CategoryService.get_all_categories(language="hi", search="कार.*")
+
+    assert categories == [
+        {
+            "_id": category.id,
+            "name": "कार एक्सेसरीज़",
+            "parent_id": None,
+        }
+    ]
+    assert captured_query == {
+        "$and": [
+            {"is_deleted": False},
+            {
+                "$or": [
+                    {"name": {"$regex": r"कार\.\*", "$options": "i"}},
+                    {"translations.hi.name": {"$regex": r"कार\.\*", "$options": "i"}},
+                ]
+            },
+        ]
+    }
+
+
+@pytest.mark.asyncio
+async def test_get_all_categories_returns_base_name_when_requested_translation_is_missing():
+    category = SimpleNamespace(
+        id=PydanticObjectId(),
+        name="Car Accessories",
+        parent_id=None,
+        translations={},
+    )
+
+    class _FindCursor:
+        async def to_list(self):
+            return [category]
+
+    with patch("app.services.category_services.Category.find", return_value=_FindCursor()):
+        categories = await CategoryService.get_all_categories(language="ja")
+
+    assert categories[0]["name"] == "Car Accessories"
 
 
 @pytest.mark.asyncio
