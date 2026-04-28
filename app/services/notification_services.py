@@ -3,6 +3,7 @@ from typing import List, Optional, Dict, Any
 from beanie import PydanticObjectId
 from app.validators.notification_validator import NotificationDomainValidator
 from app.core.exceptions import DomainValidationError
+from app.core.message_keys import Msg
 from app.models.notification_model import Notification, NotificationType
 from app.models.device_token_model import DeviceToken
 from app.push.push_provider import PushProvider
@@ -75,7 +76,7 @@ class NotificationService:
         })
 
         if not notification:
-            raise ValueError("Notification not found")
+            raise ValueError(Msg.NOTIFICATION_NOT_FOUND)
 
         if not notification.is_read:
             notification.is_read = True

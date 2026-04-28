@@ -6,6 +6,8 @@ from app.schemas.dashboard_schema import AdminDashboardSummary, RevenueChartResp
 from app.schemas.common_schema import ApiResponse
 from app.services.dashboard_services import DashboardService
 from app.utils.responses import success_response
+from app.core.i18n import t
+from app.core.message_keys import Msg
 
 router = APIRouter()
 
@@ -17,7 +19,7 @@ async def get_platform_summary(request: Request):
     Protected by the Admin gateway boundary.
     """
     data = await DashboardService.get_admin_summary()
-    return success_response("Admin dashboard summary fetched successfully", data)
+    return success_response(t(request, Msg.ADMIN_DASHBOARD_SUMMARY_FETCHED_SUCCESSFULLY), data)
 
 @router.get("/revenue", response_model=ApiResponse[RevenueChartResponse])
 @user_limiter.limit("30/minute")    
@@ -31,6 +33,6 @@ async def get_admin_revenue(
         data = await DashboardService.get_revenue_chart(
             period=period, start_date=start_date, end_date=end_date
         )
-        return success_response("Admin revenue data fetched", RevenueChartResponse(data=data))
+        return success_response(t(request, Msg.ADMIN_REVENUE_DATA_FETCHED), RevenueChartResponse(data=data))
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))

@@ -1,3 +1,4 @@
+import re
 from typing import Dict, Any, Tuple, List, Optional
 from bson import ObjectId
 from bson.errors import InvalidId
@@ -12,7 +13,7 @@ from app.utils.product_mapper import ProductMapper
 class ProductQueryService:
 
     @staticmethod
-    async def list_products(params: ProductQueryParams) -> Tuple[List[ProductResponse], Optional[str], bool]:
+    async def list_products(params: ProductQueryParams, language: Optional[str] = None) -> Tuple[List[ProductResponse], Optional[str], bool]:
         query: Dict[str, Any] = {"is_deleted": {"$ne": True}}
         
         if params.category_id: query["category_id"] = params.category_id
@@ -27,26 +28,118 @@ class ProductQueryService:
         products = []
 
         # ==========================================
-        # PATH A: TEXT SEARCH (Offset Pagination)
+        # PATH A: REGEX SEARCH (Offset Pagination)
         # ==========================================
         if params.search:
-            query["$text"] = {"$search": params.search}
-            pipeline: List[Dict[str, Any]] = [{"$match": query}]
-            # Sort Logic
+            safe_search = re.escape(params.search)
+            search_regex = {"$regex": safe_search, "$options": "i"}
+            variant_attribute_exprs: List[Dict[str, Any]] = [
+                {
+                    "$anyElementTrue": {
+                        "$map": {
+                            "input": {"$ifNull": ["$variants", []]},
+                            "as": "variant",
+                            "in": {
+                                "$anyElementTrue": {
+                                    "$map": {
+                                        "input": {"$objectToArray": {"$ifNull": ["$$variant.attributes", {}]}},
+                                        "as": "attr",
+                                        "in": {
+                                            "$regexMatch": {
+                                                "input": {"$toString": "$$attr.v"},
+                                                "regex": safe_search,
+                                                "options": "i",
+                                            }
+                                        },
+                                    }
+                                }
+                            },
+                        }
+                    }
+                }
+            ]
+
+            search_conditions = [
+                {"name": search_regex},
+                {"description": search_regex},
+                {"brand": search_regex},
+                {"variants.sku": search_regex},
+            ]
+
+            if language:
+                search_conditions.extend([
+                    {f"translations.{language}.name": search_regex},
+                    {f"translations.{language}.description": search_regex},
+                ])
+                variant_attribute_exprs.append(
+                    {
+                        "$anyElementTrue": {
+                            "$map": {
+                                "input": {"$ifNull": ["$variants", []]},
+                                "as": "variant",
+                                "in": {
+                                    "$anyElementTrue": {
+                                        "$map": {
+                                            "input": {
+                                                "$objectToArray": {
+                                                    "$ifNull": [
+                                                        f"$$variant.translations.{language}.attributes",
+                                                        {},
+                                                    ]
+                                                }
+                                            },
+                                            "as": "attr",
+                                            "in": {
+                                                "$regexMatch": {
+                                                    "input": {"$toString": "$$attr.v"},
+                                                    "regex": safe_search,
+                                                    "options": "i",
+                                                }
+                                            },
+                                        }
+                                    }
+                                },
+                            }
+                        }
+                    }
+                )
+
+            search_conditions.append({"$expr": {"$or": variant_attribute_exprs}})
+
+            query = {
+                "$and": [
+                    query,
+                    {"$or": search_conditions},
+                ]
+            }
             if params.sort_by == SortField.RELEVANCE:
-                pipeline.append({"$sort": {"score": {"$meta": "textScore"}, "_id": 1}})
+                sort_params = [("_id", SortDirection.DESCENDING)]
             else:
-                sort_field_map = {SortField.PRICE: "price", SortField.RATING: "average_rating"}
+                sort_field_map = {
+                    SortField.PRICE: "price",
+                    SortField.RATING: "average_rating",
+                }
                 db_sort_field = sort_field_map.get(params.sort_by, "price")
-                sort_dir = -1 if params.sort_order == SortOrder.DESC else 1
-                pipeline.append({"$sort": {db_sort_field: sort_dir, "_id": sort_dir}})
-            
-            # Pagination Logic
+                sort_dir = (
+                    SortDirection.DESCENDING
+                    if params.sort_order == SortOrder.DESC
+                    else SortDirection.ASCENDING
+                )
+                sort_params = [(db_sort_field, sort_dir), ("_id", sort_dir)]
+
             skip_amount = (params.page - 1) * params.limit
-            pipeline.append({"$skip": skip_amount})
-            pipeline.append({"$limit": params.limit + 1})
-            
-            products = await Product.aggregate(pipeline, projection_model=Product).to_list()
+
+            collection = Product.get_pymongo_collection()
+            cursor = collection.find(query)
+
+            for field, direction in sort_params:
+                cursor = cursor.sort(field, direction)
+
+            raw_products = await cursor.skip(skip_amount).limit(params.limit + 1).to_list(
+                length=params.limit + 1
+            )
+
+            products = [Product.model_validate(product) for product in raw_products]
             
             if len(products) > params.limit:
                 has_next_page = True
@@ -107,15 +200,15 @@ class ProductQueryService:
         serialized_products = []
         for product in products:
             category = category_map.get(str(product.category_id))
-            serialized_products.append(ProductMapper.serialize_product(product, category))
+            serialized_products.append(ProductMapper.serialize_product(product, category, language=language))
 
         return serialized_products, next_cursor, has_next_page
 
     @staticmethod
-    async def get_product(product_id: PydanticObjectId) -> Optional[ProductResponse]:
+    async def get_product(product_id: PydanticObjectId, language: Optional[str] = None) -> Optional[ProductResponse]:
         product = await Product.get(product_id)
         if not product or getattr(product, "is_deleted", False):
             return None
         
         category = await Category.get(product.category_id)
-        return ProductMapper.serialize_product(product, category)
+        return ProductMapper.serialize_product(product, category, language=language)

@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from beanie import PydanticObjectId
-
+from app.core.i18n import get_language, t
+from app.core.message_keys import Msg
 from app.core.rate_limiter import ip_key_func, limiter
 from app.services.product_query_services import ProductQueryService
 from app.schemas.product_query_schema import ProductQueryParams
@@ -16,7 +17,7 @@ async def list_products(request: Request, query_params: ProductQueryParams = Dep
     """
     Public endpoint to fetch a paginated list of available products.
     """
-    products, next_cursor, has_next_page = await ProductQueryService.list_products(query_params)
+    products, next_cursor, has_next_page = await ProductQueryService.list_products(query_params, language=get_language(request))
     
     paginated_data = PaginatedResponse(
         items=products,
@@ -25,7 +26,7 @@ async def list_products(request: Request, query_params: ProductQueryParams = Dep
             next_cursor=next_cursor,
         ),
     )
-    return success_response("Products fetched successfully", paginated_data)
+    return success_response(t(request, Msg.PRODUCTS_FETCHED_SUCCESSFULLY), paginated_data)
 
 @router.get("/{id}", response_model=ApiResponse[ProductResponse], response_model_by_alias=False, status_code=status.HTTP_200_OK)
 @limiter.limit("60/minute", key_func=ip_key_func)
@@ -33,10 +34,10 @@ async def read_one(request: Request, id: PydanticObjectId):
     """
     Public endpoint to fetch the specific details of a single product.
     """
-    product = await ProductQueryService.get_product(id)
+    product = await ProductQueryService.get_product(id, language=get_language(request))
     if not product:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="Product not found"
+            detail=t(request, Msg.PRODUCT_NOT_FOUND)
         )
-    return success_response("Product fetched successfully", product)
+    return success_response(t(request, Msg.PRODUCT_FETCHED_SUCCESSFULLY), product)

@@ -1,8 +1,23 @@
 from typing import Dict, Optional
-
 from pydantic import BaseModel, Field, model_validator, ConfigDict
 
 
+class ProductVariantTranslationSchema(BaseModel):
+    attributes: Dict[str, str] = Field(default_factory=dict)
+
+    @model_validator(mode="before")
+    @classmethod
+    def normalize_attributes(cls, data):
+        if isinstance(data, dict) and "attributes" in data and isinstance(data["attributes"], dict):
+            data["attributes"] = {
+                str(key).strip(): str(value).strip()
+                for key, value in data["attributes"].items()
+                if str(key).strip()
+            }
+        return data
+
+    model_config = ConfigDict(from_attributes=True)
+    
 class ProductVariantCreate(BaseModel):
     sku: str = Field(..., min_length=3, max_length=50)
     price: int = Field(..., gt=0)
@@ -11,7 +26,8 @@ class ProductVariantCreate(BaseModel):
     available_stock: int = Field(..., ge=0)
     reserved_stock: int = Field(0, ge=0)
     attributes: Dict[str, str] = Field(default_factory=dict)
-
+    translations: Optional[Dict[str, ProductVariantTranslationSchema]] = None
+    
     @model_validator(mode="after")
     def validate_discount_price(self):
         if self.discount_price is not None and self.discount_price >= self.price:
@@ -30,6 +46,22 @@ class ProductVariantCreate(BaseModel):
                     "Processor": "Apple M2",
                     "RAM": "8GB",
                     "Storage": "256GB SSD"
+                },
+                "translations": {
+                    "hi": {
+                        "attributes": {
+                            "Processor": "एप्पल M2 प्रोसेसर",
+                            "RAM": "8GB रैम",
+                            "Storage": "256GB SSD स्टोरेज"
+                        }
+                    },
+                    "ja": {
+                        "attributes": {
+                            "Processor": "Apple M2プロセッサ",
+                            "RAM": "8GBメモリ",
+                            "Storage": "256GB SSDストレージ"
+                        }
+                    }
                 }
             }
         }
@@ -44,6 +76,7 @@ class ProductVariantUpdate(BaseModel):
     available_stock: Optional[int] = Field(None, ge=0)
     reserved_stock: Optional[int] = Field(None, ge=0)
     attributes: Optional[Dict[str, str]] = None
+    translations: Optional[Dict[str, ProductVariantTranslationSchema]] = None
 
     @model_validator(mode="after")
     def validate_discount_price(self):

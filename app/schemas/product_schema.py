@@ -1,8 +1,26 @@
 from pydantic import BaseModel, Field, ConfigDict, field_serializer, model_validator
 from typing import Optional, List, Dict
 from beanie import PydanticObjectId
+from app.core.i18n import CONTENT_TRANSLATION_LANGUAGES
 from app.schemas.category_schema import CategorySummaryResponse
 from app.schemas.product_variant_schema import ProductVariantCreate, ProductVariantUpdate, ProductVariantResponse
+
+
+class ProductTranslationSchema(BaseModel):
+    name: str = Field(..., min_length=3, max_length=200, pattern=r"^[^<>]+$")
+    description: str = Field(..., min_length=10, max_length=5000, pattern=r"^[^<>]+$")
+
+    @model_validator(mode="before")
+    @classmethod
+    def normalize(cls, data):
+        if isinstance(data, dict):
+            if "name" in data and isinstance(data["name"], str):
+                data["name"] = data["name"].strip()
+            if "description" in data and isinstance(data["description"], str):
+                data["description"] = data["description"].strip()
+        return data
+
+    model_config = ConfigDict(from_attributes=True)
 
 class ProductCreate(BaseModel):
     name: str = Field(..., min_length=3, max_length=200)
@@ -14,6 +32,7 @@ class ProductCreate(BaseModel):
     variants: List[ProductVariantCreate] = Field(default_factory=list) 
 
     specifications: Dict[str, str] = Field(default_factory=dict)
+    translations: Optional[Dict[str, ProductTranslationSchema]] = None
 
     is_available: bool = True
     is_featured: bool = False
@@ -38,6 +57,11 @@ class ProductCreate(BaseModel):
         skus = [variant.sku for variant in self.variants]
         if len(skus) != len(set(skus)):
             raise ValueError("Variant SKUs must be unique within a product.")
+
+        if self.translations is not None:
+            invalid_langs = [lang for lang in self.translations.keys() if lang not in CONTENT_TRANSLATION_LANGUAGES]
+            if invalid_langs:
+                raise ValueError("Invalid translation language key.")
 
         return self
 
@@ -81,6 +105,7 @@ class ProductUpdate(BaseModel):
     images: Optional[List[str]] = None
 
     specifications: Optional[Dict[str, str]] = None
+    translations: Optional[Dict[str, ProductTranslationSchema]] = None
 
     is_available: Optional[bool] = None
     is_featured: Optional[bool] = None
@@ -105,6 +130,11 @@ class ProductUpdate(BaseModel):
         skus = [variant.sku for variant in self.variants]
         if len(skus) != len(set(skus)):
             raise ValueError("Variant SKUs must be unique within a product.")
+
+        if self.translations is not None:
+            invalid_langs = [lang for lang in self.translations.keys() if lang not in CONTENT_TRANSLATION_LANGUAGES]
+            if invalid_langs:
+                raise ValueError("Invalid translation language key.")
 
         return self
 
@@ -141,3 +171,7 @@ class ProductResponse(BaseModel):
         from_attributes=True,
         populate_by_name=True
     )
+
+
+class ProductManageResponse(ProductResponse):
+    translations: Dict[str, ProductTranslationSchema] = Field(default_factory=dict)

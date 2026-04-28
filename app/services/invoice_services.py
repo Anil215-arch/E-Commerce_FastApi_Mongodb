@@ -10,6 +10,7 @@ from fastapi import HTTPException, status
 from beanie import PydanticObjectId
 from app.services.sequence_services import SequenceService
 from app.validators.invoice_validator import InvoiceDomainValidator
+from app.core.message_keys import Msg
 
 class InvoiceService:
     
@@ -61,14 +62,14 @@ class InvoiceService:
         if not invoice:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, 
-                detail="Invoice not found for this order."
+                detail=Msg.INVOICE_NOT_FOUND_FOR_ORDER
             )
 
         # Authorization: Only the buyer or an Admin can view the invoice
         if current_user.role == UserRole.CUSTOMER and invoice.user_id != current_user.id:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN, 
-                detail="You do not have permission to view this invoice."
+                detail=Msg.NO_PERMISSION_VIEW_INVOICE
             )
 
         return InvoiceResponse.model_validate(invoice)
