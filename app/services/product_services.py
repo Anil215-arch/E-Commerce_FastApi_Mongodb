@@ -61,6 +61,11 @@ class ProductService:
     def _merge_variant_update(existing_variant: ProductVariant, data: ProductVariantUpdate) -> ProductVariant:
         merged_payload = existing_variant.model_dump()
         update_data = data.model_dump(exclude_unset=True, exclude={"sku"})
+
+        if "translations" in update_data and update_data["translations"] is not None:
+            merged_payload["translations"] = update_data["translations"]
+            update_data.pop("translations")
+
         merged_payload.update(update_data)
         return ProductVariant(**merged_payload)
 

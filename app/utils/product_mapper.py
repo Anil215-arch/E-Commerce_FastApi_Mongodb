@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Any, Optional
 from app.models.product_model import Product
 from app.models.category_model import Category
 from app.schemas.product_schema import ProductResponse, ProductManageResponse
@@ -29,6 +29,17 @@ class ProductMapper:
         return product.name, product.description
 
     @staticmethod
+    def _localized_variant_attributes(variant, language: Optional[str]) -> dict[str, str]:
+        if language and language in variant.translations:
+            translated_attributes = variant.translations[language].attributes
+            if translated_attributes:
+                return {
+                    key: translated_attributes.get(key, value)
+                    for key, value in variant.attributes.items()
+                }
+        return variant.attributes
+    
+    @staticmethod
     def serialize_product(
         product: Product,
         category: Optional[Category],
@@ -46,9 +57,17 @@ class ProductMapper:
 
         localized_name, localized_description = ProductMapper._localized_product_content(product, language)
 
-        variants = [ProductVariantResponse(**variant.model_dump()) for variant in product.variants]
+        variants = [
+            ProductVariantResponse(
+                **{
+                    **variant.model_dump(exclude={"translations"}),
+                    "attributes": ProductMapper._localized_variant_attributes(variant, language),
+                }
+            )
+            for variant in product.variants
+        ]
 
-        base_payload = dict(
+        base_payload: dict[str, Any] = dict(
             _id=product.id,
             name=localized_name,
             description=localized_description,
@@ -67,15 +86,15 @@ class ProductMapper:
         )
 
         if include_translations:
-            return ProductManageResponse(
+            return ProductManageResponse.model_validate({
                 **base_payload,
-                translations={
+                "translations": {
                     lang: {
                         "name": translated.name,
                         "description": translated.description,
                     }
                     for lang, translated in product.translations.items()
                 },
-            )
+            })
 
-        return ProductResponse(**base_payload)
+        return ProductResponse.model_validate(base_payload)

@@ -27,26 +27,57 @@ class ProductQueryService:
         products = []
 
         # ==========================================
-        # PATH A: TEXT SEARCH (Offset Pagination)
+        # PATH A: REGEX SEARCH (Offset Pagination)
         # ==========================================
         if params.search:
-            query["$text"] = {"$search": params.search}
-            pipeline: List[Dict[str, Any]] = [{"$match": query}]
-            # Sort Logic
+            search_regex = {"$regex": params.search, "$options": "i"}
+
+            search_conditions = [
+                {"name": search_regex},
+                {"description": search_regex},
+                {"brand": search_regex},
+            ]
+
+            if language:
+                search_conditions.extend([
+                    {f"translations.{language}.name": search_regex},
+                    {f"translations.{language}.description": search_regex},
+                ])
+
+            query = {
+                "$and": [
+                    query,
+                    {"$or": search_conditions},
+                ]
+            }
             if params.sort_by == SortField.RELEVANCE:
-                pipeline.append({"$sort": {"score": {"$meta": "textScore"}, "_id": 1}})
+                sort_params = [("_id", SortDirection.DESCENDING)]
             else:
-                sort_field_map = {SortField.PRICE: "price", SortField.RATING: "average_rating"}
+                sort_field_map = {
+                    SortField.PRICE: "price",
+                    SortField.RATING: "average_rating",
+                }
                 db_sort_field = sort_field_map.get(params.sort_by, "price")
-                sort_dir = -1 if params.sort_order == SortOrder.DESC else 1
-                pipeline.append({"$sort": {db_sort_field: sort_dir, "_id": sort_dir}})
-            
-            # Pagination Logic
+                sort_dir = (
+                    SortDirection.DESCENDING
+                    if params.sort_order == SortOrder.DESC
+                    else SortDirection.ASCENDING
+                )
+                sort_params = [(db_sort_field, sort_dir), ("_id", sort_dir)]
+
             skip_amount = (params.page - 1) * params.limit
-            pipeline.append({"$skip": skip_amount})
-            pipeline.append({"$limit": params.limit + 1})
-            
-            products = await Product.aggregate(pipeline, projection_model=Product).to_list()
+
+            collection = Product.get_pymongo_collection()
+            cursor = collection.find(query)
+
+            for field, direction in sort_params:
+                cursor = cursor.sort(field, direction)
+
+            raw_products = await cursor.skip(skip_amount).limit(params.limit + 1).to_list(
+                length=params.limit + 1
+            )
+
+            products = [Product.model_validate(product) for product in raw_products]
             
             if len(products) > params.limit:
                 has_next_page = True
