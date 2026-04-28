@@ -1,6 +1,6 @@
-from fastapi import APIRouter, HTTPException, Request, status
+from fastapi import APIRouter, HTTPException, Request, status, Query
 from beanie import PydanticObjectId
-from typing import List
+from typing import List, Optional
 
 from app.core.rate_limiter import ip_key_func, limiter
 from app.schemas.category_schema import CategoryResponse, CategoryTreeResponse
@@ -23,11 +23,17 @@ async def get_category_tree(request: Request):
 
 @router.get("/", response_model=ApiResponse[List[CategoryResponse]], response_model_by_alias=False)
 @limiter.limit("60/minute", key_func=ip_key_func)
-async def list_categories(request: Request):
+async def list_categories(
+    request: Request,
+    search: Optional[str] = Query(default=None, max_length=50, description="Category search term"),
+):
     """
     Public endpoint to fetch all categories as a flat list.
     """
-    categories = await CategoryService.get_all_categories(language=get_language(request))
+    categories = await CategoryService.get_all_categories(
+        language=get_language(request),
+        search=search,
+    )
     return success_response(t(request, Msg.CATEGORIES_FETCHED_SUCCESSFULLY), categories)
 
 @router.get("/{id}", response_model=ApiResponse[CategoryResponse], response_model_by_alias=False)

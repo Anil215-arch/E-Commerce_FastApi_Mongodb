@@ -1,12 +1,22 @@
+import re
 from typing import Any, List, Optional, Tuple
 from beanie import PydanticObjectId
 from app.core.message_keys import Msg
-from app.models.category_model import Category
+from app.models.category_model import Category, CategoryTranslation
 from app.models.product_model import Product
 from app.schemas.category_schema import CategoryCreate, CategoryUpdate
 from app.validators.category_validator import CategoryDomainValidator
 
 class CategoryService:
+    @staticmethod
+    def _build_translations(
+        translations: dict[str, Any] | None,
+    ) -> dict[str, CategoryTranslation]:
+        return {
+            lang: CategoryTranslation(**translation.model_dump())
+            for lang, translation in (translations or {}).items()
+        }
+
     @staticmethod
     def _localized_name(category: Category, language: Optional[str]) -> str:
         if language and language in category.translations:
@@ -24,8 +34,30 @@ class CategoryService:
         }
 
     @staticmethod
-    async def get_all_categories(language: Optional[str] = None) -> List[Category] | List[dict[str, Any]]:
-        categories = await Category.find(Category.is_deleted == False).to_list()
+    async def get_all_categories(
+        language: Optional[str] = None,
+        search: Optional[str] = None,
+    ) -> List[Category] | List[dict[str, Any]]:
+        query: dict[str, Any] = {"is_deleted": False}
+
+        if search:
+            clean_search = search.strip()
+            if clean_search:
+                safe_regex = {"$regex": re.escape(clean_search), "$options": "i"}
+
+                search_conditions = [{"name": safe_regex}]
+
+                if language:
+                    search_conditions.append({f"translations.{language}.name": safe_regex})
+
+                query = {
+                    "$and": [
+                        query,
+                        {"$or": search_conditions},
+                    ]
+                }
+
+        categories = await Category.find(query).to_list()
         if language is None:
             return categories
         return [CategoryService._serialize_category(category, language) for category in categories]
@@ -86,7 +118,7 @@ class CategoryService:
         new_category = Category(
             name=clean_name,
             parent_id=parent_id,
-            translations=data.translations or {},
+            translations=CategoryService._build_translations(data.translations),
             created_by=current_user_id,
             updated_by=current_user_id
         )
@@ -139,7 +171,7 @@ class CategoryService:
             category.name = CategoryDomainValidator.validate_name(update_data["name"])
 
         if "translations" in update_data and update_data["translations"] is not None:
-            category.translations = update_data["translations"]
+            category.translations = CategoryService._build_translations(data.translations)
 
         if "parent_id" in update_data:
             new_parent_id = update_data["parent_id"]
