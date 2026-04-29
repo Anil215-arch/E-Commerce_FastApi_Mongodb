@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Dict, Any
 from beanie import PydanticObjectId
-from pydantic import Field, model_validator
+from pydantic import BaseModel, Field, model_validator
 from pymongo import ASCENDING, DESCENDING, IndexModel
 
 from app.models.base_model import AuditDocument
@@ -12,6 +12,20 @@ class NotificationType(str, Enum):
     SYSTEM = "SYSTEM"
     PROMOTION = "PROMOTION"
 
+class NotificationTranslation(BaseModel):
+    title: str = Field(..., max_length=150)
+    message: str = Field(..., max_length=1000)
+
+    @model_validator(mode="after")
+    def validate_translation_record(self):
+        if not self.title.strip():
+            raise ValueError("Notification translation title cannot be empty or whitespace")
+
+        if not self.message.strip():
+            raise ValueError("Notification translation message cannot be empty or whitespace")
+
+        return self
+    
 class Notification(AuditDocument):
     user_id: PydanticObjectId
     title: str = Field(..., max_length=150)
@@ -19,6 +33,7 @@ class Notification(AuditDocument):
     type: NotificationType
     is_read: bool = Field(default=False)
     metadata: Dict[str, Any] = Field(default_factory=dict)
+    translations: Dict[str, NotificationTranslation] = Field(default_factory=dict)
 
     @model_validator(mode="after")
     def validate_notification_record(self):
