@@ -1,6 +1,8 @@
 from typing import Dict, Optional
 from pydantic import BaseModel, Field, model_validator, ConfigDict
 
+from app.core.i18n import CONTENT_TRANSLATION_LANGUAGES
+
 
 class ProductVariantTranslationSchema(BaseModel):
     attributes: Dict[str, str] = Field(default_factory=dict)
@@ -32,6 +34,17 @@ class ProductVariantCreate(BaseModel):
     def validate_discount_price(self):
         if self.discount_price is not None and self.discount_price >= self.price:
             raise ValueError("discount_price must be less than price")
+        return self
+    
+    @model_validator(mode="after")
+    def validate_translations(self):
+        if self.translations is not None:
+            invalid_langs = [
+                lang for lang in self.translations.keys()
+                if lang not in CONTENT_TRANSLATION_LANGUAGES
+            ]
+            if invalid_langs:
+                raise ValueError("Invalid translation language key.")
         return self
     
     model_config = ConfigDict(
@@ -82,6 +95,17 @@ class ProductVariantUpdate(BaseModel):
     def validate_discount_price(self):
         if self.discount_price is not None and self.price is not None and self.discount_price >= self.price:
             raise ValueError("discount_price must be less than price")
+        return self
+    
+    @model_validator(mode="after")
+    def validate_translations(self):
+        if self.translations is not None:
+            invalid_langs = [
+                lang for lang in self.translations.keys()
+                if lang not in CONTENT_TRANSLATION_LANGUAGES
+            ]
+            if invalid_langs:
+                raise ValueError("Invalid translation language key.")
         return self
 
 class ProductVariantResponse(BaseModel):

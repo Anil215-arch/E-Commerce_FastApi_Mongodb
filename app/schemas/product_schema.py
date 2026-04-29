@@ -65,6 +65,17 @@ class ProductCreate(BaseModel):
 
         return self
 
+    @model_validator(mode="after")
+    def validate_translations(self):
+        if self.translations is not None:
+            invalid_langs = [
+                lang for lang in self.translations.keys()
+                if lang not in CONTENT_TRANSLATION_LANGUAGES
+            ]
+            if invalid_langs:
+                raise ValueError("Invalid translation language key.")
+        return self
+
     model_config = ConfigDict(
         json_schema_extra={
             "example": {
@@ -138,7 +149,17 @@ class ProductUpdate(BaseModel):
 
         return self
 
-
+    @model_validator(mode="after")
+    def validate_translations(self):
+        if self.translations is not None:
+            invalid_langs = [
+                lang for lang in self.translations.keys()
+                if lang not in CONTENT_TRANSLATION_LANGUAGES
+            ]
+            if invalid_langs:
+                raise ValueError("Invalid translation language key.")
+        return self
+    
 class ProductResponse(BaseModel):
     id: PydanticObjectId = Field(alias="_id")
     name: str
