@@ -6,6 +6,7 @@ import pytest
 from fastapi import HTTPException
 from beanie import PydanticObjectId
 
+from app.core.message_keys import Msg
 from app.schemas.address_schema import Address
 from app.schemas.user_schema import UserAddAddress
 from app.schemas.user_schema import UserTokenData, UserUpdatePassword
@@ -141,7 +142,7 @@ async def test_add_user_address_rejects_more_than_ten(monkeypatch):
         await UserServices.add_user_address(current_user, _address_payload())
 
     assert exc_info.value.status_code == 400
-    assert "maximum of 10 addresses" in str(exc_info.value.detail).lower()
+    assert exc_info.value.detail == Msg.MAX_ADDRESSES_ALLOWED
     current_user.save.assert_not_awaited()
 
 
@@ -189,7 +190,7 @@ async def test_update_user_address_rejects_invalid_index(monkeypatch, index):
         await UserServices.update_user_address(current_user, index, _address_payload(city="Hubli"))
 
     assert exc_info.value.status_code == 404
-    assert "address not found" in str(exc_info.value.detail).lower()
+    assert exc_info.value.detail == Msg.ADDRESS_NOT_FOUND
     current_user.save.assert_not_awaited()
 
 
@@ -239,5 +240,5 @@ async def test_remove_user_address_rejects_invalid_index(monkeypatch, index):
         await UserServices.remove_user_address(current_user, index)
 
     assert exc_info.value.status_code == 404
-    assert "address not found" in str(exc_info.value.detail).lower()
+    assert exc_info.value.detail == Msg.ADDRESS_NOT_FOUND
     current_user.save.assert_not_awaited()
