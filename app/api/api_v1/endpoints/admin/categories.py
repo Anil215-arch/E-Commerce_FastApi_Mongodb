@@ -37,8 +37,11 @@ async def update_category(request: Request, id: PydanticObjectId, category_in: C
 async def delete_category(request: Request, id: PydanticObjectId, current_user: User = Depends(get_current_user)):
     user_id = _require_user_id(current_user)
     error = await CategoryService.delete_category(id, user_id)
-    if error == "Category not found.":
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=t(request, Msg.CATEGORY_NOT_FOUND))
+    if error == Msg.CATEGORY_NOT_FOUND:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=t(request, Msg.CATEGORY_NOT_FOUND),
+        )
     if error:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=t(request, error))
     return success_response(t(request, Msg.CATEGORY_DELETED_SUCCESSFULLY))

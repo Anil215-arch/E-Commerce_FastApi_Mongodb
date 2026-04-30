@@ -65,7 +65,7 @@ class CategoryService:
     @staticmethod
     async def get_category_by_id(category_id: PydanticObjectId, language: Optional[str] = None) -> Category | dict[str, Any] | None:
         category = await Category.get(category_id)
-        if not category:
+        if not category or category.is_deleted:
             return None
         if language is None:
             return category
@@ -96,7 +96,29 @@ class CategoryService:
             current_parent = await Category.get(current_parent.parent_id)
 
         return False
+    
+    @staticmethod
+    async def _get_descendant_category_ids(category_id: PydanticObjectId) -> list[PydanticObjectId]:
+        descendant_ids: list[PydanticObjectId] = []
+        pending_ids: list[PydanticObjectId] = [category_id]
 
+        while pending_ids:
+            children = await Category.find({
+                "parent_id": {"$in": pending_ids},
+                "is_deleted": False,
+            }).to_list()
+
+            child_ids = [
+                child.id
+                for child in children
+                if child.id is not None
+            ]
+
+            descendant_ids.extend(child_ids)
+            pending_ids = child_ids
+
+        return descendant_ids
+    
     @staticmethod
     async def create_category(data: CategoryCreate, current_user_id: PydanticObjectId) -> Tuple[Category | None, str | None]:
         parent_id, error = await CategoryService._validate_parent(data.parent_id)
@@ -145,11 +167,9 @@ class CategoryService:
             cat_id_str = str(cat.id)
             if cat.parent_id:
                 parent_id_str = str(cat.parent_id)
-                # If the parent exists in our map, inject this category into its children list
                 if parent_id_str in category_map:
                     category_map[parent_id_str]["children"].append(category_map[cat_id_str])
             else:
-                # If it has no parent, it is a root category
                 tree.append(category_map[cat_id_str])
 
         return tree
@@ -205,16 +225,34 @@ class CategoryService:
     @staticmethod
     async def delete_category(category_id: PydanticObjectId, current_user_id: PydanticObjectId) -> str | None:
         category = await Category.get(category_id)
-        if not category or category.is_deleted:
+        if not category or category.is_deleted or category.id is None:
             return Msg.CATEGORY_NOT_FOUND
 
-        child_exists = await Category.find_one({"parent_id": category.id, "is_deleted": False})
-        if child_exists:
-            return Msg.CATEGORY_HAS_CHILDREN
+        descendant_ids = await CategoryService._get_descendant_category_ids(category.id)
+        category_ids_to_delete: list[PydanticObjectId] = [category.id, *descendant_ids]
 
-        product_exists = await Product.find_one({"category_id": category.id, "is_deleted": False})
-        if product_exists:
-            return Msg.CATEGORY_HAS_PRODUCTS
+        products = await Product.find({
+            "category_id": {"$in": category_ids_to_delete},
+            "is_deleted": False,
+        }).to_list()
 
-        await category.soft_delete(current_user_id)
+        for product in products:
+            await product.soft_delete(current_user_id)
+
+        categories_to_delete = await Category.find({
+            "_id": {"$in": category_ids_to_delete},
+            "is_deleted": False,
+        }).to_list()
+
+        categories_by_id = {
+            category_to_delete.id: category_to_delete
+            for category_to_delete in categories_to_delete
+            if category_to_delete.id is not None
+        }
+
+        for category_id_to_delete in reversed(category_ids_to_delete):
+            category_to_delete = categories_by_id.get(category_id_to_delete)
+            if category_to_delete:
+                await category_to_delete.soft_delete(current_user_id)
+
         return None
