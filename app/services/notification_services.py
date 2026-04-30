@@ -1,13 +1,16 @@
 import asyncio
 from typing import List, Optional, Dict, Any
 from beanie import PydanticObjectId
+from beanie.exceptions import CollectionWasNotInitialized
 from app.validators.notification_validator import NotificationDomainValidator
 from app.core.exceptions import DomainValidationError
 from app.core.message_keys import Msg
+from app.models.user_model import User
 from app.models.notification_model import Notification, NotificationTranslation, NotificationType
 from app.models.device_token_model import DeviceToken
 from app.core.i18n import CONTENT_TRANSLATION_LANGUAGES
 from app.push.push_provider import PushProvider
+
 
 class NotificationService:
     @staticmethod
@@ -31,7 +34,16 @@ class NotificationService:
             )
             for lang, value in translations.items()
         }
-        
+    
+    @staticmethod
+    async def _get_user_preferred_language(user_id: PydanticObjectId) -> Optional[str]:
+        try:
+            user = await User.get(user_id)
+        except CollectionWasNotInitialized:
+            return None
+
+        return user.preferred_language if user and user.preferred_language else None   
+    
     @staticmethod
     async def create_notification(
         user_id: PydanticObjectId,
@@ -56,6 +68,8 @@ class NotificationService:
             updated_by=user_id
         )
         await notification.insert()
+        language = await NotificationService._get_user_preferred_language(user_id)
+        push_payload = NotificationService.serialize_notification(notification, language=language)
 
         # 2. Fetch active routing destinations
         device_tokens = await DeviceToken.find({
@@ -70,8 +84,8 @@ class NotificationService:
         push_tasks = [
             PushProvider.send_push(
                 token=device.token,
-                title=clean_title,
-                body=clean_message,
+                title=push_payload["title"],
+                body=push_payload["message"],
                 data=clean_metadata
             ) for device in device_tokens
         ]

@@ -37,7 +37,17 @@ async def test_get_unread_count_returns_zero_when_no_unread_notifications():
 async def test_create_notification_normalizes_payload_and_sends_pushes():
     user_id = PydanticObjectId()
     insert_mock = AsyncMock()
-    notification_doc = SimpleNamespace(insert=insert_mock)
+    notification_doc = SimpleNamespace(
+        insert=insert_mock,
+        title="Order Update",
+        message="Your order is shipped",
+        translations={},
+        type=NotificationType.ORDER,
+        is_read=False,
+        metadata={"orderId": "ORD-1"},
+        created_at=None,
+        id=PydanticObjectId(),
+    )
     tokens_cursor = SimpleNamespace(
         to_list=AsyncMock(
             return_value=[
@@ -49,14 +59,19 @@ async def test_create_notification_normalizes_payload_and_sends_pushes():
 
     with patch("app.services.notification_services.Notification", return_value=notification_doc):
         with patch("app.services.notification_services.DeviceToken.find", return_value=tokens_cursor):
-            with patch("app.services.notification_services.PushProvider.send_push", new=AsyncMock()) as mock_send:
-                result = await NotificationService.create_notification(
-                    user_id=user_id,
-                    title="  Order Update  ",
-                    message="  Your order is shipped  ",
-                    notification_type=NotificationType.ORDER,
-                    metadata={"orderId": "ORD-1"},
-                )
+            with patch.object(
+                NotificationService,
+                "_get_user_preferred_language",
+                new=AsyncMock(return_value=None),
+            ):
+                with patch("app.services.notification_services.PushProvider.send_push", new=AsyncMock()) as mock_send:
+                    result = await NotificationService.create_notification(
+                        user_id=user_id,
+                        title="  Order Update  ",
+                        message="  Your order is shipped  ",
+                        notification_type=NotificationType.ORDER,
+                        metadata={"orderId": "ORD-1"},
+                    )
 
     assert result is notification_doc
     insert_mock.assert_awaited_once()
