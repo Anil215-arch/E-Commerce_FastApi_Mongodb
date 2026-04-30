@@ -1,5 +1,6 @@
 from io import BytesIO
 from types import SimpleNamespace
+from typing import Any, cast
 from unittest.mock import mock_open
 from unittest.mock import AsyncMock, patch
 
@@ -10,7 +11,7 @@ from fastapi import HTTPException
 from app.core.exceptions import DomainValidationError
 from app.core.message_keys import Msg
 from app.models.product_variant_model import ProductVariant
-from app.schemas.category_schema import CategoryUpdate
+from app.schemas.category_schema import CategoryCreate, CategoryUpdate
 from app.schemas.product_schema import ProductCreate, ProductUpdate
 from app.schemas.product_variant_schema import ProductVariantCreate, ProductVariantUpdate
 from app.services.category_services import CategoryService
@@ -27,9 +28,9 @@ async def test_product_update_variant_rejects_path_body_sku_mismatch():
                 await ProductService.update_variant(
                     PydanticObjectId(),
                     "SKU-PATH",
-                    ProductVariantUpdate(sku="SKU-BODY", price=100, available_stock=3),
+                    ProductVariantUpdate.model_validate({"sku": "SKU-BODY", "price": 100, "available_stock": 3}),
                     PydanticObjectId(),
-    )
+                )
 
     assert exc.value.status_code == 400
     assert exc.value.detail == Msg.VARIANT_SKU_PATH_BODY_MISMATCH
@@ -94,7 +95,7 @@ async def test_upload_product_images_rejects_file_above_size_limit():
 
     with patch("app.services.product_services.Product.get", new=AsyncMock(return_value=product)):
         with pytest.raises(HTTPException) as exc:
-            await ProductService.upload_product_images(PydanticObjectId(), [image], PydanticObjectId())
+            await ProductService.upload_product_images(PydanticObjectId(), cast(Any, [image]), PydanticObjectId())
 
     assert exc.value.status_code == 400
     assert exc.value.detail == Msg.FILE_TOO_LARGE_MAX_5MB
@@ -109,10 +110,14 @@ async def test_update_product_rejects_variants_payload_in_general_update():
             with pytest.raises(HTTPException) as exc:
                 await ProductService.update_product(
                     PydanticObjectId(),
-                    ProductUpdate(
-                        variants=[
-                            ProductVariantUpdate(sku="SKU-1", price=100, available_stock=1),
-                        ]
+                    ProductUpdate.model_validate(
+                        {
+                            "variants": [
+                                ProductVariantUpdate.model_validate(
+                                    {"sku": "SKU-1", "price": 100, "available_stock": 1}
+                                ),
+                            ]
+                        }
                     ),
                     PydanticObjectId(),
                 )
@@ -138,7 +143,7 @@ async def test_update_product_unavailable_triggers_wishlist_cleanup():
                 with patch("app.services.product_services.WishlistService.remove_ghost_product_references", new=cleanup_mock):
                     await ProductService.update_product(
                         product_id,
-                        ProductUpdate(is_available=False),
+                        ProductUpdate.model_validate({"is_available": False}),
                         current_user_id,
                     )
 
@@ -163,7 +168,7 @@ async def test_update_product_without_unavailable_flag_does_not_trigger_cleanup(
                 with patch("app.services.product_services.WishlistService.remove_ghost_product_references", new=cleanup_mock):
                     await ProductService.update_product(
                         product_id,
-                        ProductUpdate(name="Updated Product Name"),
+                        ProductUpdate.model_validate({"name": "Updated Product Name"}),
                         current_user_id,
                     )
 
@@ -175,13 +180,15 @@ async def test_add_variant_rejects_reserved_stock_above_available():
     with pytest.raises(DomainValidationError) as exc:
         await ProductService.add_variant(
             PydanticObjectId(),
-            ProductVariantCreate(
-                sku="SKU-1",
-                price=100,
-                discount_price=90,
-                available_stock=1,
-                reserved_stock=2,
-                attributes={},
+            ProductVariantCreate.model_validate(
+                {
+                    "sku": "SKU-1",
+                    "price": 100,
+                    "discount_price": 90,
+                    "available_stock": 1,
+                    "reserved_stock": 2,
+                    "attributes": {},
+                }
             ),
             PydanticObjectId(),
         )
@@ -213,7 +220,7 @@ async def test_update_variant_rejects_partial_payload_that_breaks_price_rules():
                 await ProductService.update_variant(
                     PydanticObjectId(),
                     "SKU-1",
-                    ProductVariantUpdate(sku="SKU-1", reserved_stock=6),
+                    ProductVariantUpdate.model_validate({"sku": "SKU-1", "reserved_stock": 6}),
                     PydanticObjectId(),
                 )
 
@@ -224,30 +231,36 @@ async def test_update_variant_rejects_partial_payload_that_breaks_price_rules():
 @pytest.mark.asyncio
 async def test_create_product_runs_domain_validation_for_specs_and_each_variant():
     category_id = PydanticObjectId()
-    payload = ProductCreate(
-        name="Phone X",
-        description="Modern smartphone with long battery and excellent camera setup",
-        brand="Acme",
-        category_id=category_id,
-        variants=[
-            ProductVariantCreate(
-                sku="SKU-1",
-                price=100,
-                discount_price=90,
-                available_stock=5,
-                reserved_stock=0,
-                attributes={"Color": "Black"},
-            ),
-            ProductVariantCreate(
-                sku="SKU-2",
-                price=150,
-                discount_price=120,
-                available_stock=3,
-                reserved_stock=1,
-                attributes={"Color": "Blue"},
-            ),
-        ],
-        specifications={"Material": "Aluminum"},
+    payload = ProductCreate.model_validate(
+        {
+            "name": "Phone X",
+            "description": "Modern smartphone with long battery and excellent camera setup",
+            "brand": "Acme",
+            "category_id": category_id,
+            "variants": [
+                ProductVariantCreate.model_validate(
+                    {
+                        "sku": "SKU-1",
+                        "price": 100,
+                        "discount_price": 90,
+                        "available_stock": 5,
+                        "reserved_stock": 0,
+                        "attributes": {"Color": "Black"},
+                    }
+                ),
+                ProductVariantCreate.model_validate(
+                    {
+                        "sku": "SKU-2",
+                        "price": 150,
+                        "discount_price": 120,
+                        "available_stock": 3,
+                        "reserved_stock": 1,
+                        "attributes": {"Color": "Blue"},
+                    }
+                ),
+            ],
+            "specifications": {"Material": "Aluminum"},
+        }
     )
     validator_specs_mock = patch("app.services.product_services.ProductDomainValidator.validate_specifications")
     validator_variant_mock = patch("app.services.product_services.ProductDomainValidator.validate_variant_data")
@@ -274,7 +287,7 @@ async def test_update_product_rejects_invalid_specification_value_length():
             with pytest.raises(DomainValidationError) as exc:
                 await ProductService.update_product(
                     PydanticObjectId(),
-                    ProductUpdate(specifications={"LongSpec": "x" * 501}),
+                    ProductUpdate.model_validate({"specifications": {"LongSpec": "x" * 501}}),
                     PydanticObjectId(),
                 )
 
@@ -291,14 +304,14 @@ async def test_upload_product_images_rejects_duplicate_image_urls_in_existing_pr
     image = SimpleNamespace(
         filename="ok.jpg",
         content_type="image/jpeg",
-        file=BytesIO(b"\xff\xd8\xff\xe0validjpeg"),
+        file=BytesIO(b"\xff\xd8\xff\xe0valid"),
     )
 
     with patch("app.services.product_services.Product.get", new=AsyncMock(return_value=product)):
         with patch("builtins.open", mock_open()):
             with patch("app.services.product_services.shutil.copyfileobj"):
                 with pytest.raises(DomainValidationError) as exc:
-                    await ProductService.upload_product_images(PydanticObjectId(), [image], PydanticObjectId())
+                    await ProductService.upload_product_images(PydanticObjectId(), cast(Any, [image]), PydanticObjectId())
 
     assert "duplicate image urls" in str(exc.value).lower()
     product.save.assert_not_awaited()
@@ -332,7 +345,7 @@ async def test_category_update_rejects_self_parent_assignment():
     with patch("app.services.category_services.Category.get", new=AsyncMock(return_value=category)):
         updated, error = await CategoryService.update_category(
             category_id,
-            CategoryUpdate(parent_id=category_id),
+            CategoryUpdate.model_validate({"parent_id": category_id}),
             PydanticObjectId(),
         )
 
@@ -357,7 +370,7 @@ async def test_category_update_rejects_cycle_in_hierarchy():
         with patch("app.services.category_services.CategoryService._creates_cycle", new=AsyncMock(return_value=True)):
             updated, error = await CategoryService.update_category(
                 category_id,
-                CategoryUpdate(parent_id=new_parent_id),
+                CategoryUpdate.model_validate({"parent_id": new_parent_id}),
                 PydanticObjectId(),
             )
 
@@ -366,15 +379,56 @@ async def test_category_update_rejects_cycle_in_hierarchy():
 
 
 @pytest.mark.asyncio
-async def test_delete_category_rejects_when_products_are_assigned():
-    category = SimpleNamespace(id=PydanticObjectId(), is_deleted=False, delete=AsyncMock())
+async def test_delete_category_soft_deletes_products_and_category_tree():
+    parent_id = PydanticObjectId()
+    child_id = PydanticObjectId()
+    current_user_id = PydanticObjectId()
 
-    with patch("app.services.category_services.Category.get", new=AsyncMock(return_value=category)):
-        with patch("app.services.category_services.Category.find_one", new=AsyncMock(return_value=None)):
-            with patch("app.services.category_services.Product.find_one", new=AsyncMock(return_value=object())):
-                error = await CategoryService.delete_category(category.id, PydanticObjectId())
+    parent = SimpleNamespace(
+        id=parent_id,
+        is_deleted=False,
+        soft_delete=AsyncMock(),
+    )
 
-    assert error == Msg.CATEGORY_HAS_PRODUCTS
+    child = SimpleNamespace(
+        id=child_id,
+        is_deleted=False,
+        soft_delete=AsyncMock(),
+    )
+
+    product = SimpleNamespace(
+        id=PydanticObjectId(),
+        is_deleted=False,
+        soft_delete=AsyncMock(),
+    )
+
+    children_cursor = AsyncMock()
+    children_cursor.to_list = AsyncMock(return_value=[child])
+
+    no_children_cursor = AsyncMock()
+    no_children_cursor.to_list = AsyncMock(return_value=[])
+
+    products_cursor = AsyncMock()
+    products_cursor.to_list = AsyncMock(return_value=[product])
+
+    categories_cursor = AsyncMock()
+    categories_cursor.to_list = AsyncMock(return_value=[parent, child])
+
+    with patch("app.services.category_services.Category.get", new=AsyncMock(return_value=parent)):
+        with patch(
+            "app.services.category_services.Category.find",
+            side_effect=[children_cursor, no_children_cursor, categories_cursor],
+        ):
+            with patch(
+                "app.services.category_services.Product.find",
+                return_value=products_cursor,
+            ):
+                error = await CategoryService.delete_category(parent_id, current_user_id)
+
+    assert error is None
+    product.soft_delete.assert_awaited_once_with(current_user_id)
+    child.soft_delete.assert_awaited_once_with(current_user_id)
+    parent.soft_delete.assert_awaited_once_with(current_user_id)
 
 
 @pytest.mark.asyncio
@@ -393,7 +447,7 @@ async def test_get_category_tree_builds_nested_children():
     find_cursor = SimpleNamespace(to_list=AsyncMock(return_value=categories))
     with patch("app.services.category_services.Category.is_deleted", new=_Expr(), create=True):
         with patch("app.services.category_services.Category.find", return_value=find_cursor):
-            tree = await CategoryService.get_category_tree()
+            tree = cast(list[dict[str, Any]], await CategoryService.get_category_tree())
 
     assert len(tree) == 1
     assert tree[0]["name"] == "Root"
@@ -407,7 +461,7 @@ async def test_get_all_categories_search_escapes_input_and_searches_translation_
         id=PydanticObjectId(),
         name="Car Accessories",
         parent_id=None,
-        translations={"hi": SimpleNamespace(name="कार एक्सेसरीज़")},
+        translations={"hi": SimpleNamespace(name="Localized Accessories")},
     )
 
     captured_query = {}
@@ -421,12 +475,12 @@ async def test_get_all_categories_search_escapes_input_and_searches_translation_
         return _FindCursor()
 
     with patch("app.services.category_services.Category.find", side_effect=_find):
-        categories = await CategoryService.get_all_categories(language="hi", search="कार.*")
+        categories = await CategoryService.get_all_categories(language="hi", search="Car.*")
 
     assert categories == [
         {
             "_id": category.id,
-            "name": "कार एक्सेसरीज़",
+            "name": "Localized Accessories",
             "parent_id": None,
         }
     ]
@@ -435,8 +489,8 @@ async def test_get_all_categories_search_escapes_input_and_searches_translation_
             {"is_deleted": False},
             {
                 "$or": [
-                    {"name": {"$regex": r"कार\.\*", "$options": "i"}},
-                    {"translations.hi.name": {"$regex": r"कार\.\*", "$options": "i"}},
+                    {"name": {"$regex": r"Car\.\*", "$options": "i"}},
+                    {"translations.hi.name": {"$regex": r"Car\.\*", "$options": "i"}},
                 ]
             },
         ]
@@ -457,7 +511,7 @@ async def test_get_all_categories_returns_base_name_when_requested_translation_i
             return [category]
 
     with patch("app.services.category_services.Category.find", return_value=_FindCursor()):
-        categories = await CategoryService.get_all_categories(language="ja")
+        categories = cast(list[dict[str, Any]], await CategoryService.get_all_categories(language="ja"))
 
     assert categories[0]["name"] == "Car Accessories"
 
@@ -465,7 +519,7 @@ async def test_get_all_categories_returns_base_name_when_requested_translation_i
 @pytest.mark.asyncio
 async def test_create_category_rejects_when_depth_limit_is_exceeded():
     parent_id = PydanticObjectId()
-    payload = SimpleNamespace(name="Mobiles", parent_id=parent_id)
+    payload = CategoryCreate.model_validate({"name": "Mobiles", "parent_id": parent_id})
 
     root = SimpleNamespace(id=PydanticObjectId(), parent_id=None, is_deleted=False)
     parent = SimpleNamespace(id=parent_id, parent_id=root.id, is_deleted=False)
@@ -516,7 +570,7 @@ async def test_update_category_rejects_when_new_parent_chain_exceeds_depth_limit
                 with pytest.raises(DomainValidationError) as exc:
                     await CategoryService.update_category(
                         category_id,
-                        CategoryUpdate(parent_id=new_parent_id),
+                        CategoryUpdate.model_validate({"parent_id": new_parent_id}),
                         PydanticObjectId(),
                     )
 
