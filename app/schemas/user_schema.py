@@ -4,7 +4,7 @@ from app.schemas.address_schema import Address
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_serializer, field_validator
 from beanie import PydanticObjectId
 from app.core.user_role import UserRole
-
+from app.core.i18n import SUPPORTED_LANGUAGES
 
 class UserRegister(BaseModel):
     user_name: str = Field(..., min_length=2, max_length=100, pattern=r"^[a-zA-Z0-9][a-zA-Z0-9_ -]+$")
@@ -81,6 +81,7 @@ class UserResponse(BaseModel):
     mobile: str
     role: UserRole
     is_verified: bool
+    preferred_language: str = "en"
     addresses: list[Address] = []
     created_at: datetime
     
@@ -151,6 +152,10 @@ class UserUpdateRole(BaseModel):
 class UserUpdateProfile(BaseModel):
     user_name: str | None = Field(default=None, min_length=2, max_length=100, pattern=r"^[a-zA-Z0-9][a-zA-Z0-9_ -]+$", description="Updated user name")
     mobile: str | None = Field(default=None, min_length=10, max_length=15, pattern=r"^\+?[1-9]\d{9,14}$", description="Updated mobile number")
+    preferred_language: str | None = Field(
+        default=None,
+        description="Preferred language for localized content and notifications",
+    )
 
     @field_validator("user_name", mode="before")
     @classmethod
@@ -159,11 +164,19 @@ class UserUpdateProfile(BaseModel):
             return value.strip()
         return value
     
+    @field_validator("preferred_language")
+    @classmethod
+    def validate_preferred_language(cls, value: str | None) -> str | None:
+        if value is not None and value not in SUPPORTED_LANGUAGES:
+            raise ValueError("Invalid preferred language.")
+        return value
+    
     model_config = ConfigDict(
         json_schema_extra={
             "example": {
                 "user_name": "RockStar Updated",
-                "mobile": "9876501234"
+                "mobile": "9876501234",
+                "preferred_language": "hi"
             }
         }
     )

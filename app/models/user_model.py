@@ -1,13 +1,11 @@
-import re
-from datetime import datetime, timezone
+from app.core.i18n import SUPPORTED_LANGUAGES
 from typing import List
-from beanie import Document
 from pydantic import EmailStr, Field, field_validator
 from pymongo import ASCENDING, IndexModel
 from app.core.user_role import UserRole
 from app.models.base_model import AuditDocument
 from app.schemas.address_schema import Address
-
+    
 class User(AuditDocument):
     # Enforce safe characters: alphanumeric, spaces, underscores, hyphens. Strip leading/trailing.
     user_name: str = Field(
@@ -30,7 +28,18 @@ class User(AuditDocument):
     role: UserRole = Field(default=UserRole.CUSTOMER, description="User role")
     is_verified: bool = Field(default=False, description="False until email OTP is verified")
     addresses: List[Address] = Field(default_factory=list, max_length=10, description="User's saved addresses")
-
+    preferred_language: str = Field(
+        default="en",
+        description="Preferred language for localized content and notifications",
+    )
+    
+    @field_validator("preferred_language")
+    @classmethod
+    def validate_preferred_language(cls, value: str) -> str:
+        if value not in SUPPORTED_LANGUAGES:
+            raise ValueError("Invalid preferred language.")
+        return value
+    
     @field_validator("user_name", mode="before")
     @classmethod
     def strip_username(cls, value: str) -> str:
