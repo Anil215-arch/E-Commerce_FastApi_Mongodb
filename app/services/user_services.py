@@ -325,9 +325,11 @@ class UserServices:
         UserValidator.validate_profile_update(data)
         
         if "user_name" in update_data:
-            existing_user = await User.find_one(
-                (User.user_name == update_data["user_name"]) & (User.id != current_user.id)
-            )
+            existing_user = await User.find_one({
+                "user_name": update_data["user_name"],
+                "_id": {"$ne": current_user.id},
+                "is_deleted": {"$ne": True},
+            })
             if existing_user:
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
@@ -376,9 +378,11 @@ class UserServices:
             )
 
         if "user_name" in update_data:
-            existing_user = await User.find_one(
-                (User.user_name == update_data["user_name"]) & (User.id != target_user.id)
-            )
+            existing_user = await User.find_one({
+                "user_name": update_data["user_name"],
+                "_id": {"$ne": target_user.id},
+                "is_deleted": {"$ne": True},
+            })
             if existing_user:
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
