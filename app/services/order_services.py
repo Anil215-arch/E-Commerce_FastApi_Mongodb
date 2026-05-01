@@ -30,6 +30,7 @@ from app.services.inventory_services import InventoryService
 from app.validators.order_validator import OrderDomainValidator
 from app.validators.transaction_validator import TransactionDomainValidator
 from app.core.message_keys import Msg
+from app.utils.product_mapper import ProductMapper
 
 logger = logging.getLogger(__name__)
 
@@ -170,7 +171,10 @@ class OrderService:
         return tax_amount, shipping_fee, grand_total
 
     @staticmethod
-    async def _build_checkout_batch_response(existing_orders: list[Order]) -> CheckoutBatchResponse:
+    async def _build_checkout_batch_response(
+        existing_orders: list[Order],
+        language: str | None = None,
+    ) -> CheckoutBatchResponse:
         if not existing_orders:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -195,7 +199,10 @@ class OrderService:
             amount=transaction.amount,
             transaction_status=transaction.status,
             payment_method=transaction.payment_method,
-            orders=[OrderResponse.model_validate(order) for order in existing_orders],
+            orders=await OrderService._build_localized_order_list_response(
+                existing_orders,
+                language=language,
+            ),
         )
 
     @staticmethod
@@ -271,7 +278,11 @@ class OrderService:
             await asyncio.sleep(OrderService.EXPIRY_CLEANUP_INTERVAL_SECONDS)
 
     @staticmethod
-    async def checkout(user_id: PydanticObjectId, data: CheckoutRequest) -> CheckoutBatchResponse:
+    async def checkout(
+        user_id: PydanticObjectId,
+        data: CheckoutRequest,
+        language: str | None = None,
+    ) -> CheckoutBatchResponse:
         user = await User.get(user_id)
         if not user:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=Msg.USER_NOT_FOUND)
@@ -290,7 +301,10 @@ class OrderService:
             }
         ).to_list()
         if existing_orders:
-            return await OrderService._build_checkout_batch_response(existing_orders)
+            return await OrderService._build_checkout_batch_response(
+                existing_orders,
+                language=language,
+            )
 
         try:
             extracted_shipping = user.addresses[data.shipping_address_index]
@@ -453,7 +467,10 @@ class OrderService:
                 amount=created_transaction.amount,
                 transaction_status=created_transaction.status,
                 payment_method=created_transaction.payment_method,
-                orders=[OrderResponse.model_validate(order) for order in created_orders],
+                orders=await OrderService._build_localized_order_list_response(
+                    created_orders,
+                    language=language,
+                ),
             )
         except HTTPException:
             if not payment_captured:
@@ -485,14 +502,82 @@ class OrderService:
             )
 
     @staticmethod
-    async def get_my_orders(user_id: PydanticObjectId) -> list[OrderResponse]:
+    def _build_localized_order_response_from_product_map(
+        order: Order,
+        product_map: dict[str, Product],
+        language: str | None = None,
+    ) -> OrderResponse:
+        if not language:
+            return OrderResponse.model_validate(order)
+
+        localized_items = []
+
+        for item in order.items:
+            item_data = item.model_dump()
+            product = product_map.get(str(item.product_id))
+
+            if product:
+                localized_name, _ = ProductMapper._localized_product_content(product, language)
+                item_data["product_name"] = localized_name
+
+            localized_items.append(OrderItemSnapshot(**item_data))
+
+        order_data = order.model_dump()
+        order_data["items"] = localized_items
+        return OrderResponse.model_validate(order_data)
+
+    @staticmethod
+    async def _build_localized_order_response(
+        order: Order,
+        language: str | None = None,
+    ) -> OrderResponse:
+        if not language:
+            return OrderResponse.model_validate(order)
+
+        product_ids = list({item.product_id for item in order.items})
+        products = await Product.find({
+            "_id": {"$in": product_ids},
+            "is_deleted": {"$ne": True},
+        }).to_list()
+
+        product_map = {str(product.id): product for product in products}
+        return OrderService._build_localized_order_response_from_product_map(order, product_map, language)
+
+    @staticmethod
+    async def _build_localized_order_list_response(
+        orders: list[Order],
+        language: str | None = None,
+    ) -> list[OrderResponse]:
+        if not language:
+            return [OrderResponse.model_validate(order) for order in orders]
+
+        product_ids = list({
+            item.product_id
+            for order in orders
+            for item in order.items
+        })
+
+        products = await Product.find({
+            "_id": {"$in": product_ids},
+            "is_deleted": {"$ne": True},
+        }).to_list()
+
+        product_map = {str(product.id): product for product in products}
+
+        return [
+            OrderService._build_localized_order_response_from_product_map(order, product_map, language)
+            for order in orders
+        ]
+        
+    @staticmethod
+    async def get_my_orders(user_id: PydanticObjectId, language: str | None = None) -> list[OrderResponse]:
         orders = await Order.find(
             {"user_id": user_id, "is_deleted": {"$ne": True}}
         ).sort("-created_at").to_list()
-        return [OrderResponse.model_validate(order) for order in orders]
+        return await OrderService._build_localized_order_list_response(orders, language=language)
 
     @staticmethod
-    async def get_order_by_id(user_id: PydanticObjectId, order_id: PydanticObjectId) -> OrderResponse:
+    async def get_order_by_id(user_id: PydanticObjectId, order_id: PydanticObjectId, language: str | None = None) -> OrderResponse:
         order = await Order.find_one(
             {"_id": order_id, "user_id": user_id, "is_deleted": {"$ne": True}}
         )
@@ -501,7 +586,7 @@ class OrderService:
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail=Msg.ORDER_NOT_FOUND_OR_NO_PERMISSION,
             )
-        return OrderResponse.model_validate(order)
+        return await OrderService._build_localized_order_response(order, language=language)
 
     @staticmethod
     def _validate_status_transition(current_status: OrderStatus, next_status: OrderStatus) -> None:
@@ -564,7 +649,7 @@ class OrderService:
         return OrderResponse.model_validate(order)
 
     @staticmethod
-    async def cancel_order(order_id: PydanticObjectId, current_user: User, reason: str) -> OrderResponse:
+    async def cancel_order(order_id: PydanticObjectId, current_user: User, reason: str, language: str | None = None) -> OrderResponse:
         reason = OrderDomainValidator.validate_cancellation_reason(reason)
         order = await Order.find_one({"_id": order_id, "is_deleted": {"$ne": True}})
         if not order:
@@ -670,4 +755,4 @@ class OrderService:
             )
         )
 
-        return OrderResponse.model_validate(order)
+        return await OrderService._build_localized_order_response(order, language=language)

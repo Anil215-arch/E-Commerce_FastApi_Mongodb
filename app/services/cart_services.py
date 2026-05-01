@@ -10,6 +10,7 @@ from app.schemas.product_variant_schema import ProductVariantResponse
 from app.core.exceptions import DomainValidationError
 from app.core.message_keys import Msg
 from app.validators.cart_validator import CartDomainValidator
+from app.utils.product_mapper import ProductMapper
 
 # Domain Exceptions
 class CartError(DomainValidationError): pass
@@ -172,7 +173,7 @@ class CartService:
         raise CartConflictError(Msg.CART_CONCURRENT_MODIFICATION)
 
     @staticmethod
-    async def get_cart(user_id: PydanticObjectId) -> CartResponse:
+    async def get_cart(user_id: PydanticObjectId, language: str | None = None) -> CartResponse:
         cart = await Cart.find_one(Cart.user_id == user_id)
         if not cart or not cart.items:
             return CartResponse(items=[], total_quantity=0, total_price=0)
@@ -201,16 +202,33 @@ class CartService:
                     is_available = False
                 else:
                     available_stock = variant.available_stock
-                    variant_response = ProductVariantResponse(**variant.model_dump())
+                    attributes = (
+                        ProductMapper._localized_variant_attributes(variant, language)
+                        if language
+                        else variant.attributes
+                    )
+
+                    variant_response = ProductVariantResponse(
+                        **{
+                            **variant.model_dump(exclude={"translations"}),
+                            "attributes": attributes,
+                        }
+                    )
                     
                     effective_qty = min(item.quantity, available_stock)
                     subtotal = variant.effective_price * effective_qty
                     t_price += subtotal
                     t_qty += effective_qty
-
+                    
+            localized_product_name = "Unavailable Product"
+            if product:
+                if language:
+                    localized_product_name, _ = ProductMapper._localized_product_content(product, language)
+                else:
+                    localized_product_name = product.name
             detailed_items.append(CartItemDetailed(
                 product_id=item.product_id,
-                name=product.name if product else "Unavailable Product",
+                name=localized_product_name,
                 brand=product.brand if product else "",
                 sku=item.sku,
                 image=product.images[0] if product and product.images else None,

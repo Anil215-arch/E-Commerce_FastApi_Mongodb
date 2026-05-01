@@ -1,10 +1,11 @@
-import uuid
-from datetime import datetime, timezone
 from app.models.order_model import Order
 from app.models.invoice_model import Invoice
 from app.models.transaction_model import Transaction
 from app.schemas.invoice_schema import InvoiceResponse
 from app.models.user_model import User
+from app.models.product_model import Product
+from app.models.order_model import OrderItemSnapshot
+from app.utils.product_mapper import ProductMapper
 from app.core.user_role import UserRole
 from fastapi import HTTPException, status
 from beanie import PydanticObjectId
@@ -13,6 +14,37 @@ from app.validators.invoice_validator import InvoiceDomainValidator
 from app.core.message_keys import Msg
 
 class InvoiceService:
+    
+    @staticmethod
+    async def _build_localized_invoice_response(
+        invoice: Invoice,
+        language: str | None = None,
+    ) -> InvoiceResponse:
+        if not language:
+            return InvoiceResponse.model_validate(invoice)
+
+        product_ids = list({item.product_id for item in invoice.items})
+        products = await Product.find({
+            "_id": {"$in": product_ids},
+            "is_deleted": {"$ne": True},
+        }).to_list()
+
+        product_map = {str(product.id): product for product in products}
+
+        localized_items = []
+        for item in invoice.items:
+            item_data = item.model_dump()
+            product = product_map.get(str(item.product_id))
+
+            if product:
+                localized_name, _ = ProductMapper._localized_product_content(product, language)
+                item_data["product_name"] = localized_name
+
+            localized_items.append(OrderItemSnapshot(**item_data))
+
+        invoice_data = invoice.model_dump()
+        invoice_data["items"] = localized_items
+        return InvoiceResponse.model_validate(invoice_data)
     
     @staticmethod
     async def create_invoice_from_order(order: Order, transaction: Transaction) -> Invoice:
@@ -56,7 +88,7 @@ class InvoiceService:
         return invoice
     
     @staticmethod
-    async def get_invoice_by_order_id(order_id: PydanticObjectId, current_user: User) -> InvoiceResponse:
+    async def get_invoice_by_order_id(order_id: PydanticObjectId, current_user: User, language: str | None = None,) -> InvoiceResponse:
         invoice = await Invoice.find_one({"order_id": order_id})
         
         if not invoice:
@@ -72,4 +104,4 @@ class InvoiceService:
                 detail=Msg.NO_PERMISSION_VIEW_INVOICE
             )
 
-        return InvoiceResponse.model_validate(invoice)
+        return await InvoiceService._build_localized_invoice_response(invoice, language=language)
