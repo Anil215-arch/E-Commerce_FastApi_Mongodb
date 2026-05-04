@@ -46,12 +46,12 @@ def test_seller_dashboard_revenue_success(client):
         "app.api.api_v1.endpoints.dashboard_api.DashboardService.get_revenue_chart",
         new=AsyncMock(return_value=[{"date": "2026-04-01", "revenue": 1200}]),
     ):
-        response = client.get("/api/v1/dashboard/seller/revenue?period=daily")
+        response = client.get("/api/v1/dashboard/revenue?period=daily")
 
     assert response.status_code == 200
     body = response.json()
     assert body["status"] == "success"
-    assert body["message"] == "Seller revenue data fetched"
+    assert body["message"] == "Revenue data fetched"
     assert body["data"]["data"][0]["date"] == "2026-04-01"
     assert body["data"]["data"][0]["revenue"] == 1200
 
@@ -63,7 +63,7 @@ def test_seller_dashboard_revenue_maps_value_error_to_400(client):
         "app.api.api_v1.endpoints.dashboard_api.DashboardService.get_revenue_chart",
         new=AsyncMock(side_effect=ValueError("Date range exceeds 5-year limit")),
     ):
-        response = client.get("/api/v1/dashboard/seller/revenue?period=yearly")
+        response = client.get("/api/v1/dashboard/revenue?period=yearly")
 
     assert response.status_code == 400
     body = response.json()
@@ -113,12 +113,12 @@ def test_admin_dashboard_revenue_success(client):
         "app.api.api_v1.endpoints.dashboard_api.DashboardService.get_revenue_chart",
         new=AsyncMock(return_value=[{"date": "2026-04", "revenue": 3400}]),
     ):
-        response = client.get("/api/v1/dashboard/admin/revenue?period=monthly")
+        response = client.get("/api/v1/dashboard/revenue?period=monthly")
 
     assert response.status_code == 200
     body = response.json()
     assert body["status"] == "success"
-    assert body["message"] == "Admin revenue data fetched"
+    assert body["message"] == "Revenue data fetched"
     assert body["data"]["data"][0]["date"] == "2026-04"
     assert body["data"]["data"][0]["revenue"] == 3400
 
