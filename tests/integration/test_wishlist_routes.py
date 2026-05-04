@@ -45,7 +45,7 @@ def test_add_to_wishlist_route_returns_201_success(client):
         new=AsyncMock(return_value=None),
     ) as mock_add:
         response = client.post(
-            "/api/v1/wishlist/",
+            "/api/v1/wishlist",
             json={"product_id": product_id, "sku": "PHX-01"},
         )
 
@@ -69,7 +69,7 @@ def test_add_to_wishlist_route_returns_422_for_missing_sku(client):
         new=AsyncMock(),
     ) as mock_add:
         response = client.post(
-            "/api/v1/wishlist/",
+            "/api/v1/wishlist",
             json={"product_id": str(PydanticObjectId())},
         )
 
@@ -88,7 +88,7 @@ def test_add_to_wishlist_route_maps_service_404(client):
         new=AsyncMock(side_effect=HTTPException(status_code=404, detail="Product not found or unavailable.")),
     ):
         response = client.post(
-            "/api/v1/wishlist/",
+            "/api/v1/wishlist",
             json={"product_id": str(PydanticObjectId()), "sku": "PHX-01"},
         )
 
@@ -144,7 +144,7 @@ def test_get_wishlist_route_returns_items(client):
         "app.api.api_v1.endpoints.wishlist_api.WishlistService.get_user_wishlist",
         new=AsyncMock(return_value=[_wishlist_populated_item()]),
     ) as mock_get:
-        response = client.get("/api/v1/wishlist/")
+        response = client.get("/api/v1/wishlist")
 
     assert response.status_code == 200
     body = response.json()
@@ -162,7 +162,7 @@ def test_get_wishlist_route_returns_empty_list(client):
         "app.api.api_v1.endpoints.wishlist_api.WishlistService.get_user_wishlist",
         new=AsyncMock(return_value=[]),
     ):
-        response = client.get("/api/v1/wishlist/")
+        response = client.get("/api/v1/wishlist")
 
     assert response.status_code == 200
     body = response.json()

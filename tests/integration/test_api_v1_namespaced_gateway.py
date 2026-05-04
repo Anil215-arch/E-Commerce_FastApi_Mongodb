@@ -86,7 +86,7 @@ def test_openapi_contract_has_order_namespace(client):
 def test_customer_is_forbidden_from_seller_inventory_routes(client):
     main.app.dependency_overrides[get_current_user] = _override_user(UserRole.CUSTOMER)
 
-    response = client.post("/api/v1/products/", json=_valid_product_create_payload())
+    response = client.post("/api/v1/products", json=_valid_product_create_payload())
 
     assert response.status_code == 403
     body = response.json()
@@ -97,7 +97,7 @@ def test_customer_is_forbidden_from_seller_inventory_routes(client):
 def test_seller_is_forbidden_from_admin_user_routes(client):
     main.app.dependency_overrides[get_current_user] = _override_user(UserRole.SELLER)
 
-    response = client.get("/api/v1/users/")
+    response = client.get("/api/v1/users")
 
     assert response.status_code == 403
     body = response.json()
@@ -140,7 +140,7 @@ def test_seller_product_create_forwards_user_id_to_service(client):
         "app.api.api_v1.endpoints.product_api.ProductService.create_product",
         new=AsyncMock(return_value=product_response),
     ) as mock_create:
-        response = client.post("/api/v1/products/", json=_valid_product_create_payload())
+        response = client.post("/api/v1/products", json=_valid_product_create_payload())
 
     assert response.status_code == 201
     await_args = mock_create.await_args

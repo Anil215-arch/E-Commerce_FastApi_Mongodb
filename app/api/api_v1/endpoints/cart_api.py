@@ -14,7 +14,7 @@ from app.core.rate_limiter import user_limiter
 router = APIRouter()
 
 
-@router.get("/", response_model=ApiResponse[CartResponse])
+@router.get("", response_model=ApiResponse[CartResponse])
 @user_limiter.limit("60/minute")
 async def get_cart(request: Request, current_user: User = Depends(get_current_user)):
     user_id = _require_user_id(current_user)

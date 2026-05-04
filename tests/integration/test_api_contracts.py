@@ -41,7 +41,7 @@ def test_products_list_returns_paginated_items_without_double_data(client):
         "app.api.api_v1.endpoints.product_api.ProductQueryService.list_products",
         new=AsyncMock(return_value=([product_payload], "cursor-1", False)),
     ):
-        response = client.get("/api/v1/products/?limit=10&sort_by=created_at&sort_order=desc")
+        response = client.get("/api/v1/products?limit=10&sort_by=created_at&sort_order=desc")
 
     assert response.status_code == 200
     body = response.json()
@@ -54,7 +54,7 @@ def test_products_list_returns_paginated_items_without_double_data(client):
 
 
 def test_products_list_bad_price_range_returns_422_validation_envelope(client):
-    response = client.get("/api/v1/products/?min_price=100&max_price=50")
+    response = client.get("/api/v1/products?min_price=100&max_price=50")
 
     assert response.status_code == 422
     body = response.json()
@@ -69,7 +69,7 @@ def test_cart_endpoint_returns_401_when_authenticated_user_id_is_missing(client)
 
     main.app.dependency_overrides[get_current_user] = _user_without_id
 
-    response = client.get("/api/v1/cart/")
+    response = client.get("/api/v1/cart")
 
     assert response.status_code == 401
     body = response.json()
@@ -248,7 +248,7 @@ def test_wishlist_add_maps_domain_validation_error_to_400(client):
         new=AsyncMock(side_effect=DomainValidationError("Wishlist is full.")),
     ):
         response = client.post(
-            "/api/v1/wishlist/",
+            "/api/v1/wishlist",
             json={"product_id": str(PydanticObjectId()), "sku": "PHX-01"},
         )
 
@@ -270,7 +270,7 @@ def test_device_token_register_rejects_whitespace_token_with_422(client):
         new=AsyncMock(),
     ) as mock_register:
         response = client.post(
-            "/api/v1/device-tokens/",
+            "/api/v1/device-tokens",
             json={"token": "          ", "platform": "ANDROID"},
         )
 
@@ -292,7 +292,7 @@ def test_device_token_register_maps_domain_validation_error_to_400(client):
         new=AsyncMock(side_effect=DomainValidationError("Maximum device limit reached.")),
     ):
         response = client.post(
-            "/api/v1/device-tokens/",
+            "/api/v1/device-tokens",
             json={"token": "abcdefghijk", "platform": "ANDROID"},
         )
 

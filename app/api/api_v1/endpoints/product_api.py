@@ -15,12 +15,10 @@ from app.services.product_services import ProductService
 from app.utils.responses import success_response
 
 router = APIRouter()
-seller_router = APIRouter(
-    dependencies=[Depends(RoleChecker([UserRole.SELLER, UserRole.ADMIN, UserRole.SUPER_ADMIN]))]
-)
+seller_dependency = Depends(RoleChecker([UserRole.SELLER, UserRole.ADMIN, UserRole.SUPER_ADMIN]))
 
 
-@router.get("/", response_model=ApiResponse[PaginatedResponse[ProductResponse]], response_model_by_alias=False, status_code=status.HTTP_200_OK)
+@router.get("", response_model=ApiResponse[PaginatedResponse[ProductResponse]], response_model_by_alias=False, status_code=status.HTTP_200_OK)
 @limiter.limit("60/minute", key_func=ip_key_func)
 async def list_all_products(request: Request, query_params: ProductQueryParams = Depends()):
     """
@@ -53,7 +51,7 @@ async def read_one(request: Request, id: PydanticObjectId):
     return success_response("Product fetched successfully", product)
 
 
-@seller_router.post("/", response_model=ApiResponse[ProductResponse], status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=ApiResponse[ProductResponse], status_code=status.HTTP_201_CREATED, dependencies=[seller_dependency])
 @user_limiter.limit("5/minute")
 async def create_product(request: Request, product: ProductCreate, current_user: User = Depends(get_current_user)):
     user_id = _require_user_id(current_user)
@@ -61,7 +59,7 @@ async def create_product(request: Request, product: ProductCreate, current_user:
     return success_response("Product created successfully", created_product)
 
 
-@seller_router.patch("/{id}/images", response_model=ApiResponse[ProductResponse])
+@router.patch("/{id}/images", response_model=ApiResponse[ProductResponse], dependencies=[seller_dependency])
 @user_limiter.limit("10/minute")
 async def upload_images(request: Request, id: PydanticObjectId, images: List[UploadFile] = File(...), current_user: User = Depends(get_current_user)):
     user_id = _require_user_id(current_user)
@@ -71,7 +69,7 @@ async def upload_images(request: Request, id: PydanticObjectId, images: List[Upl
     return success_response("Images uploaded", updated)
 
 
-@seller_router.patch("/{id}", response_model=ApiResponse[ProductResponse])
+@router.patch("/{id}", response_model=ApiResponse[ProductResponse], dependencies=[seller_dependency])
 @user_limiter.limit("10/minute")
 async def update_product(request: Request, id: PydanticObjectId, product: ProductUpdate, current_user: User = Depends(get_current_user)):
     user_id = _require_user_id(current_user)
@@ -81,7 +79,7 @@ async def update_product(request: Request, id: PydanticObjectId, product: Produc
     return success_response("Product updated", updated)
 
 
-@seller_router.post("/{id}/variants", response_model=ApiResponse[ProductResponse])
+@router.post("/{id}/variants", response_model=ApiResponse[ProductResponse], dependencies=[seller_dependency])
 @user_limiter.limit("10/minute")
 async def add_variant(request: Request, id: PydanticObjectId, variant: ProductVariantCreate, current_user: User = Depends(get_current_user)):
     user_id = _require_user_id(current_user)
@@ -89,7 +87,7 @@ async def add_variant(request: Request, id: PydanticObjectId, variant: ProductVa
     return success_response("Variant added", updated_product)
 
 
-@seller_router.patch("/{id}/variants/{sku}", response_model=ApiResponse[ProductResponse])
+@router.patch("/{id}/variants/{sku}", response_model=ApiResponse[ProductResponse], dependencies=[seller_dependency])
 @user_limiter.limit("10/minute")
 async def update_variant(request: Request, id: PydanticObjectId, sku: str, variant: ProductVariantUpdate, current_user: User = Depends(get_current_user)):
     user_id = _require_user_id(current_user)
@@ -97,7 +95,7 @@ async def update_variant(request: Request, id: PydanticObjectId, sku: str, varia
     return success_response("Variant updated", updated_product)
 
 
-@seller_router.delete("/{id}/variants/{sku}", response_model=ApiResponse[ProductResponse])
+@router.delete("/{id}/variants/{sku}", response_model=ApiResponse[ProductResponse], dependencies=[seller_dependency])
 @user_limiter.limit("10/minute")
 async def delete_variant(request: Request, id: PydanticObjectId, sku: str, current_user: User = Depends(get_current_user)):
     user_id = _require_user_id(current_user)
@@ -105,7 +103,7 @@ async def delete_variant(request: Request, id: PydanticObjectId, sku: str, curre
     return success_response("Variant deleted", updated_product)
 
 
-@seller_router.delete("/{id}", response_model=ApiResponse[None])
+@router.delete("/{id}", response_model=ApiResponse[None], dependencies=[seller_dependency])
 @user_limiter.limit("10/minute")
 async def delete_product(
     request: Request,
@@ -115,6 +113,3 @@ async def delete_product(
     if not await ProductService.delete_product(id, current_user):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Product not found")
     return success_response("Product deleted successfully")
-
-
-router.include_router(seller_router)

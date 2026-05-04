@@ -14,9 +14,7 @@ from app.utils.responses import success_response
 from app.services.category_services import CategoryService
 
 router = APIRouter()
-admin_router = APIRouter(
-    dependencies=[Depends(RoleChecker([UserRole.ADMIN, UserRole.SUPER_ADMIN]))]
-)
+admin_dependency = Depends(RoleChecker([UserRole.ADMIN, UserRole.SUPER_ADMIN]))
 
 
 @router.get("/tree", response_model=ApiResponse[List[CategoryTreeResponse]], response_model_by_alias=False)
@@ -29,7 +27,7 @@ async def get_category_tree(request: Request):
     return success_response("Category tree fetched successfully", tree)
 
 
-@router.get("/", response_model=ApiResponse[List[CategoryResponse]], response_model_by_alias=False)
+@router.get("", response_model=ApiResponse[List[CategoryResponse]], response_model_by_alias=False)
 @limiter.limit("60/minute", key_func=ip_key_func)
 async def list_categories(request: Request):
     """
@@ -51,7 +49,7 @@ async def get_category_by_id(request: Request, id: PydanticObjectId):
     return success_response("Category fetched successfully", category)
 
 
-@admin_router.post("/", response_model=ApiResponse[CategoryResponse], response_model_by_alias=False, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=ApiResponse[CategoryResponse], response_model_by_alias=False, status_code=status.HTTP_201_CREATED, dependencies=[admin_dependency])
 @user_limiter.limit("10/minute")
 async def create_category(request: Request, category_in: CategoryCreate, current_user: User = Depends(get_current_user)):
     user_id = _require_user_id(current_user)
@@ -61,7 +59,7 @@ async def create_category(request: Request, category_in: CategoryCreate, current
     return success_response("Category created successfully", created)
 
 
-@admin_router.patch("/{id}", response_model=ApiResponse[CategoryResponse], response_model_by_alias=False)
+@router.patch("/{id}", response_model=ApiResponse[CategoryResponse], response_model_by_alias=False, dependencies=[admin_dependency])
 @user_limiter.limit("10/minute")
 async def update_category(request: Request, id: PydanticObjectId, category_in: CategoryUpdate, current_user: User = Depends(get_current_user)):
     user_id = _require_user_id(current_user)
@@ -71,7 +69,7 @@ async def update_category(request: Request, id: PydanticObjectId, category_in: C
     return success_response("Category updated successfully", updated)
 
 
-@admin_router.delete("/{id}", response_model=ApiResponse[None])
+@router.delete("/{id}", response_model=ApiResponse[None], dependencies=[admin_dependency])
 @user_limiter.limit("10/minute")
 async def delete_category(request: Request, id: PydanticObjectId, current_user: User = Depends(get_current_user)):
     user_id = _require_user_id(current_user)
@@ -81,6 +79,3 @@ async def delete_category(request: Request, id: PydanticObjectId, current_user: 
     if error:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error)
     return success_response("Category deleted successfully")
-
-
-router.include_router(admin_router)

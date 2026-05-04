@@ -12,7 +12,7 @@ from app.utils.responses import success_response
 router = APIRouter()
 
 
-@router.get("/", response_model=ApiResponse[List[NotificationResponse]], status_code=status.HTTP_200_OK)
+@router.get("", response_model=ApiResponse[List[NotificationResponse]], status_code=status.HTTP_200_OK)
 @user_limiter.limit("60/minute")
 async def get_notifications(request: Request, limit: int = Query(50, ge=1, le=100), current_user: User = Depends(get_current_user)):
     user_id = _require_user_id(current_user)

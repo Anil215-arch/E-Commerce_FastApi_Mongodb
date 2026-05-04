@@ -14,9 +14,7 @@ from app.utils.responses import success_response
 from app.core.rate_limiter import user_limiter
 
 router = APIRouter()
-admin_router = APIRouter(
-    dependencies=[Depends(RoleChecker([UserRole.ADMIN, UserRole.SUPER_ADMIN]))]
-)
+admin_dependency = Depends(RoleChecker([UserRole.ADMIN, UserRole.SUPER_ADMIN]))
 
 
 @router.get("/me", response_model=ApiResponse[UserResponse], response_model_by_alias=False, status_code=status.HTTP_200_OK)
@@ -66,32 +64,29 @@ async def remove_address(request: Request, address_index: int, current_user: Use
     return success_response("Address removed successfully", updated_user)
 
 
-@admin_router.get("/", response_model=ApiResponse[List[UserResponse]], response_model_by_alias=False)
+@router.get("", response_model=ApiResponse[List[UserResponse]], response_model_by_alias=False, dependencies=[admin_dependency])
 @user_limiter.limit("30/minute")
 async def list_admin_users(request: Request, current_user: User = Depends(get_current_user)):
     users = await UserServices.get_all_users()
     return success_response("Users fetched successfully", users)
 
 
-@admin_router.patch("/{id}/role", response_model=ApiResponse[UserResponse], response_model_by_alias=False)
+@router.patch("/{id}/role", response_model=ApiResponse[UserResponse], response_model_by_alias=False, dependencies=[admin_dependency])
 @user_limiter.limit("10/minute")
 async def update_user_role(request: Request, id: PydanticObjectId, role_in: UserUpdateRole, current_user: User = Depends(get_current_user)):
     updated_user = await UserServices.update_user_role(current_user, id, role_in)
     return success_response("User role updated successfully", updated_user)
 
 
-@admin_router.patch("/{id}", response_model=ApiResponse[UserResponse], response_model_by_alias=False)
+@router.patch("/{id}", response_model=ApiResponse[UserResponse], response_model_by_alias=False, dependencies=[admin_dependency])
 @user_limiter.limit("10/minute")
 async def update_user_profile(request: Request, id: PydanticObjectId, profile_in: UserUpdateProfile, current_user: User = Depends(get_current_user)):
     updated_user = await UserServices.update_user_profile(current_user, id, profile_in)
     return success_response("User profile updated successfully", updated_user)
 
 
-@admin_router.delete("/{id}", response_model=ApiResponse[bool])
+@router.delete("/{id}", response_model=ApiResponse[bool], dependencies=[admin_dependency])
 @user_limiter.limit("10/minute")
 async def delete_user(request: Request, id: PydanticObjectId, current_user: User = Depends(get_current_user)):
     success = await UserServices.delete_user(id, current_user)
     return success_response("User deleted successfully", success)
-
-
-router.include_router(admin_router)

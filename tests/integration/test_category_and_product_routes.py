@@ -20,7 +20,7 @@ def test_category_create_maps_service_error_to_400(client):
         "app.api.api_v1.endpoints.category_api.CategoryService.create_category",
         new=AsyncMock(return_value=(None, "Parent category not found.")),
     ):
-        response = client.post("/api/v1/categories/", json={"name": "Phones", "parent_id": str(PydanticObjectId())})
+        response = client.post("/api/v1/categories", json={"name": "Phones", "parent_id": str(PydanticObjectId())})
 
     assert response.status_code == 400
     body = response.json()
@@ -55,7 +55,7 @@ def test_product_create_requires_admin_or_seller_role(client):
     main.app.dependency_overrides[get_current_user] = _customer_user
 
     response = client.post(
-        "/api/v1/products/",
+        "/api/v1/products",
         json={
             "name": "Phone X",
             "description": "Modern smartphone with long battery and strong camera",
@@ -117,7 +117,7 @@ def test_category_list_route_success_shape(client):
     ]
 
     with patch("app.api.api_v1.endpoints.category_api.CategoryService.get_all_categories", new=AsyncMock(return_value=categories)):
-        response = client.get("/api/v1/categories/")
+        response = client.get("/api/v1/categories")
 
     assert response.status_code == 200
     body = response.json()
@@ -136,7 +136,7 @@ def test_seller_product_create_maps_domain_validation_error_to_400(client):
         new=AsyncMock(side_effect=DomainValidationError("Reserved stock cannot exceed available stock.")),
     ):
         response = client.post(
-            "/api/v1/products/",
+            "/api/v1/products",
             json={
                 "name": "Phone X",
                 "description": "Modern smartphone with long battery and strong camera",

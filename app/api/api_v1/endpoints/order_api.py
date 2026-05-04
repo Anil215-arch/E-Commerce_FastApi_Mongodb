@@ -31,7 +31,7 @@ async def process_checkout(request: Request, data: CheckoutRequest, current_user
     return success_response("Checkout completed successfully", checkout_batch)
 
 
-@router.get("/", response_model=ApiResponse[List[OrderResponse]], response_model_by_alias=False, status_code=status.HTTP_200_OK)
+@router.get("", response_model=ApiResponse[List[OrderResponse]], response_model_by_alias=False, status_code=status.HTTP_200_OK)
 @user_limiter.limit("30/minute")
 async def get_my_orders(request: Request, current_user: User = Depends(get_current_user)):
     user_id = _require_user_id(current_user)
