@@ -325,7 +325,11 @@ class UserServices:
         
         if "user_name" in update_data:
             existing_user = await User.find_one(
-                (User.user_name == update_data["user_name"]) & (User.id != current_user.id)
+                {
+                    "user_name": update_data["user_name"],
+                    "_id": {"$ne": current_user.id},
+                    "is_deleted": {"$ne": True},
+                }
             )
             if existing_user:
                 raise HTTPException(
@@ -376,7 +380,11 @@ class UserServices:
 
         if "user_name" in update_data:
             existing_user = await User.find_one(
-                (User.user_name == update_data["user_name"]) & (User.id != target_user.id)
+                {
+                    "user_name": update_data["user_name"],
+                    "_id": {"$ne": target_user.id},
+                    "is_deleted": {"$ne": True},
+                }
             )
             if existing_user:
                 raise HTTPException(
