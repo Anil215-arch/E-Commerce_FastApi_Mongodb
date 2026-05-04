@@ -66,7 +66,7 @@ async def remove_address(request: Request, address_index: int, current_user: Use
 
 @router.get("", response_model=ApiResponse[List[UserResponse]], response_model_by_alias=False, dependencies=[admin_dependency])
 @user_limiter.limit("30/minute")
-async def list_admin_users(request: Request, current_user: User = Depends(get_current_user)):
+async def list_all_users(request: Request, current_user: User = Depends(get_current_user)):
     users = await UserServices.get_all_users()
     return success_response("Users fetched successfully", users)
 
