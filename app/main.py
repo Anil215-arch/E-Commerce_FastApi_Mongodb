@@ -100,9 +100,10 @@ async def unhandled_exception_handler(request: Request, exc: Exception):
         content=error_response("Internal server error"),
     )
 
-@app.get("/", response_model=ApiResponse[None])
+@app.get("/", response_model=ApiResponse[None], tags=["Root"], summary="Welcome")
 @limiter.limit("5/minute", key_func=ip_key_func)
 async def root(request: Request):
+    """Main welcome endpoint"""
     return success_response(f"Welcome to {settings.PROJECT_NAME}")
 
 if __name__ == "__main__":

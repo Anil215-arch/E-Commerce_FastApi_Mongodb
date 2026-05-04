@@ -10,9 +10,9 @@ from app.utils.responses import success_response
 router = APIRouter()
 
 
-@router.post("/", response_model=ApiResponse[None], status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=ApiResponse[None], status_code=status.HTTP_201_CREATED)
 @user_limiter.limit("10/minute")
-async def register_device_token(request: Request,data: DeviceTokenRegister, current_user: User = Depends(get_current_user)):
+async def register_device_token(request: Request, data: DeviceTokenRegister, current_user: User = Depends(get_current_user)):
     user_id = _require_user_id(current_user)
     await DeviceTokenService.register_token(user_id, data)
     return success_response("Device token registered successfully")

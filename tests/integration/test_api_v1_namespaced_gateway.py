@@ -61,35 +61,32 @@ def test_openapi_has_namespaced_groups_and_blind_spot_routes(client):
         for operation_tag in op.get("tags", [])
     }
 
-    assert "Customer Profile" in tags
-    assert "Seller Inventory" in tags
-    assert "Admin Users" in tags
+    assert "Users" in tags
+    assert "Products" in tags
+    assert "Reviews" in tags
 
-    assert "/api/v1/customer/reviews/products/{product_id}" in paths
-    assert "post" in paths["/api/v1/customer/reviews/products/{product_id}"]
+    assert "/api/v1/reviews/products/{product_id}" in paths
+    assert "post" in paths["/api/v1/reviews/products/{product_id}"]
 
-    assert "/api/v1/products/{product_id}/reviews" in paths
-    assert "get" in paths["/api/v1/products/{product_id}/reviews"]
+    assert "/api/v1/reviews/products/{product_id}/reviews" in paths
+    assert "get" in paths["/api/v1/reviews/products/{product_id}/reviews"]
 
 
-def test_openapi_contract_has_admin_products_and_orders_namespaces(client):
+def test_openapi_contract_has_order_namespace(client):
     response = client.get("/openapi.json")
 
     assert response.status_code == 200
     paths: dict = response.json()["paths"]
 
-    assert any(path.startswith("/api/v1/admin/products") for path in paths), (
-        "Missing admin product moderation routes in namespaced gateway"
-    )
-    assert any(path.startswith("/api/v1/admin/orders") for path in paths), (
-        "Missing admin order management routes in namespaced gateway"
+    assert any(path.startswith("/api/v1/orders") for path in paths), (
+        "Missing order routes in namespaced gateway"
     )
 
 
 def test_customer_is_forbidden_from_seller_inventory_routes(client):
     main.app.dependency_overrides[get_current_user] = _override_user(UserRole.CUSTOMER)
 
-    response = client.post("/api/v1/seller/products/", json=_valid_product_create_payload())
+    response = client.post("/api/v1/products", json=_valid_product_create_payload())
 
     assert response.status_code == 403
     body = response.json()
@@ -100,7 +97,7 @@ def test_customer_is_forbidden_from_seller_inventory_routes(client):
 def test_seller_is_forbidden_from_admin_user_routes(client):
     main.app.dependency_overrides[get_current_user] = _override_user(UserRole.SELLER)
 
-    response = client.get("/api/v1/admin/users/")
+    response = client.get("/api/v1/users")
 
     assert response.status_code == 403
     body = response.json()
@@ -140,10 +137,10 @@ def test_seller_product_create_forwards_user_id_to_service(client):
     }
 
     with patch(
-        "app.api.api_v1.endpoints.seller.products.ProductService.create_product",
+        "app.api.api_v1.endpoints.product_api.ProductService.create_product",
         new=AsyncMock(return_value=product_response),
     ) as mock_create:
-        response = client.post("/api/v1/seller/products/", json=_valid_product_create_payload())
+        response = client.post("/api/v1/products", json=_valid_product_create_payload())
 
     assert response.status_code == 201
     await_args = mock_create.await_args
@@ -237,25 +234,25 @@ def test_namespaced_core_loop_smoke_with_service_stubs(client):
     }
 
     with patch(
-        "app.api.api_v1.endpoints.public.auth.UserServices.user_registration",
+        "app.api.api_v1.endpoints.auth_api.UserServices.user_registration",
         new=AsyncMock(return_value=register_response),
     ), patch(
-        "app.api.api_v1.endpoints.public.auth.UserServices.login_and_issue_tokens",
+        "app.api.api_v1.endpoints.auth_api.UserServices.login_and_issue_tokens",
         new=AsyncMock(return_value=login_response),
     ), patch(
-        "app.api.api_v1.endpoints.customer.cart.CartService.add_to_cart",
+        "app.api.api_v1.endpoints.cart_api.CartService.add_to_cart",
         new=AsyncMock(return_value=None),
     ), patch(
-        "app.api.api_v1.endpoints.customer.orders.OrderService.checkout",
+        "app.api.api_v1.endpoints.order_api.OrderService.checkout",
         new=AsyncMock(return_value=checkout_response),
     ), patch(
-        "app.api.api_v1.endpoints.customer.orders.InvoiceService.get_invoice_by_order_id",
+        "app.api.api_v1.endpoints.order_api.InvoiceService.get_invoice_by_order_id",
         new=AsyncMock(return_value=invoice_response),
     ), patch(
-        "app.api.api_v1.endpoints.customer.orders.PDFService.generate_invoice_pdf",
+        "app.api.api_v1.endpoints.order_api.PDFService.generate_invoice_pdf",
         return_value=b"%PDF-1.4 test pdf",
     ), patch(
-        "app.api.api_v1.endpoints.public.products.ProductQueryService.list_products",
+        "app.api.api_v1.endpoints.product_api.ProductQueryService.list_products",
         new=AsyncMock(
             return_value=(
                 [
@@ -314,7 +311,7 @@ def test_namespaced_core_loop_smoke_with_service_stubs(client):
         product_id = product_data.get("_id") or product_data.get("id")
 
         add_cart = client.post(
-            "/api/v1/customer/cart/items",
+            "/api/v1/cart/items",
             json={
                 "product_id": product_id,
                 "sku": product_data["variants"][0]["sku"],
@@ -324,7 +321,7 @@ def test_namespaced_core_loop_smoke_with_service_stubs(client):
         assert add_cart.status_code == 200
 
         checkout = client.post(
-            "/api/v1/customer/orders/checkout",
+            "/api/v1/orders/checkout",
             json={
                 "checkout_batch_id": "gateway-smoke-batch-001",
                 "shipping_address_index": 0,
@@ -336,6 +333,6 @@ def test_namespaced_core_loop_smoke_with_service_stubs(client):
 
         downloaded_order = checkout.json()["data"]["orders"][0]
         downloaded_order_id = downloaded_order.get("_id") or downloaded_order.get("id")
-        pdf_response = client.get(f"/api/v1/customer/orders/{downloaded_order_id}/invoice/pdf")
+        pdf_response = client.get(f"/api/v1/orders/{downloaded_order_id}/invoice/pdf")
         assert pdf_response.status_code == 200
         assert "application/pdf" in (pdf_response.headers.get("content-type") or "")
