@@ -72,17 +72,14 @@ def test_openapi_has_namespaced_groups_and_blind_spot_routes(client):
     assert "get" in paths["/api/v1/reviews/products/{product_id}/reviews"]
 
 
-def test_openapi_contract_has_admin_products_and_orders_namespaces(client):
+def test_openapi_contract_has_order_namespace(client):
     response = client.get("/openapi.json")
 
     assert response.status_code == 200
     paths: dict = response.json()["paths"]
 
-    assert any(path.startswith("/api/v1/products/admin") for path in paths), (
-        "Missing admin product moderation routes in namespaced gateway"
-    )
-    assert any(path.startswith("/api/v1/orders/admin") for path in paths), (
-        "Missing admin order management routes in namespaced gateway"
+    assert any(path.startswith("/api/v1/orders") for path in paths), (
+        "Missing order routes in namespaced gateway"
     )
 
 

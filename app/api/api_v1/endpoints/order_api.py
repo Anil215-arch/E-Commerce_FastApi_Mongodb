@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Request, status, Response
+from fastapi import APIRouter, Depends, Request, status, Response
 from fastapi.concurrency import run_in_threadpool
 from beanie import PydanticObjectId
 from typing import List
@@ -18,13 +18,8 @@ from app.services.pdf_services import PDFService
 from app.utils.responses import success_response
 
 router = APIRouter()
-seller_router = APIRouter(
-    prefix="/seller",
+management_router = APIRouter(
     dependencies=[Depends(RoleChecker([UserRole.SELLER, UserRole.ADMIN, UserRole.SUPER_ADMIN]))]
-)
-admin_router = APIRouter(
-    prefix="/admin",
-    dependencies=[Depends(RoleChecker([UserRole.ADMIN, UserRole.SUPER_ADMIN]))]
 )
 
 
@@ -77,42 +72,17 @@ async def download_invoice_pdf(request: Request, order_id: PydanticObjectId, cur
     return Response(content=pdf_bytes, media_type="application/pdf", headers=headers)
 
 
-@seller_router.patch("/{order_id}/status", response_model=ApiResponse[OrderResponse])
+@management_router.patch("/{order_id}/status", response_model=ApiResponse[OrderResponse])
 @user_limiter.limit("10/minute")
-async def update_seller_order_status(request: Request, order_id: PydanticObjectId, data: OrderUpdateStatusRequest, current_user: User = Depends(get_current_user)):
-    """
-    Seller endpoint to update fulfillment status.
-    The Service layer must ensure the seller owns the products in this order.
-    """
-    if current_user.id is None:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Authenticated user id is missing")
-
+async def update_order_status(
+    request: Request,
+    order_id: PydanticObjectId,
+    data: OrderUpdateStatusRequest,
+    current_user: User = Depends(get_current_user),
+):
+    _require_user_id(current_user)
     updated_order = await OrderService.update_order_status(order_id, data, current_user)
     return success_response("Order status updated successfully", updated_order)
 
 
-@admin_router.patch("/{order_id}/status", response_model=ApiResponse[OrderResponse], status_code=status.HTTP_200_OK)
-@user_limiter.limit("10/minute")
-async def update_order_status_as_admin(request: Request, order_id: PydanticObjectId, data: OrderUpdateStatusRequest, current_user: User = Depends(get_current_user)):
-    """
-    Admin Intervention: Override fulfillment status for any order.
-    """
-    if current_user.id is None:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Authenticated user id is missing")
-
-    updated_order = await OrderService.update_order_status(order_id, data, current_user)
-    return success_response("Order status updated successfully by Admin", updated_order)
-
-
-@admin_router.patch("/{order_id}/cancel", response_model=ApiResponse[OrderResponse], status_code=status.HTTP_200_OK)
-@user_limiter.limit("10/minute")
-async def cancel_order_as_admin(request: Request, order_id: PydanticObjectId, data: OrderCancelRequest, current_user: User = Depends(get_current_user)):
-    """
-    Admin Intervention: Force cancel any order and process refunds.
-    """
-    cancelled_order = await OrderService.cancel_order(order_id, current_user, data.reason)
-    return success_response("Order cancelled successfully by Admin", cancelled_order)
-
-
-router.include_router(seller_router)
-router.include_router(admin_router)
+router.include_router(management_router)

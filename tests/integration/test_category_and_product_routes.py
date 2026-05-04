@@ -102,7 +102,7 @@ def test_product_delete_maps_false_service_result_to_404(client):
     main.app.dependency_overrides[get_current_user] = _admin_user
 
     with patch("app.api.api_v1.endpoints.product_api.ProductService.delete_product", new=AsyncMock(return_value=False)):
-        response = client.delete(f"/api/v1/products/admin/{PydanticObjectId()}")
+        response = client.delete(f"/api/v1/products/{PydanticObjectId()}")
 
     assert response.status_code == 404
     body = response.json()

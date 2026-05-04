@@ -18,15 +18,11 @@ router = APIRouter()
 seller_router = APIRouter(
     dependencies=[Depends(RoleChecker([UserRole.SELLER, UserRole.ADMIN, UserRole.SUPER_ADMIN]))]
 )
-admin_router = APIRouter(
-    prefix="/admin",
-    dependencies=[Depends(RoleChecker([UserRole.ADMIN, UserRole.SUPER_ADMIN]))]
-)
 
 
 @router.get("/", response_model=ApiResponse[PaginatedResponse[ProductResponse]], response_model_by_alias=False, status_code=status.HTTP_200_OK)
 @limiter.limit("60/minute", key_func=ip_key_func)
-async def list_public_products(request: Request, query_params: ProductQueryParams = Depends()):
+async def list_all_products(request: Request, query_params: ProductQueryParams = Depends()):
     """
     Public endpoint to fetch a paginated list of available products.
     """
@@ -59,7 +55,7 @@ async def read_one(request: Request, id: PydanticObjectId):
 
 @seller_router.post("/", response_model=ApiResponse[ProductResponse], status_code=status.HTTP_201_CREATED)
 @user_limiter.limit("5/minute")
-async def create_seller_product(request: Request, product: ProductCreate, current_user: User = Depends(get_current_user)):
+async def create_product(request: Request, product: ProductCreate, current_user: User = Depends(get_current_user)):
     user_id = _require_user_id(current_user)
     created_product = await ProductService.create_product(product, user_id)
     return success_response("Product created successfully", created_product)
@@ -111,25 +107,14 @@ async def delete_variant(request: Request, id: PydanticObjectId, sku: str, curre
 
 @seller_router.delete("/{id}", response_model=ApiResponse[None])
 @user_limiter.limit("10/minute")
-async def delete_seller_product(request: Request, id: PydanticObjectId, current_user: User = Depends(get_current_user)):
-    user_id = _require_user_id(current_user)
-    if not await ProductService.delete_product(id, user_id):
+async def delete_product(
+    request: Request,
+    id: PydanticObjectId,
+    current_user: User = Depends(get_current_user),
+):
+    if not await ProductService.delete_product(id, current_user):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Product not found")
     return success_response("Product deleted successfully")
 
 
-@admin_router.delete("/{id}", response_model=ApiResponse[None], status_code=status.HTTP_200_OK)
-@user_limiter.limit("10/minute")
-async def delete_product_as_admin(request: Request, id: PydanticObjectId, current_user: User = Depends(get_current_user)):
-    """
-    Admin Moderation: Force delete any product from the platform.
-    """
-    user_id = _require_user_id(current_user)
-    success = await ProductService.delete_product(id, user_id)
-    if not success:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Product not found")
-    return success_response("Product deleted successfully by Admin")
-
-
 router.include_router(seller_router)
-router.include_router(admin_router)
