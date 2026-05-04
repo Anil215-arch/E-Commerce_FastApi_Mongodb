@@ -1,7 +1,7 @@
 from beanie import PydanticObjectId
 from fastapi import APIRouter, Depends, HTTPException, Query, status, Request
 from app.core.rate_limiter import user_limiter
-from app.core.dependencies import _require_user_id, get_current_user
+from app.core.dependencies import _require_user_id, get_current_user, RoleChecker
 from app.core.user_role import UserRole
 from app.models.user_model import User
 from app.schemas.common_schema import ApiResponse
@@ -10,7 +10,9 @@ from app.services.inventory_services import InventoryService
 from app.utils.responses import success_response
 
 
-router = APIRouter()
+router = APIRouter(
+    dependencies=[Depends(RoleChecker([UserRole.SELLER, UserRole.ADMIN, UserRole.SUPER_ADMIN]))]
+)
 
 
 @router.get(

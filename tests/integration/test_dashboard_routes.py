@@ -26,10 +26,10 @@ def test_seller_dashboard_summary_success(client):
     main.app.dependency_overrides[get_current_user] = _override_user(UserRole.SELLER)
 
     with patch(
-        "app.api.api_v1.endpoints.seller.dashboard.DashboardService.get_seller_summary",
+        "app.api.api_v1.endpoints.dashboard_api.DashboardService.get_seller_summary",
         new=AsyncMock(return_value={"total_products": 5, "total_orders": 9}),
     ):
-        response = client.get("/api/v1/seller/dashboard/summary")
+        response = client.get("/api/v1/dashboard/seller/summary")
 
     assert response.status_code == 200
     body = response.json()
@@ -43,10 +43,10 @@ def test_seller_dashboard_revenue_success(client):
     main.app.dependency_overrides[get_current_user] = _override_user(UserRole.SELLER)
 
     with patch(
-        "app.api.api_v1.endpoints.seller.dashboard.DashboardService.get_revenue_chart",
+        "app.api.api_v1.endpoints.dashboard_api.DashboardService.get_revenue_chart",
         new=AsyncMock(return_value=[{"date": "2026-04-01", "revenue": 1200}]),
     ):
-        response = client.get("/api/v1/seller/dashboard/revenue?period=daily")
+        response = client.get("/api/v1/dashboard/seller/revenue?period=daily")
 
     assert response.status_code == 200
     body = response.json()
@@ -60,10 +60,10 @@ def test_seller_dashboard_revenue_maps_value_error_to_400(client):
     main.app.dependency_overrides[get_current_user] = _override_user(UserRole.SELLER)
 
     with patch(
-        "app.api.api_v1.endpoints.seller.dashboard.DashboardService.get_revenue_chart",
+        "app.api.api_v1.endpoints.dashboard_api.DashboardService.get_revenue_chart",
         new=AsyncMock(side_effect=ValueError("Date range exceeds 5-year limit")),
     ):
-        response = client.get("/api/v1/seller/dashboard/revenue?period=yearly")
+        response = client.get("/api/v1/dashboard/seller/revenue?period=yearly")
 
     assert response.status_code == 400
     body = response.json()
@@ -74,7 +74,7 @@ def test_seller_dashboard_revenue_maps_value_error_to_400(client):
 def test_seller_dashboard_is_forbidden_for_customer(client):
     main.app.dependency_overrides[get_current_user] = _override_user(UserRole.CUSTOMER)
 
-    response = client.get("/api/v1/seller/dashboard/summary")
+    response = client.get("/api/v1/dashboard/seller/summary")
 
     assert response.status_code == 403
     body = response.json()
@@ -94,10 +94,10 @@ def test_admin_dashboard_summary_success(client):
     }
 
     with patch(
-        "app.api.api_v1.endpoints.admin.dashboard.DashboardService.get_admin_summary",
+        "app.api.api_v1.endpoints.dashboard_api.DashboardService.get_admin_summary",
         new=AsyncMock(return_value=payload),
     ):
-        response = client.get("/api/v1/admin/dashboard/summary")
+        response = client.get("/api/v1/dashboard/admin/summary")
 
     assert response.status_code == 200
     body = response.json()
@@ -110,10 +110,10 @@ def test_admin_dashboard_revenue_success(client):
     main.app.dependency_overrides[get_current_user] = _override_user(UserRole.ADMIN)
 
     with patch(
-        "app.api.api_v1.endpoints.admin.dashboard.DashboardService.get_revenue_chart",
+        "app.api.api_v1.endpoints.dashboard_api.DashboardService.get_revenue_chart",
         new=AsyncMock(return_value=[{"date": "2026-04", "revenue": 3400}]),
     ):
-        response = client.get("/api/v1/admin/dashboard/revenue?period=monthly")
+        response = client.get("/api/v1/dashboard/admin/revenue?period=monthly")
 
     assert response.status_code == 200
     body = response.json()
@@ -126,7 +126,7 @@ def test_admin_dashboard_revenue_success(client):
 def test_admin_dashboard_is_forbidden_for_seller(client):
     main.app.dependency_overrides[get_current_user] = _override_user(UserRole.SELLER)
 
-    response = client.get("/api/v1/admin/dashboard/summary")
+    response = client.get("/api/v1/dashboard/admin/summary")
 
     assert response.status_code == 403
     body = response.json()
