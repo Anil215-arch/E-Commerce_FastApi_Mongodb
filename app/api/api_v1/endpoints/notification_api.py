@@ -32,6 +32,7 @@ async def get_notifications(request: Request, limit: int = Query(50, ge=1, le=10
     )
 
 
+
 @router.patch("/{notification_id}/read", response_model=ApiResponse[NotificationResponse], status_code=status.HTTP_200_OK)
 @user_limiter.limit("30/minute")
 async def mark_notification_read(request: Request, notification_id: PydanticObjectId, current_user: User = Depends(get_current_user)):

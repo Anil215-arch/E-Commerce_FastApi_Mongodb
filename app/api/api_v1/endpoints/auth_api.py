@@ -31,6 +31,7 @@ async def register_user(
     return success_response(t(request, Msg.USER_REGISTERED_SUCCESSFULLY, language=language), created_user)
 
 
+
 @router.post("/login", response_model=ApiResponse[UserTokenResponse], response_model_by_alias=False, status_code=status.HTTP_200_OK)
 @limiter.limit("5/minute", key_func=ip_key_func)
 async def login_user(
@@ -42,6 +43,7 @@ async def login_user(
     return success_response(t(request, Msg.USER_LOGGED_IN_SUCCESSFULLY, language=language), token_response)
 
 
+
 @router.post("/refresh", response_model=ApiResponse[UserTokenResponse], response_model_by_alias=False, status_code=status.HTTP_200_OK)
 async def refresh_token(
     request: Request,
@@ -50,6 +52,7 @@ async def refresh_token(
 ):
     token_response = await UserServices.refresh_user_token(token_in)
     return success_response(t(request, Msg.TOKEN_REFRESHED_SUCCESSFULLY, language=language), token_response)
+
 
 
 @router.post("/logout", response_model=ApiResponse[None], response_model_by_alias=False, status_code=status.HTTP_200_OK)
@@ -64,6 +67,7 @@ async def logout_user(
     return success_response(t(request, Msg.USER_LOGGED_OUT_SUCCESSFULLY, language=language))
 
 
+
 @router.post("/verify-registration")
 @limiter.limit("10/minute", key_func=ip_key_func)
 async def verify_registration(
@@ -73,6 +77,7 @@ async def verify_registration(
 ):
     message = await UserServices.verify_email_registration(data)
     return success_response(t(request, message, language=language))
+
 
 
 @router.post("/resend-otp")
@@ -86,6 +91,7 @@ async def resend_otp(
     return success_response(t(request, Msg.OTP_SENT_SUCCESSFULLY, language=language))
 
 
+
 @router.post("/forgot-password", response_model=ApiResponse[None])
 @limiter.limit("3/minute", key_func=ip_key_func)
 async def forgot_password_request(
@@ -95,6 +101,7 @@ async def forgot_password_request(
 ):
     await UserServices.forgot_password_request(data)
     return success_response(t(request, Msg.PASSWORD_RESET_CODE_SENT, language=language))
+
 
 
 @router.post("/reset-password", response_model=ApiResponse[None])
