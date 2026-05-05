@@ -14,7 +14,7 @@ from app.core.message_keys import Msg
 router = APIRouter()
 
 
-@router.get("/", response_model=ApiResponse[List[NotificationResponse]], status_code=status.HTTP_200_OK)
+@router.get("", response_model=ApiResponse[List[NotificationResponse]], status_code=status.HTTP_200_OK)
 @user_limiter.limit("60/minute")
 async def get_notifications(request: Request, limit: int = Query(50, ge=1, le=100), current_user: User = Depends(get_current_user)):
     user_id = _require_user_id(current_user)
@@ -30,6 +30,7 @@ async def get_notifications(request: Request, limit: int = Query(50, ge=1, le=10
         t(request, Msg.NOTIFICATIONS_FETCHED_SUCCESSFULLY, language=language),
         items,
     )
+
 
 @router.patch("/{notification_id}/read", response_model=ApiResponse[NotificationResponse], status_code=status.HTTP_200_OK)
 @user_limiter.limit("30/minute")
@@ -49,7 +50,8 @@ async def mark_notification_read(request: Request, notification_id: PydanticObje
         )
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
-    
+
+
 @router.get("/unread-count", response_model=ApiResponse[UnreadNotificationCount], status_code=status.HTTP_200_OK)
 @user_limiter.limit("60/minute")
 async def get_unread_notification_count(request: Request, current_user: User = Depends(get_current_user)):
@@ -60,4 +62,7 @@ async def get_unread_notification_count(request: Request, current_user: User = D
     count = await NotificationService.get_unread_count(user_id)
     language = getattr(current_user, "preferred_language", None) or get_language(request)
     data = UnreadNotificationCount(unread_count=count)
-    return success_response(t(request, Msg.UNREAD_NOTIFICATION_COUNT_FETCHED_SUCCESSFULLY, language=language), data)
+    return success_response(
+        t(request, Msg.UNREAD_NOTIFICATION_COUNT_FETCHED_SUCCESSFULLY, language=language),
+        data,
+    )

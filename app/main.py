@@ -113,7 +113,7 @@ async def unhandled_exception_handler(request: Request, exc: Exception):
         content=error_response(t(request, Msg.INTERNAL_SERVER_ERROR)),
     )
 
-@app.get("/", response_model=ApiResponse[None])
+@app.get("/", response_model=ApiResponse[None], tags=["Root"], summary="Welcome")
 @limiter.limit("5/minute", key_func=ip_key_func)
 async def root(request: Request):
     return success_response(t(request, Msg.WELCOME, project_name=settings.PROJECT_NAME))

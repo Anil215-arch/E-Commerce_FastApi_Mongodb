@@ -40,10 +40,10 @@ def test_seller_can_get_variant_inventory_and_user_id_is_forwarded(client):
     )
 
     with patch(
-        "app.api.api_v1.endpoints.seller.inventory.InventoryService.get_variant_inventory",
+        "app.api.api_v1.endpoints.inventory_api.InventoryService.get_variant_inventory",
         new=AsyncMock(return_value=service_response),
     ) as mock_get_inventory:
-        response = client.get(f"/api/v1/seller/inventory/products/{product_id}/variants/SKU-INV-1")
+        response = client.get(f"/api/v1/inventory/products/{product_id}/variants/SKU-INV-1")
 
     assert response.status_code == 200
     body = response.json()
@@ -76,11 +76,11 @@ def test_seller_can_adjust_variant_inventory_and_payload_is_forwarded(client):
     )
 
     with patch(
-        "app.api.api_v1.endpoints.seller.inventory.InventoryService.adjust_available_stock",
+        "app.api.api_v1.endpoints.inventory_api.InventoryService.adjust_available_stock",
         new=AsyncMock(return_value=service_response),
     ) as mock_adjust_inventory:
         response = client.patch(
-            f"/api/v1/seller/inventory/products/{product_id}/variants/SKU-INV-2",
+            f"/api/v1/inventory/products/{product_id}/variants/SKU-INV-2",
             json={"request_id": "req-inv-00001", "delta": 5, "reason": "restock from supplier"},
         )
 
@@ -116,11 +116,11 @@ def test_admin_inventory_read_disables_owner_enforcement(client):
     )
 
     with patch(
-        "app.api.api_v1.endpoints.seller.inventory.InventoryService.get_variant_inventory",
+        "app.api.api_v1.endpoints.inventory_api.InventoryService.get_variant_inventory",
         new=AsyncMock(return_value=service_response),
     ) as mock_get_inventory:
         response = client.get(
-            f"/api/v1/seller/inventory/products/{product_id}/variants/SKU-INV-ADMIN?seller_id={seller_id}"
+            f"/api/v1/inventory/products/{product_id}/variants/SKU-INV-ADMIN?seller_id={seller_id}"
         )
 
     assert response.status_code == 200
@@ -135,7 +135,7 @@ def test_admin_inventory_read_requires_seller_id(client):
     product_id = PydanticObjectId()
     main.app.dependency_overrides[get_current_user] = _override_user(UserRole.ADMIN, admin_id)
 
-    response = client.get(f"/api/v1/seller/inventory/products/{product_id}/variants/SKU-INV-ADMIN")
+    response = client.get(f"/api/v1/inventory/products/{product_id}/variants/SKU-INV-ADMIN")
 
     assert response.status_code == 400
     body = response.json()
@@ -147,7 +147,7 @@ def test_customer_is_forbidden_from_inventory_management_routes(client):
     product_id = PydanticObjectId()
     main.app.dependency_overrides[get_current_user] = _override_user(UserRole.CUSTOMER)
 
-    response = client.get(f"/api/v1/seller/inventory/products/{product_id}/variants/SKU-INV-3")
+    response = client.get(f"/api/v1/inventory/products/{product_id}/variants/SKU-INV-3")
 
     assert response.status_code == 403
     body = response.json()
@@ -160,7 +160,7 @@ def test_adjust_inventory_rejects_invalid_increment_payload(client):
     main.app.dependency_overrides[get_current_user] = _override_user(UserRole.SELLER)
 
     response = client.patch(
-        f"/api/v1/seller/inventory/products/{product_id}/variants/SKU-INV-4",
+        f"/api/v1/inventory/products/{product_id}/variants/SKU-INV-4",
         json={"request_id": "req-inv-00002", "delta": 0, "reason": "manual adjustment"},
     )
 
@@ -175,7 +175,7 @@ def test_adjust_inventory_rejects_short_request_id_with_domain_error_shape(clien
     main.app.dependency_overrides[get_current_user] = _override_user(UserRole.SELLER)
 
     response = client.patch(
-        f"/api/v1/seller/inventory/products/{product_id}/variants/SKU-INV-4",
+        f"/api/v1/inventory/products/{product_id}/variants/SKU-INV-4",
         json={"request_id": "short", "delta": 1, "reason": "manual adjustment"},
     )
 

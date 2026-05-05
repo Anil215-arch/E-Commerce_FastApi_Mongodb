@@ -38,10 +38,10 @@ def test_products_list_returns_paginated_items_without_double_data(client):
     }
 
     with patch(
-        "app.api.api_v1.endpoints.public.products.ProductQueryService.list_products",
+        "app.api.api_v1.endpoints.product_api.ProductQueryService.list_products",
         new=AsyncMock(return_value=([product_payload], "cursor-1", False)),
     ):
-        response = client.get("/api/v1/products/?limit=10&sort_by=created_at&sort_order=desc")
+        response = client.get("/api/v1/products?limit=10&sort_by=created_at&sort_order=desc")
 
     assert response.status_code == 200
     body = response.json()
@@ -55,11 +55,11 @@ def test_products_list_returns_paginated_items_without_double_data(client):
 
 def test_products_list_forwards_search_and_language_to_query_service(client):
     with patch(
-        "app.api.api_v1.endpoints.public.products.ProductQueryService.list_products",
+        "app.api.api_v1.endpoints.product_api.ProductQueryService.list_products",
         new=AsyncMock(return_value=([], None, False)),
     ) as mock_service:
         response = client.get(
-            "/api/v1/products/",
+            "/api/v1/products",
             params={"search": "कार", "limit": 10},
             headers={"Accept-Language": "hi"},
         )
@@ -71,7 +71,7 @@ def test_products_list_forwards_search_and_language_to_query_service(client):
 
 
 def test_products_list_bad_price_range_returns_422_validation_envelope(client):
-    response = client.get("/api/v1/products/?min_price=100&max_price=50")
+    response = client.get("/api/v1/products?min_price=100&max_price=50")
 
     assert response.status_code == 422
     body = response.json()
@@ -86,7 +86,7 @@ def test_cart_endpoint_returns_401_when_authenticated_user_id_is_missing(client)
 
     main.app.dependency_overrides[get_current_user] = _user_without_id
 
-    response = client.get("/api/v1/customer/cart/")
+    response = client.get("/api/v1/cart")
 
     assert response.status_code == 401
     body = response.json()
@@ -105,7 +105,7 @@ def test_add_cart_item_rejects_invalid_quantity_with_standard_error_shape(client
         "sku": "SKU-1",
         "quantity": 0,
     }
-    response = client.post("/api/v1/customer/cart/items", json=payload)
+    response = client.post("/api/v1/cart/items", json=payload)
 
     assert response.status_code == 422
     body = response.json()
@@ -125,7 +125,7 @@ def test_add_cart_item_rejects_quantity_above_limit_with_standard_error_shape(cl
         "sku": "SKU-1",
         "quantity": 11,
     }
-    response = client.post("/api/v1/customer/cart/items", json=payload)
+    response = client.post("/api/v1/cart/items", json=payload)
 
     assert response.status_code == 422
     body = response.json()
@@ -145,7 +145,7 @@ def test_add_cart_item_rejects_invalid_sku_pattern_with_standard_error_shape(cli
         "sku": "BAD SKU!*",
         "quantity": 1,
     }
-    response = client.post("/api/v1/customer/cart/items", json=payload)
+    response = client.post("/api/v1/cart/items", json=payload)
 
     assert response.status_code == 422
     body = response.json()
@@ -165,7 +165,7 @@ def test_order_checkout_rejects_whitespace_batch_id_with_standard_error_shape(cl
         new=AsyncMock(return_value=SimpleNamespace(addresses=[SimpleNamespace()])),
     ):
         response = client.post(
-            "/api/v1/customer/orders/checkout",
+            "/api/v1/orders/checkout",
             json={
                 "checkout_batch_id": "        ",
                 "shipping_address_index": 0,
@@ -188,7 +188,7 @@ def test_order_cancel_rejects_whitespace_reason_with_standard_error_shape(client
     main.app.dependency_overrides[get_current_user] = _user_with_id
 
     response = client.patch(
-        f"/api/v1/customer/orders/{PydanticObjectId()}/cancel",
+        f"/api/v1/orders/{PydanticObjectId()}/cancel",
         json={"reason": "          "},
     )
 
@@ -206,10 +206,10 @@ def test_unread_notification_count_returns_success_envelope(client):
     main.app.dependency_overrides[get_current_user] = _user_with_id
 
     with patch(
-        "app.api.api_v1.endpoints.customer.notifications.NotificationService.get_unread_count",
+        "app.api.api_v1.endpoints.notification_api.NotificationService.get_unread_count",
         new=AsyncMock(return_value=7),
     ):
-        response = client.get("/api/v1/customer/notifications/unread-count")
+        response = client.get("/api/v1/notifications/unread-count")
 
     assert response.status_code == 200
     body = response.json()
@@ -224,7 +224,7 @@ def test_unread_notification_count_returns_401_when_user_id_missing(client):
 
     main.app.dependency_overrides[get_current_user] = _user_without_id
 
-    response = client.get("/api/v1/customer/notifications/unread-count")
+    response = client.get("/api/v1/notifications/unread-count")
 
     assert response.status_code == 401
     body = response.json()
@@ -239,11 +239,11 @@ def test_review_create_maps_domain_validation_error_to_400(client):
     main.app.dependency_overrides[get_current_user] = _user_with_id
 
     with patch(
-        "app.api.api_v1.endpoints.customer.reviews.ReviewService.create_review",
+        "app.api.api_v1.endpoints.review_api.ReviewService.create_review",
         new=AsyncMock(side_effect=DomainValidationError("Review text is too short.")),
     ):
         response = client.post(
-            f"/api/v1/customer/reviews/products/{PydanticObjectId()}",
+            f"/api/v1/reviews/products/{PydanticObjectId()}",
             json={"rating": 5, "review": "great", "images": []},
         )
 
@@ -265,7 +265,7 @@ def test_wishlist_add_maps_domain_validation_error_to_400(client):
         new=AsyncMock(side_effect=DomainValidationError("Wishlist is full.")),
     ):
         response = client.post(
-            "/api/v1/customers/wishlist/",
+            "/api/v1/wishlist",
             json={"product_id": str(PydanticObjectId()), "sku": "PHX-01"},
         )
 
@@ -283,11 +283,11 @@ def test_device_token_register_rejects_whitespace_token_with_422(client):
     main.app.dependency_overrides[get_current_user] = _user_with_id
 
     with patch(
-        "app.api.api_v1.endpoints.customer.device_tokens.DeviceTokenService.register_token",
+        "app.api.api_v1.endpoints.device_token_api.DeviceTokenService.register_token",
         new=AsyncMock(),
     ) as mock_register:
         response = client.post(
-            "/api/v1/customer/device-tokens/",
+            "/api/v1/device-tokens",
             json={"token": "          ", "platform": "ANDROID"},
         )
 
@@ -305,11 +305,11 @@ def test_device_token_register_maps_domain_validation_error_to_400(client):
     main.app.dependency_overrides[get_current_user] = _user_with_id
 
     with patch(
-        "app.api.api_v1.endpoints.customer.device_tokens.DeviceTokenService.register_token",
+        "app.api.api_v1.endpoints.device_token_api.DeviceTokenService.register_token",
         new=AsyncMock(side_effect=DomainValidationError("Maximum device limit reached.")),
     ):
         response = client.post(
-            "/api/v1/customer/device-tokens/",
+            "/api/v1/device-tokens",
             json={"token": "abcdefghijk", "platform": "ANDROID"},
         )
 

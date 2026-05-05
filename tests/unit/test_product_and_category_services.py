@@ -10,6 +10,8 @@ from fastapi import HTTPException
 
 from app.core.exceptions import DomainValidationError
 from app.core.message_keys import Msg
+from app.core.user_role import UserRole
+from app.models.user_model import User
 from app.models.product_variant_model import ProductVariant
 from app.schemas.category_schema import CategoryCreate, CategoryUpdate
 from app.schemas.product_schema import ProductCreate, ProductUpdate
@@ -321,6 +323,7 @@ async def test_upload_product_images_rejects_duplicate_image_urls_in_existing_pr
 async def test_delete_product_triggers_wishlist_cleanup_after_soft_delete():
     product_id = PydanticObjectId()
     current_user_id = PydanticObjectId()
+    current_user = cast(User, SimpleNamespace(id=current_user_id, role=UserRole.ADMIN))
     product = SimpleNamespace(
         is_deleted=False,
         images=[],
@@ -330,7 +333,7 @@ async def test_delete_product_triggers_wishlist_cleanup_after_soft_delete():
 
     with patch("app.services.product_services.Product.get", new=AsyncMock(return_value=product)):
         with patch("app.services.product_services.WishlistService.remove_ghost_product_references", new=cleanup_mock):
-            result = await ProductService.delete_product(product_id, current_user_id)
+            result = await ProductService.delete_product(product_id, current_user)
 
     assert result is True
     product.soft_delete.assert_awaited_once_with(current_user_id)

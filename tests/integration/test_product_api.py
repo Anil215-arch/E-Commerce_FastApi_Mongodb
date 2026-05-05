@@ -10,7 +10,7 @@ def test_list_products_returns_single_paginated_payload(client, monkeypatch):
         AsyncMock(return_value=([], None, False)),
     )
 
-    response = client.get("/api/v1/products/?limit=10&sort_by=created_at&sort_order=desc")
+    response = client.get("/api/v1/products?limit=10&sort_by=created_at&sort_order=desc")
 
     assert response.status_code == 200
     assert response.json() == {

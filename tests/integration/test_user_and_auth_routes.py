@@ -21,7 +21,7 @@ def test_register_user_route_returns_success_envelope(client):
         "created_at": datetime.now(timezone.utc).isoformat(),
     }
 
-    with patch("app.api.api_v1.endpoints.public.auth.UserServices.user_registration", new=AsyncMock(return_value=created_user)):
+    with patch("app.api.api_v1.endpoints.auth_api.UserServices.user_registration", new=AsyncMock(return_value=created_user)):
         response = client.post(
             "/api/v1/auth/register",
             json={
@@ -45,7 +45,7 @@ def test_login_user_route_returns_tokens(client):
         "token_type": "bearer",
     }
 
-    with patch("app.api.api_v1.endpoints.public.auth.UserServices.login_and_issue_tokens", new=AsyncMock(return_value=token_payload)):
+    with patch("app.api.api_v1.endpoints.auth_api.UserServices.login_and_issue_tokens", new=AsyncMock(return_value=token_payload)):
         response = client.post(
             "/api/v1/auth/login",
             json={"email": "john@example.com", "password": "StrongPass123!"},
@@ -61,7 +61,7 @@ def test_refresh_route_maps_service_http_error_to_standard_error_envelope(client
     from fastapi import HTTPException
 
     with patch(
-        "app.api.api_v1.endpoints.public.auth.UserServices.refresh_user_token",
+        "app.api.api_v1.endpoints.auth_api.UserServices.refresh_user_token",
         new=AsyncMock(side_effect=HTTPException(status_code=401, detail="Refresh token has been revoked")),
     ):
         response = client.post("/api/v1/auth/refresh", json={"refresh_token": "revoked"})
@@ -82,7 +82,7 @@ def test_logout_route_success_with_dependency_overrides(client):
     main.app.dependency_overrides[get_current_user] = _current_user
     main.app.dependency_overrides[get_bearer_token] = _bearer_token
 
-    with patch("app.api.api_v1.endpoints.public.auth.UserServices.logout_user", new=AsyncMock()) as mock_logout:
+    with patch("app.api.api_v1.endpoints.auth_api.UserServices.logout_user", new=AsyncMock()) as mock_logout:
         response = client.post("/api/v1/auth/logout", json={"refresh_token": "refresh.token"})
 
     assert response.status_code == 200
@@ -119,7 +119,7 @@ def test_legacy_users_me_route_returns_current_user(client):
 
 
 def test_forgot_password_route_returns_generic_message(client):
-    with patch("app.api.api_v1.endpoints.public.auth.UserServices.forgot_password_request", new=AsyncMock()) as mock_forgot:
+    with patch("app.api.api_v1.endpoints.auth_api.UserServices.forgot_password_request", new=AsyncMock()) as mock_forgot:
         response = client.post("/api/v1/auth/forgot-password", json={"email": "john@example.com"})
 
     assert response.status_code == 200
@@ -131,7 +131,7 @@ def test_forgot_password_route_returns_generic_message(client):
 
 def test_verify_registration_route_uses_service_message(client):
     with patch(
-        "app.api.api_v1.endpoints.public.auth.UserServices.verify_email_registration",
+        "app.api.api_v1.endpoints.auth_api.UserServices.verify_email_registration",
         new=AsyncMock(return_value="Email verified successfully. You can now login."),
     ):
         response = client.post(
@@ -181,10 +181,10 @@ def test_add_address_route_returns_success_envelope(client):
     service_result = _user_response_with_addresses([_address_payload()["address"]])
 
     with patch(
-        "app.api.api_v1.endpoints.customer.profile.UserServices.add_user_address",
+        "app.api.api_v1.endpoints.users_api.UserServices.add_user_address",
         new=AsyncMock(return_value=service_result),
     ) as mock_add:
-        response = client.post("/api/v1/customer/profile/addresses", json=_address_payload())
+        response = client.post("/api/v1/users/me/addresses", json=_address_payload())
 
     assert response.status_code == 200
     body = response.json()
@@ -206,10 +206,10 @@ def test_update_address_route_passes_index_and_payload(client):
     service_result = _user_response_with_addresses([_address_payload(city="Mysuru")["address"]])
 
     with patch(
-        "app.api.api_v1.endpoints.customer.profile.UserServices.update_user_address",
+        "app.api.api_v1.endpoints.users_api.UserServices.update_user_address",
         new=AsyncMock(return_value=service_result),
     ) as mock_update:
-        response = client.put("/api/v1/customer/profile/addresses/0", json=_address_payload(city="Mysuru"))
+        response = client.put("/api/v1/users/me/addresses/0", json=_address_payload(city="Mysuru"))
 
     assert response.status_code == 200
     body = response.json()
@@ -232,10 +232,10 @@ def test_remove_address_route_returns_updated_user(client):
     service_result = _user_response_with_addresses([])
 
     with patch(
-        "app.api.api_v1.endpoints.customer.profile.UserServices.remove_user_address",
+        "app.api.api_v1.endpoints.users_api.UserServices.remove_user_address",
         new=AsyncMock(return_value=service_result),
     ) as mock_remove:
-        response = client.delete("/api/v1/customer/profile/addresses/0")
+        response = client.delete("/api/v1/users/me/addresses/0")
 
     assert response.status_code == 200
     body = response.json()
@@ -255,10 +255,10 @@ def test_update_address_route_surfaces_not_found_error(client):
     main.app.dependency_overrides[get_current_user] = _current_user
 
     with patch(
-        "app.api.api_v1.endpoints.customer.profile.UserServices.update_user_address",
+        "app.api.api_v1.endpoints.users_api.UserServices.update_user_address",
         new=AsyncMock(side_effect=HTTPException(status_code=404, detail="Address not found at the specified index.")),
     ):
-        response = client.put("/api/v1/customer/profile/addresses/99", json=_address_payload())
+        response = client.put("/api/v1/users/me/addresses/99", json=_address_payload())
 
     assert response.status_code == 404
     body = response.json()
@@ -277,10 +277,10 @@ def test_add_address_route_returns_422_for_short_phone(client, bad_phone):
     payload["address"]["phone_number"] = bad_phone
 
     with patch(
-        "app.api.api_v1.endpoints.customer.profile.UserServices.add_user_address",
+        "app.api.api_v1.endpoints.users_api.UserServices.add_user_address",
         new=AsyncMock(),
     ) as mock_add:
-        response = client.post("/api/v1/customer/profile/addresses", json=payload)
+        response = client.post("/api/v1/users/me/addresses", json=payload)
 
     assert response.status_code == 422
     body = response.json()
@@ -299,10 +299,10 @@ def test_add_address_route_returns_422_for_missing_city(client):
     payload["address"].pop("city")
 
     with patch(
-        "app.api.api_v1.endpoints.customer.profile.UserServices.add_user_address",
+        "app.api.api_v1.endpoints.users_api.UserServices.add_user_address",
         new=AsyncMock(),
     ) as mock_add:
-        response = client.post("/api/v1/customer/profile/addresses", json=payload)
+        response = client.post("/api/v1/users/me/addresses", json=payload)
 
     assert response.status_code == 422
     body = response.json()
@@ -321,10 +321,10 @@ def test_update_address_route_returns_422_for_missing_city(client):
     payload["address"].pop("city")
 
     with patch(
-        "app.api.api_v1.endpoints.customer.profile.UserServices.update_user_address",
+        "app.api.api_v1.endpoints.users_api.UserServices.update_user_address",
         new=AsyncMock(),
     ) as mock_update:
-        response = client.put("/api/v1/customer/profile/addresses/0", json=payload)
+        response = client.put("/api/v1/users/me/addresses/0", json=payload)
 
     assert response.status_code == 422
     body = response.json()
@@ -340,10 +340,10 @@ def test_update_address_route_returns_422_for_non_integer_index(client):
     main.app.dependency_overrides[get_current_user] = _current_user
 
     with patch(
-        "app.api.api_v1.endpoints.customer.profile.UserServices.update_user_address",
+        "app.api.api_v1.endpoints.users_api.UserServices.update_user_address",
         new=AsyncMock(),
     ) as mock_update:
-        response = client.put("/api/v1/customer/profile/addresses/not-a-number", json=_address_payload())
+        response = client.put("/api/v1/users/me/addresses/not-a-number", json=_address_payload())
 
     assert response.status_code == 422
     body = response.json()
@@ -359,10 +359,10 @@ def test_remove_address_route_returns_422_for_non_integer_index(client):
     main.app.dependency_overrides[get_current_user] = _current_user
 
     with patch(
-        "app.api.api_v1.endpoints.customer.profile.UserServices.remove_user_address",
+        "app.api.api_v1.endpoints.users_api.UserServices.remove_user_address",
         new=AsyncMock(),
     ) as mock_remove:
-        response = client.delete("/api/v1/customer/profile/addresses/not-a-number")
+        response = client.delete("/api/v1/users/me/addresses/not-a-number")
 
     assert response.status_code == 422
     body = response.json()

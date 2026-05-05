@@ -3,6 +3,9 @@ import shutil
 import uuid
 from typing import cast
 from typing import List
+from app.core.dependencies import _require_user_id
+from app.core.user_role import UserRole
+from app.models.user_model import User
 from app.validators.product_validator import ProductDomainValidator
 from beanie import PydanticObjectId
 from fastapi import HTTPException, UploadFile
@@ -260,10 +263,15 @@ class ProductService:
         return ProductMapper.serialize_product(updated_product, category, include_translations=True)
 
     @staticmethod
-    async def delete_product(product_id: PydanticObjectId, current_user_id: PydanticObjectId):
+    async def delete_product(product_id: PydanticObjectId, current_user: User):
         product = await Product.get(product_id)
         if not product or product.is_deleted:
             return False
+
+        current_user_id = _require_user_id(current_user)
+
+        if current_user.role == UserRole.SELLER and product.created_by != current_user_id:
+            raise HTTPException(status_code=403, detail="Not authorized to delete this product")
 
         for image_path in product.images:
             local_path = image_path.lstrip("/")

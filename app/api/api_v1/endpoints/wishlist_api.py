@@ -13,7 +13,7 @@ from app.core.message_keys import Msg
 
 router = APIRouter()
 
-@router.post("/", response_model=ApiResponse[None], status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=ApiResponse[None], status_code=status.HTTP_201_CREATED)
 @user_limiter.limit("20/minute")
 async def add_to_wishlist(
     request: Request,
@@ -38,7 +38,7 @@ async def remove_from_wishlist(
     await WishlistService.remove_item(current_user.id, product_id, sku)
     return success_response(t(request, Msg.WISHLIST_ITEM_REMOVED_SUCCESSFULLY))
 
-@router.get("/", response_model=ApiResponse[List[WishlistPopulatedResponse]], status_code=status.HTTP_200_OK)
+@router.get("", response_model=ApiResponse[List[WishlistPopulatedResponse]], status_code=status.HTTP_200_OK)
 @user_limiter.limit("60/minute")
 async def get_wishlist(
     request: Request,

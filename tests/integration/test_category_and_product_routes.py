@@ -17,10 +17,10 @@ def test_category_create_maps_service_error_to_400(client):
     main.app.dependency_overrides[get_current_user] = _admin_user
 
     with patch(
-        "app.api.api_v1.endpoints.admin.categories.CategoryService.create_category",
+        "app.api.api_v1.endpoints.category_api.CategoryService.create_category",
         new=AsyncMock(return_value=(None, "Parent category not found.")),
     ):
-        response = client.post("/api/v1/admin/categories/", json={"name": "Phones", "parent_id": str(PydanticObjectId())})
+        response = client.post("/api/v1/categories", json={"name": "Phones", "parent_id": str(PydanticObjectId())})
 
     assert response.status_code == 400
     body = response.json()
@@ -38,7 +38,7 @@ def test_category_tree_route_returns_nested_payload(client):
         }
     ]
 
-    with patch("app.api.api_v1.endpoints.public.categories.CategoryService.get_category_tree", new=AsyncMock(return_value=tree_payload)):
+    with patch("app.api.api_v1.endpoints.category_api.CategoryService.get_category_tree", new=AsyncMock(return_value=tree_payload)):
         response = client.get("/api/v1/categories/tree")
 
     assert response.status_code == 200
@@ -55,7 +55,7 @@ def test_product_create_requires_admin_or_seller_role(client):
     main.app.dependency_overrides[get_current_user] = _customer_user
 
     response = client.post(
-        "/api/v1/seller/products/",
+        "/api/v1/products",
         json={
             "name": "Phone X",
             "description": "Modern smartphone with long battery and strong camera",
@@ -86,7 +86,7 @@ def test_product_create_requires_admin_or_seller_role(client):
 
 
 def test_product_read_one_returns_404_when_not_found(client):
-    with patch("app.api.api_v1.endpoints.public.products.ProductQueryService.get_product", new=AsyncMock(return_value=None)):
+    with patch("app.api.api_v1.endpoints.product_api.ProductQueryService.get_product", new=AsyncMock(return_value=None)):
         response = client.get(f"/api/v1/products/{PydanticObjectId()}")
 
     assert response.status_code == 404
@@ -101,8 +101,8 @@ def test_product_delete_maps_false_service_result_to_404(client):
 
     main.app.dependency_overrides[get_current_user] = _admin_user
 
-    with patch("app.api.api_v1.endpoints.admin.products.ProductService.delete_product", new=AsyncMock(return_value=False)):
-        response = client.delete(f"/api/v1/admin/products/{PydanticObjectId()}")
+    with patch("app.api.api_v1.endpoints.product_api.ProductService.delete_product", new=AsyncMock(return_value=False)):
+        response = client.delete(f"/api/v1/products/{PydanticObjectId()}")
 
     assert response.status_code == 404
     body = response.json()
@@ -116,8 +116,8 @@ def test_category_list_route_success_shape(client):
         {"_id": str(PydanticObjectId()), "name": "Laptops", "parent_id": str(PydanticObjectId())},
     ]
 
-    with patch("app.api.api_v1.endpoints.public.categories.CategoryService.get_all_categories", new=AsyncMock(return_value=categories)):
-        response = client.get("/api/v1/categories/")
+    with patch("app.api.api_v1.endpoints.category_api.CategoryService.get_all_categories", new=AsyncMock(return_value=categories)):
+        response = client.get("/api/v1/categories")
 
     assert response.status_code == 200
     body = response.json()
@@ -130,9 +130,9 @@ def test_category_list_route_forwards_search_and_language(client):
         {"_id": str(PydanticObjectId()), "name": "कार एक्सेसरीज़", "parent_id": None},
     ]
 
-    with patch("app.api.api_v1.endpoints.public.categories.CategoryService.get_all_categories", new=AsyncMock(return_value=categories)) as mock_service:
+    with patch("app.api.api_v1.endpoints.category_api.CategoryService.get_all_categories", new=AsyncMock(return_value=categories)) as mock_service:
         response = client.get(
-            "/api/v1/categories/",
+            "/api/v1/categories",
             params={"search": "कार"},
             headers={"Accept-Language": "hi"},
         )
@@ -145,7 +145,7 @@ def test_category_list_route_forwards_search_and_language(client):
 
 
 def test_category_list_route_rejects_search_over_max_length(client):
-    response = client.get("/api/v1/categories/", params={"search": "x" * 51})
+    response = client.get("/api/v1/categories", params={"search": "x" * 51})
 
     assert response.status_code == 422
 
@@ -157,11 +157,11 @@ def test_seller_product_create_maps_domain_validation_error_to_400(client):
     main.app.dependency_overrides[get_current_user] = _seller_user
 
     with patch(
-        "app.api.api_v1.endpoints.seller.products.ProductService.create_product",
+        "app.api.api_v1.endpoints.product_api.ProductService.create_product",
         new=AsyncMock(side_effect=DomainValidationError("Reserved stock cannot exceed available stock.")),
     ):
         response = client.post(
-            "/api/v1/seller/products/",
+            "/api/v1/products",
             json={
                 "name": "Phone X",
                 "description": "Modern smartphone with long battery and strong camera",
