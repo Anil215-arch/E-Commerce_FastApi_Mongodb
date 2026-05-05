@@ -2,6 +2,8 @@ from datetime import datetime
 from typing import Optional, Literal
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from app.core.dependencies import get_current_user, _require_user_id, RoleChecker
+from app.core.i18n import t
+from app.core.message_keys import Msg
 from app.core.rate_limiter import user_limiter
 from app.core.user_role import UserRole
 from app.models.user_model import User
@@ -39,7 +41,7 @@ async def get_seller_summary(
 ):
     seller_id = _require_user_id(current_user)
     data = await DashboardService.get_seller_summary(seller_id)
-    return success_response("Seller dashboard summary fetched successfully", data)
+    return success_response(t(request, Msg.SELLER_DASHBOARD_SUMMARY_FETCHED_SUCCESSFULLY), data)
 
 
 @router.get(
@@ -51,7 +53,7 @@ async def get_seller_summary(
 @user_limiter.limit("30/minute")
 async def get_platform_summary(request: Request):
     data = await DashboardService.get_admin_summary()
-    return success_response("Admin dashboard summary fetched successfully", data)
+    return success_response(t(request, Msg.ADMIN_DASHBOARD_SUMMARY_FETCHED_SUCCESSFULLY), data)
 
 
 @router.get(
@@ -79,6 +81,11 @@ async def get_revenue(
             start_date=start_date,
             end_date=end_date,
         )
-        return success_response("Revenue data fetched", RevenueChartResponse(data=data))
+        message_key = (
+            Msg.SELLER_REVENUE_DATA_FETCHED
+            if current_user.role == UserRole.SELLER
+            else Msg.ADMIN_REVENUE_DATA_FETCHED
+        )
+        return success_response(t(request, message_key), RevenueChartResponse(data=data))
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail=t(request, str(e)))

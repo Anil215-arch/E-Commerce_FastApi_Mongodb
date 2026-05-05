@@ -35,7 +35,7 @@ async def get_product_reviews(
             next_cursor=next_cursor,
         ),
     )
-    return success_response("Reviews fetched successfully", paginated_data)
+    return success_response(t(request, Msg.REVIEWS_FETCHED_SUCCESSFULLY), paginated_data)
 
 
 @router.post("/products/{product_id}", response_model=ApiResponse[ReviewResponse], status_code=status.HTTP_201_CREATED)

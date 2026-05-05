@@ -49,7 +49,7 @@ async def mark_notification_read(request: Request, notification_id: PydanticObje
             ),
         )
     except ValueError as e:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=t(request, str(e)))
 
 
 @router.get("/unread-count", response_model=ApiResponse[UnreadNotificationCount], status_code=status.HTTP_200_OK)

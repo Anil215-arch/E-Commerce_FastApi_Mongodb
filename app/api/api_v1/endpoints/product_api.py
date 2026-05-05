@@ -50,7 +50,7 @@ async def read_one(request: Request, id: PydanticObjectId):
             status_code=status.HTTP_404_NOT_FOUND,
             detail=t(request, Msg.PRODUCT_NOT_FOUND),
         )
-    return success_response("Product fetched successfully", product)
+    return success_response(t(request, Msg.PRODUCT_FETCHED_SUCCESSFULLY), product)
 
 
 @router.post("", response_model=ApiResponse[ProductManageResponse], status_code=status.HTTP_201_CREATED, dependencies=[seller_dependency])
