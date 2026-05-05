@@ -1,15 +1,31 @@
 from typing import List, Dict, Any
 from beanie import Insert, PydanticObjectId, Replace, Save, SaveChanges, before_event
-from pydantic import Field, model_validator
+from pydantic import BaseModel, Field, model_validator
 from pymongo import TEXT, IndexModel, ASCENDING
 from app.models.product_variant_model import ProductVariant
 from app.models.base_model import AuditDocument
+
+
+class ProductTranslation(BaseModel):
+    name: str = Field(..., min_length=3, max_length=200, pattern=r"^[^<>]+$")
+    description: str = Field(..., min_length=10, max_length=5000, pattern=r"^[^<>]+$")
+
+    @model_validator(mode="before")
+    @classmethod
+    def normalize_translation_fields(cls, data: Any):
+        if isinstance(data, dict):
+            if "name" in data and isinstance(data["name"], str):
+                data["name"] = data["name"].strip()
+            if "description" in data and isinstance(data["description"], str):
+                data["description"] = data["description"].strip()
+        return data
 
 class Product(AuditDocument):
     name: str = Field(..., min_length=3, max_length=200, pattern=r"^[^<>]+$")
     description: str = Field(..., min_length=10, max_length=5000, pattern=r"^[^<>]+$")
     brand: str = Field(..., min_length=2, max_length=100, pattern=r"^[^<>]+$")
     category_id: PydanticObjectId
+    translations: Dict[str, ProductTranslation] = Field(default_factory=dict)
 
     variants: List[ProductVariant] = Field(default_factory=list, max_length=100)
     price: int = Field(default=0, ge=0)

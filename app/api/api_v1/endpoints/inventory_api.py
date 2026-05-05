@@ -8,6 +8,9 @@ from app.schemas.common_schema import ApiResponse
 from app.schemas.inventory_schema import InventoryAdjustRequest, InventoryVariantResponse
 from app.services.inventory_services import InventoryService
 from app.utils.responses import success_response
+from app.core.language_resolver import resolve_user_language
+from app.core.i18n import t
+from app.core.message_keys import Msg
 
 
 router = APIRouter(
@@ -28,18 +31,19 @@ async def get_variant_inventory(
     current_user: User = Depends(get_current_user),
 ):
     actor_user_id = _require_user_id(current_user)
+    language = resolve_user_language(current_user, request)
     if current_user.role == UserRole.SELLER:
         target_seller_id = actor_user_id
         if seller_id is not None and seller_id != actor_user_id:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
-                detail="Sellers can only access their own inventory.",
+                detail=t(request, Msg.SELLERS_CAN_ONLY_ACCESS_OWN_INVENTORY, language=language),
             )
     else:
         if seller_id is None:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="seller_id query parameter is required for admin inventory access.",
+                detail=t(request, Msg.SELLER_ID_REQUIRED_FOR_ADMIN_INVENTORY_ACCESS, language=language),
             )
         target_seller_id = seller_id
 
@@ -48,7 +52,7 @@ async def get_variant_inventory(
         sku,
         target_seller_id,
     )
-    return success_response("Inventory fetched successfully", data)
+    return success_response(t(request, Msg.INVENTORY_FETCHED_SUCCESSFULLY, language=language), data)
 
 
 @router.patch(
@@ -65,18 +69,19 @@ async def adjust_variant_inventory(
     current_user: User = Depends(get_current_user),
 ):
     actor_user_id = _require_user_id(current_user)
+    language = resolve_user_language(current_user, request)
     if current_user.role == UserRole.SELLER:
         target_seller_id = actor_user_id
         if seller_id is not None and seller_id != actor_user_id:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
-                detail="Sellers can only mutate their own inventory.",
+                detail=t(request, Msg.SELLERS_CAN_ONLY_MUTATE_OWN_INVENTORY, language=language),
             )
     else:
         if seller_id is None:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="seller_id query parameter is required for admin inventory mutation.",
+                detail=t(request, Msg.SELLER_ID_REQUIRED_FOR_ADMIN_INVENTORY_MUTATION, language=language),
             )
         target_seller_id = seller_id
 
@@ -89,4 +94,4 @@ async def adjust_variant_inventory(
         delta=payload.delta,
         reason=payload.reason,
     )
-    return success_response("Inventory updated successfully", data)
+    return success_response(t(request, Msg.INVENTORY_UPDATED_SUCCESSFULLY, language=language), data)

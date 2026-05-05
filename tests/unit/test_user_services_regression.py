@@ -6,6 +6,7 @@ import pytest
 from beanie import PydanticObjectId
 from fastapi import HTTPException
 
+from app.core.message_keys import Msg
 from app.core.user_role import UserRole
 from app.schemas.user_schema import RefreshTokenRequest, UserRegister, UserUpdateRole
 from app.services.user_services import UserServices
@@ -38,7 +39,7 @@ async def test_user_registration_existing_unverified_user_resends_otp_and_raises
                 )
 
     assert exc.value.status_code == 400
-    assert "not verified" in str(exc.value.detail).lower()
+    assert exc.value.detail == Msg.EMAIL_REGISTERED_NOT_VERIFIED_OTP_SENT
     mock_send.assert_awaited_once()
 
 
@@ -56,7 +57,7 @@ async def test_user_registration_duplicate_username_raises():
             )
 
     assert exc.value.status_code == 400
-    assert "username already taken" in str(exc.value.detail).lower()
+    assert exc.value.detail == Msg.USERNAME_ALREADY_TAKEN
 
 
 @pytest.mark.asyncio
@@ -69,7 +70,7 @@ async def test_authenticate_user_blocks_unverified_account():
                 await UserServices._authenticate_user("u@example.com", "StrongPass123!")
 
     assert exc.value.status_code == 403
-    assert "not verified" in str(exc.value.detail).lower()
+    assert exc.value.detail == Msg.EMAIL_NOT_VERIFIED_LOGIN
 
 
 @pytest.mark.asyncio
@@ -110,7 +111,7 @@ async def test_logout_rejects_refresh_token_for_different_user():
                 await UserServices.logout_user(current_user, "access.token", LogoutRequest(refresh_token="bad.refresh"))
 
     assert exc.value.status_code == 401
-    assert "do not belong" in str(exc.value.detail).lower()
+    assert exc.value.detail == Msg.TOKENS_DO_NOT_BELONG_TO_CURRENT_USER
 
 
 @pytest.mark.asyncio
@@ -127,7 +128,7 @@ async def test_update_user_role_admin_cannot_assign_admin_role():
             )
 
     assert exc.value.status_code == 403
-    assert "admins can assign only" in str(exc.value.detail).lower()
+    assert exc.value.detail == Msg.ADMINS_CAN_ASSIGN_LIMITED_ROLES
 
 
 @pytest.mark.asyncio
@@ -146,4 +147,4 @@ async def test_update_user_role_prevents_second_super_admin():
                 )
 
     assert exc.value.status_code == 400
-    assert "only one super admin" in str(exc.value.detail).lower()
+    assert exc.value.detail == Msg.ONLY_ONE_SUPER_ADMIN_ALLOWED

@@ -125,6 +125,31 @@ def test_category_list_route_success_shape(client):
     assert len(body["data"]) == 2
 
 
+def test_category_list_route_forwards_search_and_language(client):
+    categories = [
+        {"_id": str(PydanticObjectId()), "name": "कार एक्सेसरीज़", "parent_id": None},
+    ]
+
+    with patch("app.api.api_v1.endpoints.category_api.CategoryService.get_all_categories", new=AsyncMock(return_value=categories)) as mock_service:
+        response = client.get(
+            "/api/v1/categories",
+            params={"search": "कार"},
+            headers={"Accept-Language": "hi"},
+        )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["status"] == "success"
+    assert body["data"][0]["name"] == "कार एक्सेसरीज़"
+    mock_service.assert_awaited_once_with(language="hi", search="कार")
+
+
+def test_category_list_route_rejects_search_over_max_length(client):
+    response = client.get("/api/v1/categories", params={"search": "x" * 51})
+
+    assert response.status_code == 422
+
+
 def test_seller_product_create_maps_domain_validation_error_to_400(client):
     async def _seller_user():
         return SimpleNamespace(id=PydanticObjectId(), role=UserRole.SELLER)

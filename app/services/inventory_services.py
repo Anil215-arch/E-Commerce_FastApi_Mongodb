@@ -10,6 +10,7 @@ from app.models.product_model import Product
 from app.models.product_variant_model import ProductVariant
 from app.schemas.inventory_schema import InventoryVariantResponse
 from app.validators.inventory_validator import InventoryDomainValidator
+from app.core.message_keys import Msg
 
 class InventoryService:
 
@@ -28,14 +29,14 @@ class InventoryService:
         if not product:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="Product not found",
+                detail=Msg.PRODUCT_NOT_FOUND,
             )
 
         variant = next((item for item in product.variants if item.sku == sku), None)
         if not variant:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="Variant not found",
+                detail=Msg.VARIANT_NOT_FOUND,
             )
         return variant
 
@@ -104,14 +105,14 @@ class InventoryService:
                     if not previous_product:
                         raise HTTPException(
                             status_code=status.HTTP_409_CONFLICT,
-                            detail="Inventory update failed. Check product, SKU, ownership, or available stock.",
+                            detail=Msg.INVENTORY_UPDATE_FAILED,
                         )
 
                     previous_variant = (previous_product.get("variants") or [None])[0]
                     if not previous_variant:
                         raise HTTPException(
                             status_code=status.HTTP_409_CONFLICT,
-                            detail="Inventory update failed because matching SKU snapshot was unavailable.",
+                            detail=Msg.INVENTORY_SKU_SNAPSHOT_UNAVAILABLE,
                         )
 
                     previous_stock = int(previous_variant.get("available_stock", 0))
@@ -119,7 +120,7 @@ class InventoryService:
                     if new_stock < 0:
                         raise HTTPException(
                             status_code=status.HTTP_409_CONFLICT,
-                            detail="Inventory update failed because resulting stock would be negative.",
+                            detail=Msg.INVENTORY_NEGATIVE_STOCK,
                         )
                     InventoryDomainValidator.validate_stock_ceiling(new_stock)
                     now = datetime.now(timezone.utc)
@@ -159,12 +160,12 @@ class InventoryService:
             if not prior:
                 raise HTTPException(
                     status_code=status.HTTP_409_CONFLICT,
-                    detail="Duplicate idempotency key detected, but no matching prior record was found.",
+                    detail=Msg.DUPLICATE_IDEMPOTENCY_KEY_NO_RECORD,
                 )
             if int(prior.get("delta", 0)) != delta or str(prior.get("reason", "")) != reason:
                 raise HTTPException(
                     status_code=status.HTTP_409_CONFLICT,
-                    detail="Idempotency key has already been used with a different payload.",
+                    detail=Msg.IDEMPOTENCY_KEY_PAYLOAD_MISMATCH,
                 )
         return await InventoryService.get_variant_inventory(product_id, sku, owner_seller_id)
 
@@ -201,7 +202,10 @@ class InventoryService:
         if result.modified_count == 0:
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
-                detail=f"Stock reservation failed for SKU {sku}"
+                detail={
+                    "key": Msg.STOCK_RESERVATION_FAILED,
+                    "params": {"sku": sku},
+                }
             )
 
     @staticmethod
@@ -234,7 +238,7 @@ class InventoryService:
         if result.modified_count == 0:
             raise HTTPException(
                 status_code=500,
-                detail="Stock confirmation failed (inconsistent state)"
+                detail=Msg.STOCK_CONFIRMATION_FAILED
             )
 
     @staticmethod
@@ -267,7 +271,7 @@ class InventoryService:
         if result.modified_count == 0:
             raise HTTPException(
                 status_code=500,
-                detail="Reserved stock release failed (inconsistent state)"
+                detail=Msg.RESERVED_STOCK_RELEASE_FAILED
             )
     
     @staticmethod
@@ -291,5 +295,5 @@ class InventoryService:
         if result.modified_count == 0:
             raise HTTPException(
                 status_code=500,
-                detail="Stock restore failed (variant or product not found)"
+                detail=Msg.STOCK_RESTORE_FAILED
             )

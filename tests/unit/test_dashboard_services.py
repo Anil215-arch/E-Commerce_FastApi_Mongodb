@@ -5,6 +5,7 @@ from unittest.mock import AsyncMock, patch
 import pytest
 from beanie import PydanticObjectId
 
+from app.core.message_keys import Msg
 from app.models.order_model import OrderPaymentStatus, OrderStatus
 from app.services.dashboard_services import DashboardService
 
@@ -43,7 +44,7 @@ def test_zero_fill_rejects_invalid_period():
     with pytest.raises(ValueError) as exc:
         DashboardService._zero_fill([], start_date, end_date, "hourly")
 
-    assert "Invalid period" in str(exc.value)
+    assert str(exc.value) == Msg.INVALID_REVENUE_PERIOD
 
 
 @pytest.mark.asyncio
@@ -84,7 +85,7 @@ async def test_get_revenue_chart_rejects_date_range_over_five_years():
     with pytest.raises(ValueError) as exc:
         await DashboardService.get_revenue_chart(start_date=start_date, end_date=end_date)
 
-    assert "5-year limit" in str(exc.value)
+    assert str(exc.value) == Msg.DATE_RANGE_EXCEEDS_FIVE_YEAR_LIMIT
 
 
 @pytest.mark.asyncio
