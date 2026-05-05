@@ -1,9 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, Request, status, UploadFile, File
 from beanie import PydanticObjectId
 from typing import List
-from app.core.i18n import get_language, t
+from app.core.i18n import t
+from app.core.language_resolver import resolve_user_language
 from app.core.message_keys import Msg
-from app.core.dependencies import get_current_user, _require_user_id, RoleChecker
+from app.core.dependencies import get_current_user, _require_user_id, RoleChecker, resolve_request_language
 from app.core.rate_limiter import ip_key_func, limiter, user_limiter
 from app.core.user_role import UserRole
 from app.models.user_model import User
@@ -21,11 +22,10 @@ seller_dependency = Depends(RoleChecker([UserRole.SELLER, UserRole.ADMIN, UserRo
 
 @router.get("", response_model=ApiResponse[PaginatedResponse[ProductResponse]], response_model_by_alias=False, status_code=status.HTTP_200_OK)
 @limiter.limit("60/minute", key_func=ip_key_func)
-async def list_all_products(request: Request, query_params: ProductQueryParams = Depends()):
+async def list_all_products(request: Request, query_params: ProductQueryParams = Depends(), language: str = Depends(resolve_request_language)):
     """
     Public endpoint to fetch a paginated list of available products.
     """
-    language = get_language(request)
     products, next_cursor, has_next_page = await ProductQueryService.list_products(query_params, language=language)
 
     paginated_data = PaginatedResponse(
@@ -40,17 +40,17 @@ async def list_all_products(request: Request, query_params: ProductQueryParams =
 
 @router.get("/{id}", response_model=ApiResponse[ProductResponse], response_model_by_alias=False, status_code=status.HTTP_200_OK)
 @limiter.limit("60/minute", key_func=ip_key_func)
-async def read_one(request: Request, id: PydanticObjectId):
+async def read_one(request: Request, id: PydanticObjectId, language: str = Depends(resolve_request_language)):
     """
     Public endpoint to fetch the specific details of a single product.
     """
-    product = await ProductQueryService.get_product(id)
+    product = await ProductQueryService.get_product(id, language=language)
     if not product:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=t(request, Msg.PRODUCT_NOT_FOUND),
+            detail=t(request, Msg.PRODUCT_NOT_FOUND, language=language),
         )
-    return success_response(t(request, Msg.PRODUCT_FETCHED_SUCCESSFULLY), product)
+    return success_response(t(request, Msg.PRODUCT_FETCHED_SUCCESSFULLY, language=language), product)
 
 
 @router.post("", response_model=ApiResponse[ProductManageResponse], status_code=status.HTTP_201_CREATED, dependencies=[seller_dependency])
@@ -58,47 +58,53 @@ async def read_one(request: Request, id: PydanticObjectId):
 async def create_product(request: Request, product: ProductCreate, current_user: User = Depends(get_current_user)):
     user_id = _require_user_id(current_user)
     created_product = await ProductService.create_product(product, user_id)
-    return success_response(t(request, Msg.PRODUCT_CREATED_SUCCESSFULLY), created_product)
+    language = resolve_user_language(current_user, request)
+    return success_response(t(request, Msg.PRODUCT_CREATED_SUCCESSFULLY, language=language), created_product)
 
 @router.patch("/{id}/images", response_model=ApiResponse[ProductManageResponse], dependencies=[seller_dependency])
 @user_limiter.limit("10/minute")
 async def upload_images(request: Request, id: PydanticObjectId, images: List[UploadFile] = File(...), current_user: User = Depends(get_current_user)):
     user_id = _require_user_id(current_user)
+    language = resolve_user_language(current_user, request)
     updated = await ProductService.upload_product_images(id, images, user_id)
     if not updated:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=t(request, Msg.PRODUCT_NOT_FOUND))
-    return success_response(t(request, Msg.IMAGES_UPLOADED_SUCCESSFULLY), updated)
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=t(request, Msg.PRODUCT_NOT_FOUND, language=language))
+    return success_response(t(request, Msg.IMAGES_UPLOADED_SUCCESSFULLY, language=language), updated)
 
 @router.patch("/{id}", response_model=ApiResponse[ProductManageResponse], dependencies=[seller_dependency])
 @user_limiter.limit("10/minute")
 async def update_product(request: Request, id: PydanticObjectId, product: ProductUpdate, current_user: User = Depends(get_current_user)):
     user_id = _require_user_id(current_user)
+    language = resolve_user_language(current_user, request)
     updated = await ProductService.update_product(id, product, user_id)
     if not updated:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=t(request, Msg.PRODUCT_NOT_FOUND))
-    return success_response(t(request, Msg.PRODUCT_UPDATED_SUCCESSFULLY), updated)
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=t(request, Msg.PRODUCT_NOT_FOUND, language=language))
+    return success_response(t(request, Msg.PRODUCT_UPDATED_SUCCESSFULLY, language=language), updated)
 
 
 @router.post("/{id}/variants", response_model=ApiResponse[ProductManageResponse], dependencies=[seller_dependency])
 @user_limiter.limit("10/minute")
 async def add_variant(request: Request, id: PydanticObjectId, variant: ProductVariantCreate, current_user: User = Depends(get_current_user)):
     user_id = _require_user_id(current_user)
+    language = resolve_user_language(current_user, request)
     updated_product = await ProductService.add_variant(id, variant, user_id)
-    return success_response(t(request, Msg.VARIANT_ADDED_SUCCESSFULLY), updated_product)
+    return success_response(t(request, Msg.VARIANT_ADDED_SUCCESSFULLY, language=language), updated_product)
 
 @router.patch("/{id}/variants/{sku}", response_model=ApiResponse[ProductManageResponse], dependencies=[seller_dependency])
 @user_limiter.limit("10/minute")
 async def update_variant(request: Request, id: PydanticObjectId, sku: str, variant: ProductVariantUpdate, current_user: User = Depends(get_current_user)):
     user_id = _require_user_id(current_user)
+    language = resolve_user_language(current_user, request)
     updated_product = await ProductService.update_variant(id, sku, variant, user_id)
-    return success_response(t(request, Msg.VARIANT_UPDATED_SUCCESSFULLY), updated_product)
+    return success_response(t(request, Msg.VARIANT_UPDATED_SUCCESSFULLY, language=language), updated_product)
 
 @router.delete("/{id}/variants/{sku}", response_model=ApiResponse[ProductManageResponse], dependencies=[seller_dependency])
 @user_limiter.limit("10/minute")
 async def delete_variant(request: Request, id: PydanticObjectId, sku: str, current_user: User = Depends(get_current_user)):
     user_id = _require_user_id(current_user)
+    language = resolve_user_language(current_user, request)
     updated_product = await ProductService.delete_variant(id, sku, user_id)
-    return success_response(t(request, Msg.VARIANT_DELETED_SUCCESSFULLY), updated_product)
+    return success_response(t(request, Msg.VARIANT_DELETED_SUCCESSFULLY, language=language), updated_product)
 
 
 @router.delete("/{id}", response_model=ApiResponse[None], dependencies=[seller_dependency])
@@ -108,6 +114,7 @@ async def delete_product(
     id: PydanticObjectId,
     current_user: User = Depends(get_current_user),
 ):
+    language = resolve_user_language(current_user, request)
     if not await ProductService.delete_product(id, current_user):
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=t(request, Msg.PRODUCT_NOT_FOUND))
-    return success_response(t(request, Msg.PRODUCT_DELETED_SUCCESSFULLY))
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=t(request, Msg.PRODUCT_NOT_FOUND, language=language))
+    return success_response(t(request, Msg.PRODUCT_DELETED_SUCCESSFULLY, language=language))

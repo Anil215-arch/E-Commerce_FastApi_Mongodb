@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import Optional, Literal
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from app.core.dependencies import get_current_user, _require_user_id, RoleChecker
+from app.core.language_resolver import resolve_user_language
 from app.core.i18n import t
 from app.core.message_keys import Msg
 from app.core.rate_limiter import user_limiter
@@ -40,8 +41,9 @@ async def get_seller_summary(
     current_user: User = Depends(get_current_user),
 ):
     seller_id = _require_user_id(current_user)
+    language = resolve_user_language(current_user, request)
     data = await DashboardService.get_seller_summary(seller_id)
-    return success_response(t(request, Msg.SELLER_DASHBOARD_SUMMARY_FETCHED_SUCCESSFULLY), data)
+    return success_response(t(request, Msg.SELLER_DASHBOARD_SUMMARY_FETCHED_SUCCESSFULLY, language=language), data)
 
 
 @router.get(
@@ -51,9 +53,10 @@ async def get_seller_summary(
     dependencies=[admin_dependency],
 )
 @user_limiter.limit("30/minute")
-async def get_platform_summary(request: Request):
+async def get_platform_summary(request: Request, current_user: User = Depends(get_current_user)):
+    language = resolve_user_language(current_user, request)
     data = await DashboardService.get_admin_summary()
-    return success_response(t(request, Msg.ADMIN_DASHBOARD_SUMMARY_FETCHED_SUCCESSFULLY), data)
+    return success_response(t(request, Msg.ADMIN_DASHBOARD_SUMMARY_FETCHED_SUCCESSFULLY, language=language), data)
 
 
 @router.get(
@@ -69,6 +72,7 @@ async def get_revenue(
     end_date: Optional[datetime] = None,
     current_user: User = Depends(get_current_user),
 ):
+    language = resolve_user_language(current_user, request)
     try:
         seller_id = None
 
@@ -86,6 +90,6 @@ async def get_revenue(
             if current_user.role == UserRole.SELLER
             else Msg.ADMIN_REVENUE_DATA_FETCHED
         )
-        return success_response(t(request, message_key), RevenueChartResponse(data=data))
+        return success_response(t(request, message_key, language=language), RevenueChartResponse(data=data))
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=t(request, str(e)))
+        raise HTTPException(status_code=400, detail=t(request, str(e), language=language))
