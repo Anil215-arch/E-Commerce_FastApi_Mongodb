@@ -8,8 +8,23 @@ from app.models.device_token_model import DevicePlatform, DeviceToken
 from app.models.email_otp_model import EmailOTPVerification, OTPPurpose
 from app.models.notification_model import Notification, NotificationType
 from app.models.revoked_token_model import RevokedToken
+from app.schemas.address_schema import Address
 from app.schemas.device_token_schema import DeviceTokenRegister
 from app.schemas.email_otp_schema import ResetPasswordRequest, VerifyOTPRequest
+
+
+def _address_payload(**overrides):
+    payload = {
+        "full_name": "John Doe",
+        "phone_number": "9876543210",
+        "street_address": "123 Main Street",
+        "city": "Bengaluru",
+        "postal_code": "560001",
+        "state": "Karnataka",
+        "country": "India",
+    }
+    payload.update(overrides)
+    return payload
 
 
 def test_counter_model_rejects_negative_seq():
@@ -60,6 +75,24 @@ def test_revoked_token_model_rejects_blank_jti():
             token_type="refresh",
             expires_at=datetime.now(timezone.utc) + timedelta(minutes=5),
         )
+
+
+def test_address_defaults_language_to_en():
+    address = Address(**_address_payload())
+
+    assert address.language == "en"
+
+
+@pytest.mark.parametrize("language", ["hi", "ja"])
+def test_address_accepts_supported_language(language):
+    address = Address(**_address_payload(language=language))
+
+    assert address.language == language
+
+
+def test_address_rejects_unsupported_language():
+    with pytest.raises(ValueError, match="Invalid address language"):
+        Address(**_address_payload(language="fr"))
 
 
 def test_device_token_schema_trims_token():
