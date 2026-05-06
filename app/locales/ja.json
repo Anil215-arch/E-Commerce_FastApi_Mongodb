@@ -178,5 +178,22 @@
   "STOCK_RESERVATION_FAILED": "SKU {sku} の在庫予約に失敗しました",
   "STOCK_CONFIRMATION_FAILED": "在庫確定に失敗しました（一貫性のない状態）",
   "RESERVED_STOCK_RELEASE_FAILED": "予約在庫の解放に失敗しました（一貫性のない状態）",
-  "STOCK_RESTORE_FAILED": "在庫復元に失敗しました（バリアントまたは商品が見つかりません）"
+  "STOCK_RESTORE_FAILED": "在庫復元に失敗しました（バリアントまたは商品が見つかりません）",
+
+  "INVOICE_PDF_TAX_INVOICE": "税務請求書",
+  "INVOICE_PDF_INVOICE_NO": "請求書番号",
+  "INVOICE_PDF_DATE": "日付",
+  "INVOICE_PDF_TRANSACTION_ID": "取引ID",
+  "INVOICE_PDF_NOT_AVAILABLE": "該当なし",
+  "INVOICE_PDF_BILLED_TO": "請求先",
+  "INVOICE_PDF_SHIPPED_TO": "配送先",
+  "INVOICE_PDF_ITEM": "商品",
+  "INVOICE_PDF_SKU": "SKU",
+  "INVOICE_PDF_QTY": "数量",
+  "INVOICE_PDF_UNIT_PRICE": "単価",
+  "INVOICE_PDF_TOTAL": "合計",
+  "INVOICE_PDF_SUBTOTAL": "小計",
+  "INVOICE_PDF_TAX": "税金",
+  "INVOICE_PDF_SHIPPING": "送料",
+  "INVOICE_PDF_GRAND_TOTAL": "総合計"
 }

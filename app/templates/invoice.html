@@ -1,9 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ language }}">
 <head>
     <meta charset="UTF-8">
+    <!-- Import open-source fonts that support Japanese and Hindi -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Sans+Devanagari:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333; margin: 40px; }
+        body { 
+            font-family: Arial, sans-serif; 
+            color: #333; 
+            margin: 40px; 
+        }
+
+        /* Map languages to the imported Google Fonts */
+        body.lang-hi {
+            font-family: 'Noto Sans Devanagari', sans-serif;
+        }
+
+        body.lang-ja {
+            font-family: 'Noto Sans JP', sans-serif;
+        }
+
+        body.lang-en {
+            font-family: Arial, sans-serif;
+        }
+
+        /* Layout styles */
         .header { display: flex; justify-content: space-between; border-bottom: 2px solid #333; padding-bottom: 20px; margin-bottom: 30px; }
         .invoice-title { font-size: 28px; font-weight: bold; }
         .details-container { display: flex; justify-content: space-between; margin-bottom: 40px; }
@@ -16,41 +37,39 @@
         .grand-total { font-size: 20px; font-weight: bold; border-top: 2px solid #333; padding-top: 10px; }
     </style>
 </head>
-<body>
+<body class="lang-{{ language }}">
     <div class="header">
-        <div class="invoice-title">TAX INVOICE</div>
+        <div class="invoice-title">{{ labels.tax_invoice }}</div>
         <div>
-            <div><strong>Invoice No:</strong> {{ invoice.invoice_number }}</div>
-            <div><strong>Date:</strong> {{ invoice.issued_at.strftime('%Y-%m-%d') }}</div>
-            <div><strong>Transaction ID:</strong> {{ invoice.gateway_transaction_id or 'N/A' }}</div>
+            <div><strong>{{ labels.invoice_no }}:</strong> {{ invoice.invoice_number }}</div>
+            <div><strong>{{ labels.date }}:</strong> {{ invoice.issued_at.strftime('%Y-%m-%d') }}</div>
+            <div><strong>{{ labels.transaction_id }}:</strong> {{ invoice.gateway_transaction_id or labels.not_available }}</div>
         </div>
     </div>
 
     <div class="details-container">
         <div class="address-box">
-            <h3>Billed To:</h3>
+            <h3>{{ labels.billed_to }}:</h3>
             <div>{{ invoice.billing_address.full_name }}</div>
             <div>{{ invoice.billing_address.street_address }}</div>
             <div>{{ invoice.billing_address.city }}, {{ invoice.billing_address.state }} {{ invoice.billing_address.postal_code }}</div>
         </div>
         <div class="address-box">
-            <h3>Shipped To:</h3>
+            <h3>{{ labels.shipped_to }}:</h3>
             <div>{{ invoice.shipping_address.full_name }}</div>
             <div>{{ invoice.shipping_address.street_address }}</div>
             <div>{{ invoice.shipping_address.city }}, {{ invoice.shipping_address.state }} {{ invoice.shipping_address.postal_code }}</div>
         </div>
     </div>
 
-    
-
     <table>
         <thead>
             <tr>
-                <th>Item</th>
-                <th>SKU</th>
-                <th>Qty</th>
-                <th>Unit Price</th>
-                <th>Total</th>
+                <th>{{ labels.item }}</th>
+                <th>{{ labels.sku }}</th>
+                <th>{{ labels.qty }}</th>
+                <th>{{ labels.unit_price }}</th>
+                <th>{{ labels.total }}</th>
             </tr>
         </thead>
         <tbody>
@@ -67,10 +86,10 @@
     </table>
 
     <div class="totals">
-        <div class="totals-row">Subtotal: {{ invoice.currency }} {{ invoice.subtotal }}</div>
-        <div class="totals-row">Tax: {{ invoice.currency }} {{ invoice.tax_amount }}</div>
-        <div class="totals-row">Shipping: {{ invoice.currency }} {{ invoice.shipping_fee }}</div>
-        <div class="grand-total">Grand Total: {{ invoice.currency }} {{ invoice.grand_total }}</div>
+        <div class="totals-row">{{ labels.subtotal }}: {{ invoice.currency }} {{ invoice.subtotal }}</div>
+        <div class="totals-row">{{ labels.tax }}: {{ invoice.currency }} {{ invoice.tax_amount }}</div>
+        <div class="totals-row">{{ labels.shipping }}: {{ invoice.currency }} {{ invoice.shipping_fee }}</div>
+        <div class="grand-total">{{ labels.grand_total }}: {{ invoice.currency }} {{ invoice.grand_total }}</div>
     </div>
 </body>
 </html>

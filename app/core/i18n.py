@@ -36,12 +36,11 @@ def get_language(request: Request) -> str:
 
     return DEFAULT_LANGUAGE
 
-
-def t(request: Request, key: str, language: str | None = None, **kwargs) -> str:
+def translate(key: str, language: str | None = None, **kwargs) -> str:
     if not _translations:
         load_translations()
 
-    lang = language or get_language(request)
+    lang = language if language in SUPPORTED_LANGUAGES else DEFAULT_LANGUAGE
 
     message = (
         _translations.get(lang, {}).get(key)
@@ -56,3 +55,8 @@ def t(request: Request, key: str, language: str | None = None, **kwargs) -> str:
             return message
 
     return message
+
+
+def t(request: Request, key: str, language: str | None = None, **kwargs) -> str:
+    lang = language or get_language(request)
+    return translate(key, lang, **kwargs)

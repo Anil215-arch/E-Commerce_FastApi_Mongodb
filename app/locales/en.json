@@ -188,5 +188,22 @@
   "STOCK_RESERVATION_FAILED": "Stock reservation failed for SKU {sku}",
   "STOCK_CONFIRMATION_FAILED": "Stock confirmation failed (inconsistent state)",
   "RESERVED_STOCK_RELEASE_FAILED": "Reserved stock release failed (inconsistent state)",
-  "STOCK_RESTORE_FAILED": "Stock restore failed (variant or product not found)"
+  "STOCK_RESTORE_FAILED": "Stock restore failed (variant or product not found)",
+
+  "INVOICE_PDF_TAX_INVOICE": "TAX INVOICE",
+  "INVOICE_PDF_INVOICE_NO": "Invoice No",
+  "INVOICE_PDF_DATE": "Date",
+  "INVOICE_PDF_TRANSACTION_ID": "Transaction ID",
+  "INVOICE_PDF_NOT_AVAILABLE": "N/A",
+  "INVOICE_PDF_BILLED_TO": "Billed To",
+  "INVOICE_PDF_SHIPPED_TO": "Shipped To",
+  "INVOICE_PDF_ITEM": "Item",
+  "INVOICE_PDF_SKU": "SKU",
+  "INVOICE_PDF_QTY": "Qty",
+  "INVOICE_PDF_UNIT_PRICE": "Unit Price",
+  "INVOICE_PDF_TOTAL": "Total",
+  "INVOICE_PDF_SUBTOTAL": "Subtotal",
+  "INVOICE_PDF_TAX": "Tax",
+  "INVOICE_PDF_SHIPPING": "Shipping",
+  "INVOICE_PDF_GRAND_TOTAL": "Grand Total"
 }

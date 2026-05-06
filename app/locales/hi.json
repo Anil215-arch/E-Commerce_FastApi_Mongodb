@@ -178,5 +178,22 @@
   "STOCK_RESERVATION_FAILED": "SKU {sku} के लिए स्टॉक आरक्षण विफल रहा",
   "STOCK_CONFIRMATION_FAILED": "स्टॉक पुष्टि विफल रही (असंगत स्थिति)",
   "RESERVED_STOCK_RELEASE_FAILED": "आरक्षित स्टॉक रिलीज़ विफल रही (असंगत स्थिति)",
-  "STOCK_RESTORE_FAILED": "स्टॉक पुनर्स्थापना विफल रही (वेरिएंट या उत्पाद नहीं मिला)"
+  "STOCK_RESTORE_FAILED": "स्टॉक पुनर्स्थापना विफल रही (वेरिएंट या उत्पाद नहीं मिला)",
+
+  "INVOICE_PDF_TAX_INVOICE": "कर चालान",
+  "INVOICE_PDF_INVOICE_NO": "चालान संख्या",
+  "INVOICE_PDF_DATE": "तारीख",
+  "INVOICE_PDF_TRANSACTION_ID": "लेन-देन आईडी",
+  "INVOICE_PDF_NOT_AVAILABLE": "उपलब्ध नहीं",
+  "INVOICE_PDF_BILLED_TO": "बिल प्राप्तकर्ता",
+  "INVOICE_PDF_SHIPPED_TO": "भेजा गया",
+  "INVOICE_PDF_ITEM": "वस्तु",
+  "INVOICE_PDF_SKU": "SKU",
+  "INVOICE_PDF_QTY": "मात्रा",
+  "INVOICE_PDF_UNIT_PRICE": "इकाई मूल्य",
+  "INVOICE_PDF_TOTAL": "कुल",
+  "INVOICE_PDF_SUBTOTAL": "उप-योग",
+  "INVOICE_PDF_TAX": "कर",
+  "INVOICE_PDF_SHIPPING": "शिपिंग",
+  "INVOICE_PDF_GRAND_TOTAL": "कुल योग"
 }

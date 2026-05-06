@@ -96,7 +96,7 @@ async def download_invoice_pdf(request: Request, order_id: PydanticObjectId, cur
     _require_user_id(current_user)
     language = resolve_user_language(current_user, request)
     invoice = await InvoiceService.get_invoice_by_order_id(order_id, current_user, language=language)
-    pdf_bytes = await run_in_threadpool(PDFService.generate_invoice_pdf, invoice)
+    pdf_bytes = await run_in_threadpool(PDFService.generate_invoice_pdf, invoice, language)
     headers = {"Content-Disposition": f'attachment; filename="{invoice.invoice_number}.pdf"'}
     return Response(content=pdf_bytes, media_type="application/pdf", headers=headers)
 
