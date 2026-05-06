@@ -32,6 +32,7 @@ from app.core.security import (
 )
 from app.validators.address_validator import AddressValidator
 from app.validators.user_validator import UserValidator
+from app.core.message_keys import Msg
 
 
 class UserServices:
@@ -44,7 +45,7 @@ class UserServices:
         if not token_data.jti or not token_data.token_type:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Invalid token payload",
+                detail=Msg.INVALID_TOKEN_PAYLOAD,
             )
 
         existing_token = await RevokedToken.find_one(RevokedToken.jti == token_data.jti)
@@ -102,27 +103,27 @@ class UserServices:
         access_token_data, access_expires_at = await UserServices._decode_token_data(
             access_token,
             expected_type="access",
-            invalid_detail="Invalid access token",
-            expired_detail="Access token has expired",
+            invalid_detail=Msg.INVALID_ACCESS_TOKEN,
+            expired_detail=Msg.ACCESS_TOKEN_EXPIRED,
         )
         refresh_token_data, refresh_expires_at = await UserServices._decode_token_data(
             refresh_token,
             expected_type="refresh",
-            invalid_detail="Invalid refresh token",
-            expired_detail="Refresh token has expired",
+            invalid_detail=Msg.INVALID_REFRESH_TOKEN,
+            expired_detail=Msg.REFRESH_TOKEN_EXPIRED,
         )
 
         revoked_refresh_token = await RevokedToken.find_one(RevokedToken.jti == refresh_token_data.jti)
         if revoked_refresh_token:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Refresh token has been revoked",
+                detail=Msg.REFRESH_TOKEN_REVOKED,
             )
 
         if access_token_data.email != current_user.email or refresh_token_data.email != current_user.email:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Tokens do not belong to the current user",
+                detail=Msg.TOKENS_DO_NOT_BELONG_TO_CURRENT_USER,
             )
 
         return access_token_data, access_expires_at, refresh_token_data, refresh_expires_at
@@ -137,25 +138,25 @@ class UserServices:
         # 2. Once verified, we handle the User-specific state change
         user = await User.find_one(User.email == data.email)
         if not user:
-            raise HTTPException(status_code=404, detail="User not found")
+            raise HTTPException(status_code=404, detail=Msg.USER_NOT_FOUND)
         
         if user.is_verified:
-            return "Email is already verified."
+            return Msg.USER_ALREADY_VERIFIED
 
         user.is_verified = True
         await user.save()
         
-        return "Email verified successfully. You can now login."
+        return Msg.EMAIL_VERIFIED_SUCCESSFULLY
 
     @staticmethod
     async def resend_verification_otp(email: str) -> None:
         """Handles the logic for resending OTPs to unverified users."""
         user = await User.find_one(User.email == email)
         if not user:
-            raise HTTPException(status_code=404, detail="User not found")
+            raise HTTPException(status_code=404, detail=Msg.USER_NOT_FOUND)
         
         if user.is_verified:
-            raise HTTPException(status_code=400, detail="User is already verified")
+            raise HTTPException(status_code=400, detail=Msg.USER_ALREADY_VERIFIED)
 
         await OTPService.create_and_send_otp(email, OTPPurpose.REGISTRATION)
         
@@ -168,13 +169,13 @@ class UserServices:
                 await OTPService.create_and_send_otp(user_email.email, OTPPurpose.REGISTRATION)
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST, 
-                    detail="Email registered but not verified. A new OTP has been sent."
+                    detail=Msg.EMAIL_REGISTERED_NOT_VERIFIED_OTP_SENT
                 )
-            raise HTTPException(status_code=400, detail="Email already registered")
+            raise HTTPException(status_code=400, detail=Msg.EMAIL_ALREADY_REGISTERED)
         
         username_exists = await User.find_one(User.user_name == user.user_name)
         if username_exists:
-            raise HTTPException(status_code=400, detail="Username already taken")
+            raise HTTPException(status_code=400, detail=Msg.USERNAME_ALREADY_TAKEN)
         
         new_user = User(
             user_name=user.user_name,
@@ -204,12 +205,12 @@ class UserServices:
         if not user or not verify_password(password, user.hashed_password):
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Invalid email or password",
+                detail=Msg.INVALID_EMAIL_OR_PASSWORD,
             )
         if not user.is_verified:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
-                detail="Email not verified. Please verify your email to login."
+                detail=Msg.EMAIL_NOT_VERIFIED_LOGIN
             )
         return user
 
@@ -235,22 +236,22 @@ class UserServices:
         token_data, expires_at = await UserServices._decode_token_data(
             data.refresh_token,
             expected_type="refresh",
-            invalid_detail="Invalid refresh token",
-            expired_detail="Refresh token has expired",
+            invalid_detail=Msg.INVALID_REFRESH_TOKEN,
+            expired_detail=Msg.REFRESH_TOKEN_EXPIRED,
         )
 
         revoked_token = await RevokedToken.find_one(RevokedToken.jti == token_data.jti)
         if revoked_token:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Refresh token has been revoked",
+                detail=Msg.REFRESH_TOKEN_REVOKED,
             )
 
         user = await User.find_one(User.email == token_data.email)
         if not user:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Invalid refresh token",
+                detail=Msg.INVALID_REFRESH_TOKEN,
             )
 
         await UserServices._revoke_token(token_data, expires_at)
@@ -270,12 +271,12 @@ class UserServices:
         if not verify_password(data.old_password, current_user.hashed_password):
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Current password is incorrect",
+                detail=Msg.CURRENT_PASSWORD_INCORRECT,
             )
         if data.old_password == data.new_password:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="New password must be different from the current password",
+                detail=Msg.NEW_PASSWORD_MUST_BE_DIFFERENT,
             )
 
         access_token_data, access_expires_at, refresh_token_data, refresh_expires_at = (
@@ -296,7 +297,7 @@ class UserServices:
 
         user = await User.find_one(User.email == data.email)
         if not user:
-            raise HTTPException(status_code=404, detail="User account not found.")
+            raise HTTPException(status_code=404, detail=Msg.USER_ACCOUNT_NOT_FOUND)
 
         user.hashed_password = get_password_hash(data.new_password)
         
@@ -334,7 +335,7 @@ class UserServices:
             if existing_user:
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
-                    detail="Username already taken",
+                    detail=Msg.USERNAME_ALREADY_TAKEN,
                 )
 
         for field, value in update_data.items():
@@ -353,7 +354,7 @@ class UserServices:
         if not target_user:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="User not found",
+                detail=Msg.USER_NOT_FOUND,
             )
 
         update_data = data.model_dump(exclude_unset=True)
@@ -370,12 +371,12 @@ class UserServices:
             if not UserServices._can_admin_manage_role(target_user.role):
                 raise HTTPException(
                     status_code=status.HTTP_403_FORBIDDEN,
-                    detail="Admins can update only seller, customer, or support users",
+                    detail=Msg.ADMINS_CAN_UPDATE_LIMITED_USERS,
                 )
         else:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
-                detail="You can update only your own profile",
+                detail=Msg.UPDATE_OWN_PROFILE_ONLY,
             )
 
         if "user_name" in update_data:
@@ -389,7 +390,7 @@ class UserServices:
             if existing_user:
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
-                    detail="Username already taken",
+                    detail=Msg.USERNAME_ALREADY_TAKEN,
                 )
 
         for field, value in update_data.items():
@@ -408,58 +409,58 @@ class UserServices:
         if not target_user:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="User not found",
+                detail=Msg.USER_NOT_FOUND,
             )
 
         if current_user.id == target_user.id:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
-                detail="You cannot change your own role",
+                detail=Msg.CANNOT_CHANGE_OWN_ROLE,
             )
 
         if current_user.role not in {UserRole.ADMIN, UserRole.SUPER_ADMIN}:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
-                detail="You are not allowed to update user roles",
+                detail=Msg.NOT_ALLOWED_TO_UPDATE_USER_ROLES,
             )
 
         if target_user.role == data.new_role:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="User already has this role",
+                detail=Msg.USER_ALREADY_HAS_THIS_ROLE,
             )
 
         if current_user.role == UserRole.ADMIN:
             if target_user.role in {UserRole.ADMIN, UserRole.SUPER_ADMIN}:
                 raise HTTPException(
                     status_code=status.HTTP_403_FORBIDDEN,
-                    detail="Admins cannot change the role of admin or super admin users",
+                    detail=Msg.ADMINS_CANNOT_CHANGE_ADMIN_ROLES,
                 )
 
             if not UserServices._can_admin_manage_role(data.new_role):
                 raise HTTPException(
                     status_code=status.HTTP_403_FORBIDDEN,
-                    detail="Admins can assign only seller, customer, or support roles",
+                    detail=Msg.ADMINS_CAN_ASSIGN_LIMITED_ROLES,
                 )
 
         if data.new_role == UserRole.SUPER_ADMIN:
             if current_user.role != UserRole.SUPER_ADMIN:
                 raise HTTPException(
                     status_code=status.HTTP_403_FORBIDDEN,
-                    detail="Only the super admin can assign the super admin role",
+                    detail=Msg.ONLY_SUPER_ADMIN_CAN_ASSIGN_SUPER_ADMIN,
                 )
 
             existing_super_admin = await User.find_one(User.role == UserRole.SUPER_ADMIN)
             if existing_super_admin and existing_super_admin.id != target_user.id:
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
-                    detail="Only one super admin is allowed",
+                    detail=Msg.ONLY_ONE_SUPER_ADMIN_ALLOWED,
                 )
 
         if target_user.role == UserRole.SUPER_ADMIN and current_user.role != UserRole.SUPER_ADMIN:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
-                detail="Only the super admin can manage the super admin account",
+                detail=Msg.ONLY_SUPER_ADMIN_CAN_MANAGE_SUPER_ADMIN,
             )
 
         target_user.role = data.new_role
@@ -475,7 +476,7 @@ class UserServices:
         if len(current_user.addresses) >= 10:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Maximum of 10 addresses allowed. Please delete an old address first."
+                detail=Msg.MAX_ADDRESSES_ALLOWED
             )
             
         current_user.addresses.append(data.address)
@@ -489,7 +490,7 @@ class UserServices:
         if address_index < 0 or address_index >= len(current_user.addresses):
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="Address not found at the specified index."
+                detail=Msg.ADDRESS_NOT_FOUND
             )
         data.address = AddressValidator.normalize_and_validate(data.address) 
         current_user.addresses[address_index] = data.address
@@ -503,7 +504,7 @@ class UserServices:
         if address_index < 0 or address_index >= len(current_user.addresses):
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="Address not found at the specified index."
+                detail=Msg.ADDRESS_NOT_FOUND
             )
             
         current_user.addresses.pop(address_index)
@@ -516,13 +517,13 @@ class UserServices:
         """Admins can soft-delete a user account."""
         target_user = await User.get(target_user_id)
         if not target_user or target_user.is_deleted:
-            raise HTTPException(status_code=404, detail="User not found")
+            raise HTTPException(status_code=404, detail=Msg.USER_NOT_FOUND)
 
         if target_user.role == UserRole.SUPER_ADMIN:
-            raise HTTPException(status_code=403, detail="Super Admins cannot be deleted")
+            raise HTTPException(status_code=403, detail=Msg.SUPER_ADMINS_CANNOT_BE_DELETED)
 
         if current_user.id is None:
-            raise HTTPException(status_code=401, detail="Authentication required")
+            raise HTTPException(status_code=401, detail=Msg.AUTHENTICATION_REQUIRED)
         
         await target_user.soft_delete(current_user.id)
         return True

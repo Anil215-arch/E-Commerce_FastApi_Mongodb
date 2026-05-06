@@ -7,6 +7,7 @@ from fastapi import HTTPException
 from pymongo.errors import DuplicateKeyError
 
 from app.core.exceptions import DomainValidationError
+from app.core.message_keys import Msg
 from app.models.product_variant_model import ProductVariant
 from app.services import wishlist_services
 from app.services.wishlist_services import WishlistService
@@ -80,7 +81,7 @@ async def test_add_item_raises_404_when_product_not_found(monkeypatch):
         await WishlistService.add_item(PydanticObjectId(), PydanticObjectId(), "PHX-01")
 
     assert exc_info.value.status_code == 404
-    assert "product not found" in str(exc_info.value.detail).lower()
+    assert exc_info.value.detail == Msg.PRODUCT_NOT_FOUND_OR_UNAVAILABLE
 
 
 @pytest.mark.asyncio
@@ -101,7 +102,7 @@ async def test_add_item_raises_404_when_variant_not_found(monkeypatch):
         await WishlistService.add_item(PydanticObjectId(), product_id, "PHX-99")
 
     assert exc_info.value.status_code == 404
-    assert "variant sku" in str(exc_info.value.detail).lower()
+    assert exc_info.value.detail == Msg.VARIANT_SKU_NOT_FOUND
 
 
 @pytest.mark.asyncio
@@ -141,7 +142,7 @@ async def test_remove_item_raises_404_when_row_missing(monkeypatch):
         await WishlistService.remove_item(PydanticObjectId(), PydanticObjectId(), "PHX-01")
 
     assert exc_info.value.status_code == 404
-    assert "not found" in str(exc_info.value.detail).lower()
+    assert exc_info.value.detail == Msg.ITEM_NOT_FOUND_IN_WISHLIST
 
 
 @pytest.mark.asyncio

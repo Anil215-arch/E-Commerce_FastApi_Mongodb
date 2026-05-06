@@ -13,6 +13,7 @@ from app.schemas.review_rating_schema import ReviewCreate, ReviewUpdate
 from app.utils.pagination import CursorUtils
 from app.validators.review_validator import ReviewDomainValidator
 from app.core.exceptions import DomainValidationError
+from app.core.message_keys import Msg
 
 class ReviewService:
     
@@ -33,14 +34,14 @@ class ReviewService:
             "is_available": True
         })
         if not product:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Product not found or unavailable")
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=Msg.PRODUCT_NOT_FOUND_OR_UNAVAILABLE)
 
         order_id = await ReviewService._check_verified_purchase(user_id, product_id)
         
         if not order_id:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN, 
-                detail="You can only review products that you have purchased and received."
+                detail=Msg.REVIEW_OWN_PRODUCTS_ONLY
             )
         clean_review_text = ReviewDomainValidator.validate_review_text(review_data.review)
         clean_images = ReviewDomainValidator.validate_images(review_data.images)
@@ -60,7 +61,7 @@ class ReviewService:
             # 1. Insert the review (Standalone write)
             await new_review.insert()
         except DuplicateKeyError:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="You have already reviewed this product.")
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=Msg.REVIEW_ALREADY_EXISTS)
 
         # 2. Update the product aggregates natively (Standalone write)
         await Product.get_pymongo_collection().update_one(
@@ -101,10 +102,10 @@ class ReviewService:
             
         review_doc = await ReviewAndRating.get(review_id)
         if not review_doc or review_doc.is_deleted:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Review not found")
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=Msg.REVIEW_NOT_FOUND)
             
         if review_doc.user_id != user_id:
-            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="You can only edit your own reviews")
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=Msg.EDIT_OWN_REVIEWS_ONLY)
 
         update_data = review_data.model_dump(exclude_unset=True)
         if not update_data:
@@ -124,7 +125,7 @@ class ReviewService:
         if new_rating is not None and old_rating != new_rating:
             product = await Product.get(review_doc.product_id)
             if not product:
-                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Target product no longer exists.")
+                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=Msg.TARGET_PRODUCT_NO_LONGER_EXISTS)
             
             # 2. Shift the aggregates (Standalone write)
             await Product.get_pymongo_collection().update_one(
@@ -163,10 +164,10 @@ class ReviewService:
     async def delete_review(review_id: PydanticObjectId, user_id: PydanticObjectId) -> None:
         review_doc = await ReviewAndRating.get(review_id)
         if not review_doc or review_doc.is_deleted:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Review not found")
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=Msg.REVIEW_NOT_FOUND)
             
         if review_doc.user_id != user_id:
-            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="You can only delete your own reviews")
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=Msg.DELETE_OWN_REVIEWS_ONLY)
 
         rating_to_remove = review_doc.rating
         product_id = review_doc.product_id
@@ -180,7 +181,7 @@ class ReviewService:
 
         product = await Product.get(product_id)
         if not product:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Target product no longer exists.")
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=Msg.TARGET_PRODUCT_NO_LONGER_EXISTS)
         
         # 2. Decrement the aggregates (Standalone write)
         await Product.get_pymongo_collection().update_one(

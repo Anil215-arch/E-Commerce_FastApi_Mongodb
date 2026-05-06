@@ -53,6 +53,23 @@ def test_products_list_returns_paginated_items_without_double_data(client):
     assert body["data"]["items"][0]["name"] == "Phone"
 
 
+def test_products_list_forwards_search_and_language_to_query_service(client):
+    with patch(
+        "app.api.api_v1.endpoints.product_api.ProductQueryService.list_products",
+        new=AsyncMock(return_value=([], None, False)),
+    ) as mock_service:
+        response = client.get(
+            "/api/v1/products",
+            params={"search": "कार", "limit": 10},
+            headers={"Accept-Language": "hi"},
+        )
+
+    assert response.status_code == 200
+    query_params = mock_service.await_args.args[0]
+    assert query_params.search == "कार"
+    assert mock_service.await_args.kwargs["language"] == "hi"
+
+
 def test_products_list_bad_price_range_returns_422_validation_envelope(client):
     response = client.get("/api/v1/products?min_price=100&max_price=50")
 

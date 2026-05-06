@@ -8,17 +8,29 @@ from app.schemas.notification_schema import NotificationResponse, UnreadNotifica
 from app.services.notification_services import NotificationService
 from app.schemas.common_schema import ApiResponse
 from app.utils.responses import success_response
+from app.core.i18n import t
+from app.core.language_resolver import resolve_user_language
+from app.core.message_keys import Msg
 
 router = APIRouter()
-
 
 @router.get("", response_model=ApiResponse[List[NotificationResponse]], status_code=status.HTTP_200_OK)
 @user_limiter.limit("60/minute")
 async def get_notifications(request: Request, limit: int = Query(50, ge=1, le=100), current_user: User = Depends(get_current_user)):
     user_id = _require_user_id(current_user)
     notifications = await NotificationService.get_user_notifications(user_id, limit)
-    items = [NotificationResponse.model_validate(n) for n in notifications]
-    return success_response("Notifications fetched successfully", items)
+    language = resolve_user_language(current_user, request)
+    items = [
+        NotificationResponse.model_validate(
+            NotificationService.serialize_notification(n, language=language)
+        )
+        for n in notifications
+    ]
+    return success_response(
+        t(request, Msg.NOTIFICATIONS_FETCHED_SUCCESSFULLY, language=language),
+        items,
+    )
+
 
 
 @router.patch("/{notification_id}/read", response_model=ApiResponse[NotificationResponse], status_code=status.HTTP_200_OK)
@@ -27,9 +39,22 @@ async def mark_notification_read(request: Request, notification_id: PydanticObje
     user_id = _require_user_id(current_user)
     try:
         notification = await NotificationService.mark_as_read(notification_id, user_id)
-        return success_response("Notification marked as read", NotificationResponse.model_validate(notification))
+        language = resolve_user_language(current_user, request)
+        return success_response(
+            t(request, Msg.NOTIFICATION_MARKED_AS_READ, language=language),
+            NotificationResponse.model_validate(
+                NotificationService.serialize_notification(
+                    notification,
+                    language=language,
+                )
+            ),
+        )
     except ValueError as e:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
+        language = resolve_user_language(current_user, request)
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=t(request, str(e), language=language),
+        )
 
 
 @router.get("/unread-count", response_model=ApiResponse[UnreadNotificationCount], status_code=status.HTTP_200_OK)
@@ -40,6 +65,9 @@ async def get_unread_notification_count(request: Request, current_user: User = D
     """
     user_id = _require_user_id(current_user)
     count = await NotificationService.get_unread_count(user_id)
-
+    language = resolve_user_language(current_user, request)
     data = UnreadNotificationCount(unread_count=count)
-    return success_response("Unread notification count fetched successfully", data)
+    return success_response(
+        t(request, Msg.UNREAD_NOTIFICATION_COUNT_FETCHED_SUCCESSFULLY, language=language),
+        data,
+    )

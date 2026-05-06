@@ -18,6 +18,8 @@ RUN apt-get update && apt-get install -y \
     libffi8 \
     shared-mime-info \
     fonts-dejavu-core \
+    fonts-noto-cjk \
+    fonts-noto-devanagari \
     && rm -rf /var/lib/apt/lists/*
 
 RUN pip install --no-cache-dir uv

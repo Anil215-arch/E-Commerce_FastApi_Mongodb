@@ -8,6 +8,9 @@ from app.schemas.common_schema import ApiResponse
 from app.services.wishlist_services import WishlistService
 from app.utils.responses import success_response
 from app.core.rate_limiter import user_limiter
+from app.core.i18n import t
+from app.core.language_resolver import resolve_user_language
+from app.core.message_keys import Msg
 
 router = APIRouter()
 
@@ -20,8 +23,9 @@ async def add_to_wishlist(
 ):
     """Adds a specific product variant to the user's wishlist."""
     assert current_user.id is not None # SATISFIES PYLANCE
+    language = resolve_user_language(current_user, request)
     await WishlistService.add_item(current_user.id, payload.product_id, payload.sku)
-    return success_response("Item added to wishlist successfully")
+    return success_response(t(request, Msg.WISHLIST_ITEM_ADDED_SUCCESSFULLY, language=language))
 
 @router.delete("/{product_id}/variants/{sku}", response_model=ApiResponse[None], status_code=status.HTTP_200_OK)
 @user_limiter.limit("20/minute")
@@ -33,8 +37,9 @@ async def remove_from_wishlist(
 ):
     """Removes a specific product variant from the user's wishlist."""
     assert current_user.id is not None # SATISFIES PYLANCE
+    language = resolve_user_language(current_user, request)
     await WishlistService.remove_item(current_user.id, product_id, sku)
-    return success_response("Item removed from wishlist successfully")
+    return success_response(t(request, Msg.WISHLIST_ITEM_REMOVED_SUCCESSFULLY, language=language))
 
 @router.get("", response_model=ApiResponse[List[WishlistPopulatedResponse]], status_code=status.HTTP_200_OK)
 @user_limiter.limit("60/minute")
@@ -44,5 +49,6 @@ async def get_wishlist(
 ):
     """Retrieves all active items in the user's wishlist."""
     assert current_user.id is not None # SATISFIES PYLANCE
+    language = resolve_user_language(current_user, request)
     items = await WishlistService.get_user_wishlist(current_user.id)
-    return success_response("Wishlist fetched successfully", items)
+    return success_response(t(request, Msg.WISHLIST_FETCHED_SUCCESSFULLY, language=language), items)

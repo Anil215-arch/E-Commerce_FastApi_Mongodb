@@ -8,6 +8,7 @@ from app.models.order_model import Order, OrderPaymentStatus, OrderStatus
 from app.models.product_model import Product
 from app.models.category_model import Category
 from app.core.user_role import UserRole
+from app.core.message_keys import Msg
 from app.schemas.dashboard_schema import (
     AdminDashboardSummary, 
     SellerDashboardSummary, 
@@ -44,7 +45,7 @@ class DashboardService:
                 key = current.strftime("%Y")
                 current = current.replace(year=current.year + 1, month=1, day=1)
             else:
-                raise ValueError(f"Invalid period: {period}")
+                raise ValueError(Msg.INVALID_REVENUE_PERIOD)
 
             filled.append(DailyRevenue(date=key, revenue=revenue_map.get(key, 0)))
         
@@ -86,7 +87,7 @@ class DashboardService:
         now = datetime.now(timezone.utc)
         
         if start_date and end_date and (end_date - start_date).days > 1825:
-            raise ValueError("Date range exceeds 5-year limit")
+            raise ValueError(Msg.DATE_RANGE_EXCEEDS_FIVE_YEAR_LIMIT)
 
         if not start_date:
             lookback = {"daily": 30, "weekly": 60, "monthly": 365, "yearly": 1825}

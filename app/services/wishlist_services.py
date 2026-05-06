@@ -6,6 +6,7 @@ from app.models.product_model import Product
 from app.schemas.wishlist_schema import WishlistPopulatedResponse
 from app.validators.wishlist_validator import WishlistDomainValidator
 from app.core.exceptions import DomainValidationError
+from app.core.message_keys import Msg
 
 class WishlistService:
 
@@ -29,11 +30,11 @@ class WishlistService:
         # 1. Validate Product and Variant Existence
         product = await Product.find_one({"_id": product_id, "is_deleted": {"$ne": True}, "is_available": True})
         if not product:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Product not found or unavailable.")
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=Msg.PRODUCT_NOT_FOUND_OR_UNAVAILABLE)
 
         variant = next((v for v in product.variants if v.sku == sku), None)
         if not variant:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Variant SKU not found.")
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=Msg.VARIANT_SKU_NOT_FOUND)
 
         # 2. Atomic Insert with Index Protection
         wishlist_item = Wishlist(
@@ -57,7 +58,7 @@ class WishlistService:
             {"user_id": user_id, "product_id": product_id, "sku": sku, "is_deleted": {"$ne": True}}
         )
         if not result:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Item not found in wishlist.")
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=Msg.ITEM_NOT_FOUND_IN_WISHLIST)
             
         await result.delete()
 

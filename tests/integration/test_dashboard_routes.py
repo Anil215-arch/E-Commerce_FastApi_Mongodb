@@ -51,7 +51,7 @@ def test_seller_dashboard_revenue_success(client):
     assert response.status_code == 200
     body = response.json()
     assert body["status"] == "success"
-    assert body["message"] == "Revenue data fetched"
+    assert body["message"] == "Seller revenue data fetched"
     assert body["data"]["data"][0]["date"] == "2026-04-01"
     assert body["data"]["data"][0]["revenue"] == 1200
 
@@ -118,7 +118,7 @@ def test_admin_dashboard_revenue_success(client):
     assert response.status_code == 200
     body = response.json()
     assert body["status"] == "success"
-    assert body["message"] == "Revenue data fetched"
+    assert body["message"] == "Admin revenue data fetched"
     assert body["data"]["data"][0]["date"] == "2026-04"
     assert body["data"]["data"][0]["revenue"] == 3400
 

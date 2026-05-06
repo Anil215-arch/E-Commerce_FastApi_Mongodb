@@ -7,6 +7,7 @@ from beanie import PydanticObjectId
 from fastapi import HTTPException
 
 from app.core.exceptions import DomainValidationError
+from app.core.message_keys import Msg
 from app.models.email_otp_model import OTPPurpose
 from app.models.cart_model import CartItem
 from app.models.product_variant_model import ProductVariant
@@ -50,7 +51,7 @@ async def test_add_to_cart_rejects_when_unique_item_limit_is_reached():
                     CartItemAdd(product_id=new_product_id, sku="SKU-NEW", quantity=1),
                 )
 
-    assert "Cart limit reached" in str(exc.value)
+    assert str(exc.value) == Msg.CART_LIMIT_REACHED
 
 
 @pytest.mark.asyncio
@@ -75,7 +76,7 @@ async def test_add_to_cart_rejects_when_requested_quantity_exceeds_stock():
                     CartItemAdd(product_id=product_id, sku="SKU-1", quantity=2),
                 )
 
-    assert "Insufficient stock" in str(exc.value)
+    assert str(exc.value) == Msg.INSUFFICIENT_STOCK
 
 
 @pytest.mark.asyncio
@@ -140,7 +141,7 @@ async def test_update_item_quantity_rejects_when_new_quantity_exceeds_stock():
                     CartItemUpdate(quantity=5),
                 )
 
-    assert "Only 2 in stock" in str(exc.value)
+    assert str(exc.value) == Msg.ONLY_STOCK_AVAILABLE
 
 
 @pytest.mark.asyncio

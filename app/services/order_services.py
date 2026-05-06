@@ -29,6 +29,8 @@ from app.services.cart_services import CartService
 from app.services.inventory_services import InventoryService
 from app.validators.order_validator import OrderDomainValidator
 from app.validators.transaction_validator import TransactionDomainValidator
+from app.core.message_keys import Msg
+from app.utils.product_mapper import ProductMapper
 
 logger = logging.getLogger(__name__)
 
@@ -78,7 +80,7 @@ class OrderService:
     async def _load_checkout_items(user_id: PydanticObjectId) -> list[OrderItemSnapshot]:
         cart = await Cart.find_one({"user_id": user_id})
         if not cart or not cart.items:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Cart is empty")
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=Msg.CART_IS_EMPTY)
 
         product_ids = list({item.product_id for item in cart.items})
         products = await Product.find(
@@ -92,29 +94,43 @@ class OrderService:
             if not product or not product.is_available:
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
-                    detail=f"Product for SKU {cart_item.sku} is unavailable or deleted.",
+                    detail={
+                        "key": Msg.PRODUCT_FOR_SKU_UNAVAILABLE_OR_DELETED,
+                        "params": {"sku": cart_item.sku},
+                    },
                 )
 
             if product.created_by is None:
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
-                    detail=f"Product {product.name} is missing seller ownership.",
+                    detail={
+                        "key": Msg.PRODUCT_MISSING_SELLER_OWNERSHIP,
+                        "params": {"product_name": product.name},
+                    },
                 )
 
             variant = next((variant for variant in product.variants if variant.sku == cart_item.sku), None)
             if not variant:
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
-                    detail=f"Variant {cart_item.sku} for {product.name} no longer exists.",
+                    detail={
+                        "key": Msg.VARIANT_FOR_PRODUCT_NO_LONGER_EXISTS,
+                        "params": {"sku": cart_item.sku, "product_name": product.name},
+                    },
                 )
 
             if variant.available_stock < cart_item.quantity:
                 raise HTTPException(
                     status_code=status.HTTP_409_CONFLICT,
-                    detail=(
-                        f"Insufficient stock for {product.name} ({cart_item.sku}). "
-                        f"Requested {cart_item.quantity}, available {variant.available_stock}."
-                    ),
+                    detail={
+                        "key": Msg.INSUFFICIENT_STOCK_FOR_PRODUCT_SKU,
+                        "params": {
+                            "product_name": product.name,
+                            "sku": cart_item.sku,
+                            "requested": cart_item.quantity,
+                            "available": variant.available_stock,
+                        },
+                    },
                 )
 
             checkout_items.append(
@@ -155,23 +171,26 @@ class OrderService:
         return tax_amount, shipping_fee, grand_total
 
     @staticmethod
-    async def _build_checkout_batch_response(existing_orders: list[Order]) -> CheckoutBatchResponse:
+    async def _build_checkout_batch_response(
+        existing_orders: list[Order],
+        language: str | None = None,
+    ) -> CheckoutBatchResponse:
         if not existing_orders:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="No orders found for checkout batch.",
+                detail=Msg.NO_ORDERS_FOUND_FOR_CHECKOUT_BATCH,
             )
 
         transaction = await Transaction.find_one({"_id": existing_orders[0].transaction_id})
         if not transaction:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail="Checkout batch is missing transaction data.",
+                detail=Msg.CHECKOUT_BATCH_MISSING_TRANSACTION_DATA,
             )
         if transaction.id is None:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail="Checkout batch transaction has no identifier.",
+                detail=Msg.CHECKOUT_BATCH_TRANSACTION_HAS_NO_IDENTIFIER,
             )
 
         return CheckoutBatchResponse(
@@ -180,7 +199,10 @@ class OrderService:
             amount=transaction.amount,
             transaction_status=transaction.status,
             payment_method=transaction.payment_method,
-            orders=[OrderResponse.model_validate(order) for order in existing_orders],
+            orders=await OrderService._build_localized_order_list_response(
+                existing_orders,
+                language=language,
+            ),
         )
 
     @staticmethod
@@ -256,10 +278,14 @@ class OrderService:
             await asyncio.sleep(OrderService.EXPIRY_CLEANUP_INTERVAL_SECONDS)
 
     @staticmethod
-    async def checkout(user_id: PydanticObjectId, data: CheckoutRequest) -> CheckoutBatchResponse:
+    async def checkout(
+        user_id: PydanticObjectId,
+        data: CheckoutRequest,
+        language: str | None = None,
+    ) -> CheckoutBatchResponse:
         user = await User.get(user_id)
         if not user:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=Msg.USER_NOT_FOUND)
         
         OrderDomainValidator.validate_checkout_request(
             checkout_batch_id=data.checkout_batch_id,
@@ -275,7 +301,10 @@ class OrderService:
             }
         ).to_list()
         if existing_orders:
-            return await OrderService._build_checkout_batch_response(existing_orders)
+            return await OrderService._build_checkout_batch_response(
+                existing_orders,
+                language=language,
+            )
 
         try:
             extracted_shipping = user.addresses[data.shipping_address_index]
@@ -283,13 +312,13 @@ class OrderService:
         except IndexError:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Invalid shipping or billing address index. Address does not exist."
+                detail=Msg.INVALID_SHIPPING_OR_BILLING_ADDRESS_INDEX
             )
             
         checkout_items = await OrderService._load_checkout_items(user_id)
         TransactionDomainValidator.validate_checkout_items(checkout_items)
         if not checkout_items:
-            raise HTTPException(status_code=400, detail="No valid items for checkout")
+            raise HTTPException(status_code=400, detail=Msg.NO_VALID_ITEMS_FOR_CHECKOUT)
         
         seller_groups = OrderService._group_items_by_seller(checkout_items)
 
@@ -345,7 +374,7 @@ class OrderService:
             await created_transaction.insert()
 
             if created_transaction.id is None:
-                raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Failed to create checkout transaction.")
+                raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=Msg.FAILED_TO_CREATE_CHECKOUT_TRANSACTION)
 
             allocations: list[TransactionAllocation] = []
             for payload in seller_order_payloads:
@@ -371,7 +400,7 @@ class OrderService:
                 created_orders.append(order)
 
                 if order.id is None:
-                    raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Failed to create seller order.")
+                    raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=Msg.FAILED_TO_CREATE_SELLER_ORDER)
 
                 allocations.append(
                     TransactionAllocation(
@@ -396,7 +425,7 @@ class OrderService:
             if payment_result["status"] != "SUCCESS":
                 raise HTTPException(
                     status_code=status.HTTP_402_PAYMENT_REQUIRED,
-                    detail="Payment gateway declined the transaction.",
+                    detail=Msg.PAYMENT_GATEWAY_DECLINED,
                 )
 
             payment_captured = True
@@ -438,7 +467,10 @@ class OrderService:
                 amount=created_transaction.amount,
                 transaction_status=created_transaction.status,
                 payment_method=created_transaction.payment_method,
-                orders=[OrderResponse.model_validate(order) for order in created_orders],
+                orders=await OrderService._build_localized_order_list_response(
+                    created_orders,
+                    language=language,
+                ),
             )
         except HTTPException:
             if not payment_captured:
@@ -454,7 +486,7 @@ class OrderService:
             if payment_captured:
                 raise HTTPException(
                     status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                    detail="Payment was captured, but order finalization needs manual review.",
+                    detail=Msg.PAYMENT_CAPTURED_ORDER_REVIEW,
                 )
 
             for item in reserved_items:
@@ -466,27 +498,95 @@ class OrderService:
             await OrderService._mark_checkout_failed(created_transaction, created_orders, user_id)
             raise HTTPException(
                 status_code=status.HTTP_502_BAD_GATEWAY,
-                detail="Checkout failed because the payment gateway is unreachable. Inventory released.",
+                detail=Msg.PAYMENT_GATEWAY_UNREACHABLE,
             )
 
     @staticmethod
-    async def get_my_orders(user_id: PydanticObjectId) -> list[OrderResponse]:
+    def _build_localized_order_response_from_product_map(
+        order: Order,
+        product_map: dict[str, Product],
+        language: str | None = None,
+    ) -> OrderResponse:
+        if not language:
+            return OrderResponse.model_validate(order)
+
+        localized_items = []
+
+        for item in order.items:
+            item_data = item.model_dump()
+            product = product_map.get(str(item.product_id))
+
+            if product:
+                localized_name, _ = ProductMapper._localized_product_content(product, language)
+                item_data["product_name"] = localized_name
+
+            localized_items.append(OrderItemSnapshot(**item_data))
+
+        order_data = order.model_dump()
+        order_data["items"] = localized_items
+        return OrderResponse.model_validate(order_data)
+
+    @staticmethod
+    async def _build_localized_order_response(
+        order: Order,
+        language: str | None = None,
+    ) -> OrderResponse:
+        if not language:
+            return OrderResponse.model_validate(order)
+
+        product_ids = list({item.product_id for item in order.items})
+        products = await Product.find({
+            "_id": {"$in": product_ids},
+            "is_deleted": {"$ne": True},
+        }).to_list()
+
+        product_map = {str(product.id): product for product in products}
+        return OrderService._build_localized_order_response_from_product_map(order, product_map, language)
+
+    @staticmethod
+    async def _build_localized_order_list_response(
+        orders: list[Order],
+        language: str | None = None,
+    ) -> list[OrderResponse]:
+        if not language:
+            return [OrderResponse.model_validate(order) for order in orders]
+
+        product_ids = list({
+            item.product_id
+            for order in orders
+            for item in order.items
+        })
+
+        products = await Product.find({
+            "_id": {"$in": product_ids},
+            "is_deleted": {"$ne": True},
+        }).to_list()
+
+        product_map = {str(product.id): product for product in products}
+
+        return [
+            OrderService._build_localized_order_response_from_product_map(order, product_map, language)
+            for order in orders
+        ]
+        
+    @staticmethod
+    async def get_my_orders(user_id: PydanticObjectId, language: str | None = None) -> list[OrderResponse]:
         orders = await Order.find(
             {"user_id": user_id, "is_deleted": {"$ne": True}}
         ).sort("-created_at").to_list()
-        return [OrderResponse.model_validate(order) for order in orders]
+        return await OrderService._build_localized_order_list_response(orders, language=language)
 
     @staticmethod
-    async def get_order_by_id(user_id: PydanticObjectId, order_id: PydanticObjectId) -> OrderResponse:
+    async def get_order_by_id(user_id: PydanticObjectId, order_id: PydanticObjectId, language: str | None = None) -> OrderResponse:
         order = await Order.find_one(
             {"_id": order_id, "user_id": user_id, "is_deleted": {"$ne": True}}
         )
         if not order:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="Order not found or you do not have permission to view it",
+                detail=Msg.ORDER_NOT_FOUND_OR_NO_PERMISSION,
             )
-        return OrderResponse.model_validate(order)
+        return await OrderService._build_localized_order_response(order, language=language)
 
     @staticmethod
     def _validate_status_transition(current_status: OrderStatus, next_status: OrderStatus) -> None:
@@ -497,7 +597,13 @@ class OrderService:
         if next_status not in allowed_statuses:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Cannot change order status from {current_status.value} to {next_status.value}.",
+                detail={
+                    "key": Msg.INVALID_ORDER_STATUS_TRANSITION,
+                    "params": {
+                        "current_status": current_status.value,
+                        "next_status": next_status.value,
+                    },
+                },
             )
 
     @staticmethod
@@ -508,18 +614,21 @@ class OrderService:
     ) -> OrderResponse:
         order = await Order.find_one({"_id": order_id, "is_deleted": {"$ne": True}})
         if not order:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Order not found")
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=Msg.ORDER_NOT_FOUND)
 
         if current_user.role == UserRole.SELLER and order.seller_id != current_user.id:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
-                detail="You do not have permission to manage this order.",
+                detail=Msg.NO_PERMISSION_MANAGE_ORDER,
             )
 
         if order.status in {OrderStatus.CANCELLED, OrderStatus.COMPLETED}:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Cannot change status of an order that is already {order.status.value}.",
+                detail={
+                    "key": Msg.ORDER_STATUS_ALREADY_FINAL,
+                    "params": {"current_status": order.status.value},
+                },
             )
 
         OrderService._validate_status_transition(order.status, data.status)
@@ -540,49 +649,49 @@ class OrderService:
         return OrderResponse.model_validate(order)
 
     @staticmethod
-    async def cancel_order(order_id: PydanticObjectId, current_user: User, reason: str) -> OrderResponse:
+    async def cancel_order(order_id: PydanticObjectId, current_user: User, reason: str, language: str | None = None) -> OrderResponse:
         reason = OrderDomainValidator.validate_cancellation_reason(reason)
         order = await Order.find_one({"_id": order_id, "is_deleted": {"$ne": True}})
         if not order:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Order not found")
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=Msg.ORDER_NOT_FOUND)
 
         original_payment_status = order.payment_status
 
         if current_user.role == UserRole.CUSTOMER and order.user_id != current_user.id:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
-                detail="You do not have permission to cancel this order.",
+                detail=Msg.NO_PERMISSION_CANCEL_ORDER,
             )
 
         if current_user.role == UserRole.SELLER and order.seller_id != current_user.id:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
-                detail="You do not have permission to cancel this order.",
+                detail=Msg.NO_PERMISSION_CANCEL_ORDER,
             )
 
         if current_user.role == UserRole.SUPPORT:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
-                detail="Support users cannot cancel orders.",
+                detail=Msg.SUPPORT_USERS_CANNOT_CANCEL_ORDERS,
             )
 
         if order.status in {OrderStatus.SHIPPED, OrderStatus.DELIVERED, OrderStatus.COMPLETED}:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="This order can no longer be cancelled.",
+                detail=Msg.ORDER_CANNOT_BE_CANCELLED,
             )
 
         if order.status == OrderStatus.CANCELLED:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Order is already cancelled.",
+                detail=Msg.ORDER_ALREADY_CANCELLED,
             )
 
         # Guard against the brief partial-finalization window after payment capture.
         if order.payment_status == OrderPaymentStatus.PAID and order.status != OrderStatus.CONFIRMED:
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
-                detail="Order is currently finalizing. Please retry cancellation in a few moments."
+                detail=Msg.ORDER_FINALIZING_RETRY_CANCELLATION
             )
 
         transaction = await Transaction.find_one({"_id": order.transaction_id})
@@ -646,4 +755,4 @@ class OrderService:
             )
         )
 
-        return OrderResponse.model_validate(order)
+        return await OrderService._build_localized_order_response(order, language=language)
